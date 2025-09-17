@@ -1,32 +1,36 @@
 {
-  "name": "gmah",
-  "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
-  "type": "module",
-  "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon -e css,ejs,js,json",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "format": "prettier --write ."
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/chincai-org/gmah.git"
-  },
-  "author": "",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/chincai-org/gmah/issues"
-  },
-  "homepage": "https://github.com/chincai-org/gmah#readme",
-  "dependencies": {
-    "aws-sdk": "^2.1692.0",
-    "dotenv": "^17.2.2",
-    "express": "^5.1.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.10",
-    "prettier": "^3.6.2"
-  }
+    "name": "gmah",
+    "version": "1.0.0",
+    "description": "",
+    "main": "app.js",
+    "type": "module",
+    "scripts": {
+        "install": "npm install --omit=dev",
+        "start": "node app.js",
+        "dev": "nodemon -e css,ejs,js,json",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "format": "prettier --write ."
+    },
+    "engines": {
+        "node": "18.x"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/chincai-org/gmah.git"
+    },
+    "author": "",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/chincai-org/gmah/issues"
+    },
+    "homepage": "https://github.com/chincai-org/gmah#readme",
+    "dependencies": {
+        "aws-sdk": "^2.1692.0",
+        "dotenv": "^17.2.2",
+        "express": "^5.1.0"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.10",
+        "prettier": "^3.6.2"
+    }
 }
