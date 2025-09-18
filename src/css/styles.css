@@ -108,35 +108,26 @@ a {
   opacity: 1;
 }
 
-/* Socials */
-.socials {
-  list-style: none;
-  display: flex;
-  gap: .9rem;
-  align-items: center;
+/* Login button */
+.login-btn {
+  background: var(--accent);
+  color: #101400;
+  font-weight: 600;
+  font-size: 0.8rem;
+  padding: 0.45rem 1.6rem;
+  border-radius: 40px;
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--accent-glow);
+  transition: transform var(--transition), box-shadow var(--transition);
+  letter-spacing: 0.5px;
+  margin-left: 1rem; /* keeps spacing with the menu */
 }
 
-.socials a {
-  display: grid;
-  place-items: center;
-  width: 26px;
-  height: 26px;
-  color: var(--muted);
-  transition: color var(--transition), transform var(--transition);
-}
-
-.socials a:focus-visible,
-.socials a:hover {
-  color: var(--accent);
-  transform: scale(1.07);
-}
-
-.socials svg {
-  width: 100%;
-  height: 100%;
-  fill: currentColor;
-  stroke: currentColor;
-  stroke-width: 1;
+.login-btn:hover,
+.login-btn:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 18px -3px rgba(214,255,40,0.65), 0 0 30px -2px rgba(214,255,40,.35);
 }
 
 /* Hamburger */
