@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dynamo Test</title>
+  </head>
+  <body>
+    <h1>Test DynamoDB with Express</h1>
+
+    <form id="saveForm">
+      <input type="text" name="userId" placeholder="User ID" required />
+      <input type="text" name="name" placeholder="Name" required />
+      <button type="submit">Save User</button>
+    </form>
+
+    <hr />
+
+    <form id="getForm">
+      <input type="text" name="userId" placeholder="User ID to fetch" required />
+      <button type="submit">Get User</button>
+    </form>
+
+    <pre id="output"></pre>
+
+    <script>
+      const saveForm = document.getElementById("saveForm");
+      const getForm = document.getElementById("getForm");
+      const output = document.getElementById("output");
+
+      saveForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(saveForm);
+        const body = new URLSearchParams(formData);
+        const res = await fetch("/user", {
+          method: "POST",
+          body,
+        });
+        output.textContent = await res.text();
+      });
+
+      getForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(getForm);
+        const userId = formData.get("userId");
+        const res = await fetch("/user/" + encodeURIComponent(userId));
+        output.textContent = await res.text();
+      });
+    </script>
+  </body>
+</html>
