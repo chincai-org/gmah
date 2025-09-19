@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title><%= course?.name %> • Course</title>
+  <link rel="stylesheet" href="/css/course.css" />
+</head>
+<body>
+  <header class="course-header">
+    <div class="course-header__meta">
+      <a class="back-link" href="/">← Back</a>
+      <h1 class="course-title"><%= course?.name || "Course" %></h1>
+      <p class="course-subtitle">
+        <span>Language: <strong><%= course?.lang || "—" %></strong></span>
+        <span class="dot">•</span>
+        <span>Context: <strong><%= course?.context || "—" %></strong></span>
+      </p>
+    </div>
+  </header>
+
+  <main class="course-main">
+    <nav class="tabs" role="tablist" aria-label="Course panels">
+      <button class="tab is-active" data-target="grammar" role="tab" aria-selected="true">Grammar</button>
+      <button class="tab" data-target="vocab" role="tab" aria-selected="false">Vocab</button>
+      <button class="tab" data-target="chatbot" role="tab" aria-selected="false">Chatbot</button>
+      <button class="tab" data-target="dialogue" role="tab" aria-selected="false">Dialogue</button>
+    </nav>
+
+    <section id="grammar" class="panel is-active" role="tabpanel" aria-labelledby="grammar-tab">
+      <div class="panel__header">
+        <h2>Grammar</h2>
+        <button class="btn btn-primary">New lesson</button>
+      </div>
+      <div class="grid">
+        <!-- Example grammar cards -->
+        <div class="card">
+          <h3>Present Simple</h3>
+          <p>Usage, structure, examples.</p>
+          <div class="card__actions">
+            <button class="btn">Open</button>
+            <button class="btn btn-ghost">Edit</button>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Past Continuous</h3>
+          <p>Actions in progress in the past.</p>
+          <div class="card__actions">
+            <button class="btn">Open</button>
+            <button class="btn btn-ghost">Edit</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="vocab" class="panel" role="tabpanel" aria-labelledby="vocab-tab" hidden>
+      <div class="panel__header">
+        <h2>Vocab</h2>
+        <button class="btn btn-primary">New set</button>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <h3>Daily Activities</h3>
+          <p>20 words • A1</p>
+          <div class="card__actions">
+            <button class="btn">Practice</button>
+            <button class="btn btn-ghost">Edit</button>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Travel</h3>
+          <p>32 words • A2</p>
+          <div class="card__actions">
+            <button class="btn">Practice</button>
+            <button class="btn btn-ghost">Edit</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="chatbot" class="panel" role="tabpanel" aria-labelledby="chatbot-tab" hidden>
+      <div class="panel__header">
+        <h2>Chatbot</h2>
+      </div>
+      <div class="chat">
+        <div class="chat__messages" id="chatMessages" aria-live="polite">
+          <div class="chat__bubble chat__bubble--bot">Hi! Ask me anything about this course.</div>
+        </div>
+        <form class="chat__form" id="chatForm">
+          <input class="input" id="chatInput" name="message" type="text" placeholder="Type your message..." autocomplete="off"/>
+          <button class="btn btn-primary" type="submit">Send</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="dialogue" class="panel" role="tabpanel" aria-labelledby="dialogue-tab" hidden>
+      <div class="panel__header">
+        <h2>Dialogue</h2>
+        <button class="btn btn-primary">New dialogue</button>
+      </div>
+      <ul class="list">
+        <li class="list__item">
+          <div>
+            <strong>At the Restaurant</strong>
+            <p class="muted">Ordering food and asking about the menu.</p>
+          </div>
+          <div class="list__actions">
+            <button class="btn">Open</button>
+            <button class="btn btn-ghost">Edit</button>
+          </div>
+        </li>
+        <li class="list__item">
+          <div>
+            <strong>Checking In</strong>
+            <p class="muted">Hotel check-in conversation.</p>
+          </div>
+          <div class="list__actions">
+            <button class="btn">Open</button>
+            <button class="btn btn-ghost">Edit</button>
+          </div>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="/js/course.js" defer></script>
+</body>
+</html>
