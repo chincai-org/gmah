@@ -59,6 +59,10 @@ app.get("/new", (req, res) => {
     res.render("newCourse");
 });
 
+app.get("/login", (req, res) => {
+    res.sendFile(path.join(__dirname, "public/login.html"));
+});
+
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
@@ -79,14 +83,22 @@ const courses = [
 app.get("/menu", (req, res) => {
     res.render("menu", { courses: courses });
 });
-
-app.post("/menu", (req, res) => {
+app.post("/createCourseVerifier", (req, res) => {
     console.log(req.body);
     const { name, lang, context } = req.body;
     if (!name.trim() || !lang.trim() || !context.trim()) {
         return res.status(400).send("Error: Fields cannot be empty.");
     } else {
-        courses.push(req.body); //supposed to save it into db
+        courses.push({ ...req.body, id: courses.length }); //supposed to save it into db
     }
     res.redirect("/menu");
+});
+
+app.get("/courses/:id", (req, res) => {
+    const course = courses.find(c => String(c.id) === String(req.params.id));
+    if (!course) {
+        return res.status(404).send("Course not found");
+    }
+    // Renders views/course.ejs (make sure this file exists)
+    res.render("course", { course });
 });

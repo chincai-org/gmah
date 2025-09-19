@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>GMAH</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+:root {
+    --bg: #111;
+    --bg-alt: #161616;
+    --text: #e8e8e8;
+    --muted: #a8a8a8;
+    --accent: #d6ff28;
+    --accent-glow: 0 0 12px rgba(214,255,40,0.45), 0 0 24px rgba(214,255,40,0.25);
+    --transition: 160ms ease;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, Cantarell, "Open Sans", sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100dvh;
+    line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(17,17,17,0.78);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #1e1e1e;
+}
+
+.nav {
+    max-width: 1340px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    padding: 0 .9rem;
+    height: 56px;
+    gap: 1rem;
+}
+
+.brand {
+    font-weight: 700;
+    letter-spacing: .5px;
+    font-size: .95rem;
+    padding: .4rem .2rem;
+}
+
+/* Menu */
+.menu {
+    list-style: none;
+    display: flex;
+    justify-self: center;
+    gap: 2.8rem;
+    font-size: .8rem;
+    font-weight: 500;
+    letter-spacing: .4px;
+}
+
+.menu a {
+    position: relative;
+    display: inline-block;
+    padding: .35rem 0;
+    color: var(--muted);
+    transition: color var(--transition);
+}
+
+.menu a::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    height: 2px;
+    width: 0;
+    background: var(--accent);
+    transform: translateX(-50%);
+    transition: width var(--transition);
+    border-radius: 2px;
+    box-shadow: var(--accent-glow);
+    opacity: 0;
+}
+
+.menu a:is(:hover,:focus-visible) {
+    color: var(--text);
+}
+
+.menu a:is(:hover,:focus-visible)::after {
+    width: 90%;
+    opacity: 1;
+}
+
+.menu a.active {
+    color: var(--text);
+    font-weight: 600;
+}
+
+.menu a.active::after {
+    width: 90%;
+    opacity: 1;
+}
+
+/* Login button */
+.login-btn {
+    background: var(--accent);
+    color: #101400;
+    font-weight: 600;
+    font-size: 0.8rem;
+    padding: 0.45rem 1.6rem;
+    border-radius: 40px;
+    border: none;
+    cursor: pointer;
+    box-shadow: var(--accent-glow);
+    transition: transform var(--transition), box-shadow var(--transition);
+    letter-spacing: 0.5px;
+    margin-left: 1rem; /* keeps spacing with the menu */
+}
+
+.login-btn:hover,
+.login-btn:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 18px -3px rgba(214,255,40,0.65), 0 0 30px -2px rgba(214,255,40,.35);
+}
+
+/* Hamburger */
+.nav-toggle {
+    display: none;
+    cursor: pointer;
+    border: none;
+    background: none;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    position: relative;
+    justify-self: start;
+}
+
+.nav-toggle .bar {
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: transform var(--transition), opacity var(--transition), top var(--transition);
+}
+
+.nav-toggle .bar:nth-child(1) { top: 12px; }
+.nav-toggle .bar:nth-child(2) { top: 19px; }
+.nav-toggle .bar:nth-child(3) { top: 26px; }
+
+.nav-toggle[aria-expanded="true"] .bar:nth-child(1) {
+    top: 19px;
+    transform: rotate(45deg);
+}
+.nav-toggle[aria-expanded="true"] .bar:nth-child(2) {
+    opacity: 0;
+}
+.nav-toggle[aria-expanded="true"] .bar:nth-child(3) {
+    top: 19px;
+    transform: rotate(-45deg);
+}
+
+/* Hero */
+.hero {
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: clamp(3rem, 10vh, 10rem) 1.2rem 4rem;
+}
+
+.hero-inner {
+    max-width: 640px;
+}
+
+.hero-title {
+    font-size: clamp(1.15rem, 1.1rem + 1.2vw, 1.6rem);
+    font-weight: 700;
+    letter-spacing: .5px;
+    line-height: 1.3;
+    margin-bottom: 1.15rem;
+}
+
+.hero-text {
+    font-size: .82rem;
+    max-width: 520px;
+    margin: 0 auto 2.2rem;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.cta {
+    background: var(--accent);
+    border: none;
+    color: #101400;
+    font-weight: 600;
+    font-size: .7rem;
+    padding: .85rem 3.2rem;
+    border-radius: 40px;
+    cursor: pointer;
+    position: relative;
+    box-shadow: var(--accent-glow);
+    transition: transform var(--transition), box-shadow var(--transition);
+    letter-spacing: .5px;
+}
+
+.cta:hover,
+.cta:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 18px -3px rgba(214,255,40,0.65), 0 0 30px -2px rgba(214,255,40,.35);
+}
+
+  /* Mobile */
+  @media (max-width: 900px) {
+      .nav {
+          grid-template-columns: auto auto auto;
+          height: 60px;
+      }
+
+      .nav-toggle {
+          display: inline-block;
+      }
+
+      .menu {
+          position: fixed;
+          inset: 60px 0 auto 0;
+          background: rgba(17,17,17,0.95);
+          backdrop-filter: blur(12px);
+          flex-direction: column;
+          padding: 1.2rem clamp(1rem,4vw,2rem) 2rem;
+          gap: .3rem;
+          transform: translateY(-10px);
+          opacity: 0;
+          pointer-events: none;
+          border-bottom: 1px solid #222;
+      }
+
+      .menu.open {
+          animation: fadeSlide .32s var(--transition) forwards;
+      }
+
+      @keyframes fadeSlide {
+          to {
+              transform: translateY(0);
+              opacity: 1;
+              pointer-events: auto;
+          }
+      }
+
+      .menu a {
+          font-size: .9rem;
+          padding: .8rem 0;
+      }
+
+      .socials {
+          gap: .5rem;
+      }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+      * {
+          animation: none !important;
+          transition: none !important;
+      }
+  }
+    </style>
+</head>
+
+<body>
+
+	<header class="site-header">
+		<nav class="nav" aria-label="Main">
+			<!-- Brand -->
+			<a href="#" class="brand" aria-label="GMAH Home">GMAH</a>
+
+			<!-- Hamburger -->
+			<button class="nav-toggle" aria-expanded="false" aria-controls="primary-menu"
+				aria-label="Open menu">
+				<span class="bar"></span>
+				<span class="bar"></span>
+				<span class="bar"></span>
+			</button>
+
+			<!-- Primary Menu -->
+			<ul id="primary-menu" class="menu" data-active="">
+				<li><a href="#about" data-name="About">About</a></li>
+				<li><a href="#pricing" data-name="Pricing">Pricing</a></li>
+			</ul>
+
+			<!-- Login Button -->
+			<a href="/login">
+				<button class="login-btn">Login</button>
+			</a>
+		</nav>
+	</header>
+
+	<main class="hero">
+		<div class="hero-inner">
+			<h1 class="hero-title">LEARN NEW WORDS EVERY DAY<br />WITH A FRIENDLY AI GUIDE</h1>
+			<p class="hero-text">
+				Grow your vocabulary through simple daily practice with an AI companion that makes
+				learning easy and fun
+			</p>
+            <a href="/menu">
+                <button class="cta">START</button>
+            </a>
+		</div>
+	</main>
+
+    <script>
+        // Handle current (fake) active item: choose based on hash or default
+        (function setActiveLink() {
+            const links = document.querySelectorAll('.menu a');
+            const hash = window.location.hash.toLowerCase();
+            let matched = false;
+
+            links.forEach(a => {
+                const name = a.dataset.name.toLowerCase();
+                if (hash && hash.includes(name)) {
+                    a.classList.add('active');
+                    matched = true;
+                } else {
+                    a.classList.remove('active');
+                }
+            });
+
+            if (!matched) {
+                const first = document.querySelector('.menu a[data-name="Main"]');
+                if (first) first.classList.add('active');
+            }
+        })();
+
+        // Mobile toggle
+        const toggleBtn = document.querySelector('.nav-toggle');
+        const menu = document.getElementById('primary-menu');
+
+        toggleBtn?.addEventListener('click', () => {
+            const expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+            toggleBtn.setAttribute('aria-expanded', String(!expanded));
+            toggleBtn.setAttribute('aria-label', expanded ? 'Open menu' : 'Close menu');
+            menu.classList.toggle('open');
+        });
+
+        // Close on link click (mobile)
+        menu?.addEventListener('click', e => {
+            const target = e.target;
+            if (target instanceof HTMLElement && target.tagName === 'A' && window.innerWidth <= 900) {
+                toggleBtn.setAttribute('aria-expanded', 'false');
+                toggleBtn.setAttribute('aria-label', 'Open menu');
+                menu.classList.remove('open');
+            }
+        });
+
+        // Close on outside click (mobile)
+        document.addEventListener('click', e => {
+            if (window.innerWidth > 900) return;
+            if (!menu.contains(e.target) && !toggleBtn.contains(e.target)) {
+                if (menu.classList.contains('open')) {
+                    toggleBtn.setAttribute('aria-expanded', 'false');
+                    toggleBtn.setAttribute('aria-label', 'Open menu');
+                    menu.classList.remove('open');
+                }
+            }
+        });
+
+        // Optional: highlight active link on hash change
+        window.addEventListener('hashchange', () => {
+            document.querySelectorAll('.menu a').forEach(a => {
+                a.classList.toggle('active', window.location.hash.toLowerCase().includes(a.dataset.name.toLowerCase()));
+            });
+        });
+    </script>
+</body>
+
+</html>
