@@ -25,6 +25,19 @@ app.set("view engine", "ejs");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public"))); // serve static files
+function cookieAuth(req, res, next) {
+	const token = req.cookies?.token;
+	if (!token) {
+		return res.status(401).send("Unauthorized");
+	}
+	try {
+		const decoded = jwt.verify(token, "super-secret");
+		req.user = decoded; // store user info in request
+		next();
+	} catch (err) {
+		return res.status(403).send("Invalid or expired token");
+	}
+}
 
 // routes
 app.get("/", (req, res) => {
