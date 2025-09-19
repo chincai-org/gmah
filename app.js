@@ -3,8 +3,10 @@ import bodyParser from "body-parser";
 import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
+import jwt from "jsonwebtoken";
 
-import { putUser, getUser } from "./util/database.js";
+import { putUser, getUser, verifyUserCredentials } from "./util/database.js";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -15,6 +17,8 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 3000;
+// const jwt = require("jsonwebtoken");
+app.use(cookieParser());
 
 // middlewares
 app.set("view engine", "ejs");
@@ -24,6 +28,7 @@ app.use(express.static(path.join(__dirname, "public"))); // serve static files
 
 // routes
 app.get("/", (req, res) => {
+	console.log(isValidEmail("m-8935079@moe-dl.edu.my"))
 	res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
@@ -61,6 +66,91 @@ app.get("/new", (req, res) => {
 
 app.get("/login", (req, res) => {
 	res.sendFile(path.join(__dirname, "public/login.html"));
+});
+
+app.post("/signup-verifier", async (req, res) => {
+	const { name, password } = req.body;
+	//const user = getUser(name); NEED TO FIND USER BY NAME
+	// ===== Validation Rules =====
+	const nameRegex = /^[a-zA-Z0-9_-]{3,15}$/;
+	const passwordMin = 6;
+	const passwordMax = 30;
+
+	// Check name
+	if (!nameRegex.test(name)) {
+		return res.status(400).send(
+		"Error: Name must be 3-15 characters, only letters, numbers, _ or - allowed."
+		);
+	}
+	if (user){
+		return res.status(400).send(
+			"Username taken, please try another username."
+		)
+	}
+	// Check email (basic check, you might add more robust later)
+	// if (!isValidEmail(email)) {
+	// 	return res.status(400).send("Error: Invalid email format.");
+	// }
+
+	// Check password length
+	if (password.length < passwordMin || password.length > passwordMax) {
+		return res.status(400).send(
+		`Error: Password must be between ${passwordMin}-${passwordMax} characters.`
+		);
+	}
+
+	// If all good
+	console.log("Signup data is valid! User can be created.");
+	try {
+		// Create the user in DynamoDB
+		const newUser = await putUser(name, password);
+		
+		// Create JWT (valid 7 days)
+		const token = jwt.sign(
+			{ id: newUser.id, username: newUser.username },
+			"super-secret", // 🔑 move this to process.env.JWT_SECRET in real app
+			{ expiresIn: "7d" }
+		);
+
+		// Set cookie with 7-day expiry
+		res.cookie("token", token, {
+			httpOnly: true,
+			sameSite: "strict",
+			maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days in ms
+		});
+
+		res.redirect("/menu");
+	} catch (err) {
+		console.error("Error creating user:", err);
+		res.status(500).send("Internal server error.");
+	}
+});
+
+app.post("/login-verifier", async(res, req) => {
+	const {name, password} = req.body;
+	//const user = getUser(name); FIND USER BY NAME
+	if (!user) {
+		return res.status(400).send("Username doesn't exist")
+	}
+	if (verifyUserCredentials(user.id, password)){
+		// Create JWT (valid 7 days)
+		const token = jwt.sign(
+			{ id: user.id, username: newUser.username },
+			"super-secret", // 🔑 move this to process.env.JWT_SECRET in real app
+			{ expiresIn: "7d" }
+		);
+
+		// Set cookie with 7-day expiry
+		res.cookie("token", token, {
+			httpOnly: true,
+			sameSite: "strict",
+			maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days in ms
+		});
+		
+		res.redirect("/menu")
+	}
+	res.send("Haven't do yet");
+	//TODO: check
 });
 
 app.listen(port, () => {

@@ -104,12 +104,12 @@
 		<form id="loginForm" method="post" action="/login-verifier">
 			<h2>Login</h2>
 			<div class="input-group">
-				<label>Email</label>
-				<input type="email" placeholder="Enter your email">
+				<label>Username</label>
+				<input type="text" name="name" placeholder="Enter your name" required>
 			</div>
 			<div class="input-group">
 				<label>Password</label>
-				<input type="password" placeholder="Enter your password">
+				<input type="password" name="password" placeholder="Enter your password">
 			</div>
 			<button class="btn">Login</button>
 			<p class="toggle">Don't have an account? <span onclick="showSignUp()">Sign Up</span></p>
@@ -119,16 +119,12 @@
 		<form id="signUpForm" style="display: none;" method="post" action="/signup-verifier">
 			<h2>Sign Up</h2>
 			<div class="input-group">
-				<label>Full Name</label>
-				<input type="text" placeholder="Enter your name">
-			</div>
-			<div class="input-group">
-				<label>Email</label>
-				<input type="email" placeholder="Enter your email">
+				<label>Username</label>
+				<input type="text" name="name" placeholder="Enter your name" required>
 			</div>
 			<div class="input-group">
 				<label>Password</label>
-				<input type="password" placeholder="Create a password">
+				<input type="password" name="password" placeholder="Create a password" required>
 			</div>
 			<button class="btn">Sign Up</button>
 			<p class="toggle">Already have an account? <span onclick="showLogin()">Login</span></p>
