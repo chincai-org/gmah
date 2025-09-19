@@ -1,30 +1,33 @@
- <!DOCTYPE html>
- <html lang="en">
- <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Course</title>
- </head>
- <body>
-    <a href="/menu">
-        <button>Back to menu</button>
-    </a>
-    <h1>New Course</h1>
-    <form action="/menu" method="POST">
-        <label>Name:</label>
-        <input type="text" maxlength="20" name="name" required>
-        <br>
-        <label>Choose a language to learn:</label>
-        <select id="dropdown" name="lang">
-            <option value="Chinese">Chinese</option>
-            <option value="Malay">Malay</option>
-            <option value="English">English</option>
-        </select>
-        <br>
-        <label>Purpose for learning</label>
-        <input type="text" maxlength="50" name="context" required>
-        <br>
-        <button type="submit">Create</button>
-    </form>
- </body>
- </html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>New Course</title>
+</head>
+
+<body>
+	<a href="/menu">
+		<button>Back to menu</button>
+	</a>
+	<h1>New Course</h1>
+	<form action="/createCourseVerifier" method="POST">
+		<label>Name:</label>
+		<input type="text" maxlength="20" name="name" required>
+		<br>
+		<label>Choose a language to learn:</label>
+		<select id="dropdown" name="lang">
+			<option value="Chinese">Chinese</option>
+			<option value="Malay">Malay</option>
+			<option value="English">English</option>
+		</select>
+		<br>
+		<label>Purpose for learning</label>
+		<input type="text" maxlength="50" name="context" required>
+		<br>
+		<button type="submit">Create</button>
+	</form>
+</body>
+
+</html>
