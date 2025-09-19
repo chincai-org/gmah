@@ -17,6 +17,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // middlewares
+app.set('view engine', 'ejs')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public"))); // serve static files
@@ -54,6 +55,35 @@ app.get("/user/:id", async (req, res) => {
     }
 });
 
+app.get('/new', (req,res) => {
+    res.render("newCourse");
+});
+
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
+});
+
+
+const courses = [{ 
+    name : "Course1" ,
+    lang : "Chinese",
+    context: "None",
+}, {
+    name : "Course2" ,
+    lang : "Malay",
+    context: "Hello"
+}]
+
+app.get('/menu', (req,res) => {
+    res.render("menu", { courses : courses});
+});
+app.post('/menu', (req,res) => {
+    console.log(req.body);
+    const {name, lang, context} = req.body;
+    if (!name.trim() || !lang.trim() || !context.trim()) {
+        return res.status(400).send("Error: Fields cannot be empty.");
+    } else{
+        courses.push(req.body); //supposed to save it into db
+    }
+    res.redirect('/menu');
 });

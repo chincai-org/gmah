@@ -1,13 +1,43 @@
 // lib/repos.js
 import { PutCommand, GetCommand } from "@aws-sdk/lib-dynamodb";
 import { ddb } from "./dynamoClient.js";
+import crypto from "crypto";
 
-const USERS_TABLE = process.env.USERS_TABLE || "user";
+export const USERS_TABLE = process.env.USERS_TABLE || "user";
+export const COURSES_TABLE = process.env.COURSES_TABLE || "course";
 
-export async function putUser(user) {
-    console.log(USERS_TABLE);
-    await ddb.send(new PutCommand({ TableName: USERS_TABLE, Item: user }));
-    return user;
+let sequence = 0;
+const machineId = 1; // Unique ID for the machine or process
+
+function generateSnowflakeId() {
+    const timestamp = Date.now() - 1609459200000; // Offset from a custom epoch (e.g., Jan 1, 2021)
+    sequence = (sequence + 1) % 4096; // Sequence number (12 bits)
+    return (timestamp << 22) | (machineId << 12) | sequence;
+}
+
+export async function putUser(username, password) {
+    // Generate a unique user ID using Snowflake-like algorithm
+    const userId = generateSnowflakeId();
+
+    // Hash the password using SHA-256
+    const hashedPassword = crypto
+        .createHash("sha256")
+        .update(password)
+        .digest("hex");
+
+    // Prepare the user object with the hashed password and generated ID
+    const userWithId = {
+        id: userId,
+        username: username,
+        password: hashedPassword // Replace plain password with hashed password
+    };
+
+    // Insert the user into the database
+    await ddb.send(
+        new PutCommand({ TableName: USERS_TABLE, Item: userWithId })
+    );
+    console.log("User added:", userWithId);
+    return userWithId;
 }
 
 export async function getUser(userId) {
@@ -15,4 +45,14 @@ export async function getUser(userId) {
         new GetCommand({ TableName: USERS_TABLE, Key: { id: userId } })
     );
     return r.Item || null;
+}
+
+export async function verifyUserCredentials(userId, password) {
+    const user = await getUser(userId);
+    if (!user) return false;
+    const hashedPassword = crypto
+        .createHash("sha256")
+        .update(password)
+        .digest("hex");
+    return user.password === hashedPassword;
 }
