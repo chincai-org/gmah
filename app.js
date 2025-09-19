@@ -17,7 +17,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // middlewares
-app.set('view engine', 'ejs')
+app.set("view engine", "ejs");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public"))); // serve static files
@@ -55,7 +55,7 @@ app.get("/user/:id", async (req, res) => {
     }
 });
 
-app.get('/new', (req,res) => {
+app.get("/new", (req, res) => {
     res.render("newCourse");
 });
 
@@ -63,27 +63,41 @@ app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
 
+const courses = [
+    {
+        id: "1",
+        name: "Course1",
+        lang: "Chinese",
+        context: "None"
+    },
+    {
+        id: "2",
+        name: "Course1",
+        name: "Course2",
+        lang: "Malay",
+        context: "Hello"
+    }
+];
 
-const courses = [{ 
-    name : "Course1" ,
-    lang : "Chinese",
-    context: "None",
-}, {
-    name : "Course2" ,
-    lang : "Malay",
-    context: "Hello"
-}]
-
-app.get('/menu', (req,res) => {
-    res.render("menu", { courses : courses});
+app.get("/menu", (req, res) => {
+    res.render("menu", { courses: courses });
 });
-app.post('/menu', (req,res) => {
+app.post("/menu", (req, res) => {
     console.log(req.body);
-    const {name, lang, context} = req.body;
+    const { name, lang, context } = req.body;
     if (!name.trim() || !lang.trim() || !context.trim()) {
         return res.status(400).send("Error: Fields cannot be empty.");
-    } else{
+    } else {
         courses.push(req.body); //supposed to save it into db
     }
-    res.redirect('/menu');
+    res.redirect("/menu");
+});
+
+app.get("/courses/:id", (req, res) => {
+    const course = courses.find(c => String(c.id) === String(req.params.id));
+    if (!course) {
+        return res.status(404).send("Course not found");
+    }
+    // Renders views/course.ejs (make sure this file exists)
+    res.render("course", { course });
 });
