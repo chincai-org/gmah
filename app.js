@@ -28,44 +28,43 @@ app.use(express.static(path.join(__dirname, "public"))); // serve static files
 
 // routes
 app.get("/", (req, res) => {
-	console.log(isValidEmail("m-8935079@moe-dl.edu.my"))
-	res.sendFile(path.join(__dirname, "public/index.html"));
+    res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
 app.post("/user", async (req, res) => {
-	try {
-		const { userId, name } = req.body;
-		if (!userId || !name) {
-			return res.status(400).send("Missing userId or name");
-		}
-		const user = { id: userId, name };
-		await putUser(user);
-		res.json({ message: "User saved!", user });
-	} catch (err) {
-		console.error(err);
-		res.status(500).send("Error saving user");
-	}
+    try {
+        const { userId, name } = req.body;
+        if (!userId || !name) {
+            return res.status(400).send("Missing userId or name");
+        }
+        const user = { id: userId, name };
+        await putUser(user);
+        res.json({ message: "User saved!", user });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Error saving user");
+    }
 });
 
 app.get("/user/:id", async (req, res) => {
-	try {
-		const user = await getUser(req.params.id);
-		if (!user) {
-			return res.status(404).send("User not found");
-		}
-		res.json(user);
-	} catch (err) {
-		console.error(err);
-		res.status(500).send("Error fetching user");
-	}
+    try {
+        const user = await getUser(req.params.id);
+        if (!user) {
+            return res.status(404).send("User not found");
+        }
+        res.json(user);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Error fetching user");
+    }
 });
 
 app.get("/new", (req, res) => {
-	res.render("newCourse");
+    res.render("newCourse");
 });
 
 app.get("/login", (req, res) => {
-	res.sendFile(path.join(__dirname, "public/login.html"));
+    res.sendFile(path.join(__dirname, "public/login.html"));
 });
 
 app.post("/signup-verifier", async (req, res) => {
@@ -154,43 +153,41 @@ app.post("/login-verifier", async(res, req) => {
 });
 
 app.listen(port, () => {
-	console.log(`Server running on http://localhost:${port}`);
+    console.log(`Server running on http://localhost:${port}`);
 });
 
 const courses = [
-	{
-		id: "0",
-		name: "Course1",
-		lang: "Chinese",
-		context: "None"
-	},
-	{
-		id: "1",
-		name: "Course2",
-		lang: "Malay",
-		context: "Hello"
-	}
+    {
+        name: "Course1",
+        lang: "Chinese",
+        context: "None"
+    },
+    {
+        name: "Course2",
+        lang: "Malay",
+        context: "Hello"
+    }
 ];
 
 app.get("/menu", (req, res) => {
-	res.render("menu", { courses: courses });
+    res.render("menu", { courses: courses });
 });
 app.post("/createCourseVerifier", (req, res) => {
-	console.log(req.body);
-	const { name, lang, context } = req.body;
-	if (!name.trim() || !lang.trim() || !context.trim()) {
-		return res.status(400).send("Error: Fields cannot be empty.");
-	} else {
-		courses.push({ ...req.body, id: courses.length }); //supposed to save it into db
-	}
-	res.redirect("/menu");
+    console.log(req.body);
+    const { name, lang, context } = req.body;
+    if (!name.trim() || !lang.trim() || !context.trim()) {
+        return res.status(400).send("Error: Fields cannot be empty.");
+    } else {
+        courses.push({ ...req.body, id: courses.length }); //supposed to save it into db
+    }
+    res.redirect("/menu");
 });
 
 app.get("/courses/:id", (req, res) => {
-	const course = courses.find(c => String(c.id) === String(req.params.id));
-	if (!course) {
-		return res.status(404).send("Course not found");
-	}
-	// Renders views/course.ejs (make sure this file exists)
-	res.render("course", { course });
+    const course = courses.find(c => String(c.id) === String(req.params.id));
+    if (!course) {
+        return res.status(404).send("Course not found");
+    }
+    // Renders views/course.ejs (make sure this file exists)
+    res.render("course", { course });
 });

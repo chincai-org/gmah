@@ -6,7 +6,7 @@
     "type": "module",
     "scripts": {
         "start": "node app.js",
-        "dev": "nodemon -e css,ejs,js,json",
+        "dev": "npm run format && nodemon -e css,ejs,js,json",
         "test": "echo \"Error: no test specified\" && exit 1",
         "format": "prettier --write ."
     },

@@ -1,4 +1,3 @@
-// lib/repos.js
 import { PutCommand, GetCommand } from "@aws-sdk/lib-dynamodb";
 import { ddb } from "./dynamoClient.js";
 import crypto from "crypto";
@@ -43,6 +42,13 @@ export async function putUser(username, password) {
 export async function getUser(userId) {
     const r = await ddb.send(
         new GetCommand({ TableName: USERS_TABLE, Key: { id: userId } })
+    );
+    return r.Item || null;
+}
+
+export async function getUserByUsername(username) {
+    const r = await ddb.send(
+        new GetCommand({ TableName: USERS_TABLE, Key: { username: username } })
     );
     return r.Item || null;
 }
