@@ -21,7 +21,7 @@ const TABLE_NAME = "user";
 async function createTable() {
     const cmd = new CreateTableCommand({
         TableName: TABLE_NAME,
-        AttributeDefinitions: [{ AttributeName: "id", AttributeType: "S" }],
+        AttributeDefinitions: [{ AttributeName: "id", AttributeType: "N" }],
         KeySchema: [{ AttributeName: "id", KeyType: "HASH" }],
         BillingMode: "PAY_PER_REQUEST"
     });
