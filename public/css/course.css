@@ -216,14 +216,14 @@ a {
     box-shadow: 0 0 0 2px rgba(110, 168, 254, 0.25);
 }
 
-.list {
+.dialog-list {
     list-style: none;
     padding: 0;
     margin: 0;
     display: grid;
     gap: 8px;
 }
-.list__item {
+.dialog-item {
     display: flex;
     justify-content: space-between;
     align-items: center;

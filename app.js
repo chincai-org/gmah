@@ -6,7 +6,12 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
 
-import { putUser, getUser, verifyUserCredentials } from "./util/database.js";
+import {
+    putUser,
+    getUser,
+    verifyUserCredentials,
+    getUserByUsername
+} from "./util/database.js";
 import { promptBedrock } from "./util/bedrock.js";
 
 // Load environment variables from .env file
@@ -29,14 +34,14 @@ app.use(express.static(path.join(__dirname, "public"))); // serve static files
 function cookieAuth(req, res, next) {
     const token = req.cookies?.token;
     if (!token) {
-        return res.status(401).send("Unauthorized");
+        return res.redirect("/login");
     }
     try {
         const decoded = jwt.verify(token, "super-secret");
         req.user = decoded; // store user info in request
         next();
     } catch (err) {
-        return res.status(403).send("Invalid or expired token");
+        return res.redirect("/login");
     }
 }
 
@@ -83,7 +88,8 @@ app.get("/login", (req, res) => {
 
 app.post("/signup-verifier", async (req, res) => {
     const { name, password } = req.body;
-    //const user = getUser(name); NEED TO FIND USER BY NAME
+    console.log(req.body);
+    const user = await getUserByUsername(name);
     // ===== Validation Rules =====
     const nameRegex = /^[a-zA-Z0-9_-]{3,15}$/;
     const passwordMin = 6;
@@ -98,14 +104,11 @@ app.post("/signup-verifier", async (req, res) => {
             );
     }
     if (user) {
+        console.log(user);
         return res
             .status(400)
             .send("Username taken, please try another username.");
     }
-    // Check email (basic check, you might add more robust later)
-    // if (!isValidEmail(email)) {
-    // 	return res.status(400).send("Error: Invalid email format.");
-    // }
 
     // Check password length
     if (password.length < passwordMin || password.length > passwordMax) {
@@ -143,9 +146,10 @@ app.post("/signup-verifier", async (req, res) => {
     }
 });
 
-app.post("/login-verifier", async (res, req) => {
+app.post("/login-verifier", async (req, res) => {
     const { name, password } = req.body;
-    //const user = getUser(name); FIND USER BY NAME
+    console.log(req.body);
+    const user = await getUserByUsername(name);
     if (!user) {
         return res.status(400).send("Username doesn't exist");
     }
@@ -165,23 +169,38 @@ app.post("/login-verifier", async (res, req) => {
         });
 
         res.redirect("/dashboard");
+    } else {
+        return res.send("Wrong password");
     }
-    res.send("Haven't do yet");
-    //TODO: check
 });
 
 const courses = [
     {
         id: 0,
-        name: "Course1",
+        courseName: "Course1",
+        native: "native1",
         lang: "Chinese",
         context: "None"
     },
     {
         id: 1,
-        name: "Course2",
+        courseName: "Course2",
+        native: "native2",
         lang: "Malay",
         context: "Hello"
+    }
+];
+
+const dialogs = [
+    {
+        id: 0,
+        title: "Going on the plane",
+        info: "Wth with plane"
+    },
+    {
+        id: 1,
+        title: "balls",
+        info: "hello"
     }
 ];
 
@@ -191,8 +210,13 @@ app.get("/dashboard", (req, res) => {
 
 app.post("/createCourseVerifier", (req, res) => {
     console.log(req.body);
-    const { name, lang, context } = req.body;
-    if (!name.trim() || !lang.trim() || !context.trim()) {
+    const { courseName, native, lang, context } = req.body;
+    if (
+        !courseName.trim() ||
+        !lang.trim() ||
+        !context.trim() ||
+        !native.trim()
+    ) {
         return res.status(400).send("Error: Fields cannot be empty.");
     } else {
         courses.push({ ...req.body, id: courses.length }); //supposed to save it into db
@@ -206,7 +230,7 @@ app.get("/courses/:id", (req, res) => {
         return res.status(404).send("Course not found");
     }
     // Renders views/course.ejs (make sure this file exists)
-    res.render("course", { course });
+    res.render("course", { course, dialogs });
 });
 
 app.get("/ask", async (req, res) => {
@@ -217,6 +241,15 @@ app.get("/ask", async (req, res) => {
     } catch (e) {
         res.status(500).json({ error: e.message });
     }
+});
+
+app.get("/logout", (req, res) => {
+    res.clearCookie("token", {
+        httpOnly: true,
+        sameSite: "strict"
+    });
+
+    res.redirect("/landing_page.html");
 });
 
 app.listen(port, () => {

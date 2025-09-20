@@ -23,14 +23,13 @@
     <nav class="tabs" role="tablist" aria-label="Course panels">
       <button class="tab is-active" data-target="grammar" role="tab" aria-selected="true">Grammar</button>
       <button class="tab" data-target="vocab" role="tab" aria-selected="false">Vocab</button>
-      <button class="tab" data-target="chatbot" role="tab" aria-selected="false">Chatbot</button>
       <button class="tab" data-target="dialogue" role="tab" aria-selected="false">Dialogue</button>
     </nav>
 
     <section id="grammar" class="panel is-active" role="tabpanel" aria-labelledby="grammar-tab">
       <div class="panel__header">
         <h2>Grammar</h2>
-        <button class="btn btn-primary">New lesson</button>
+        <button class="btn btn-primary">Generate lesson</button>
       </div>
       <div class="grid">
         <!-- Example grammar cards -->
@@ -39,7 +38,7 @@
           <p>Usage, structure, examples.</p>
           <div class="card__actions">
             <button class="btn">Open</button>
-            <button class="btn btn-ghost">Edit</button>
+            <button class="btn btn-ghost">Regenerate</button>
           </div>
         </div>
         <div class="card">
@@ -47,7 +46,7 @@
           <p>Actions in progress in the past.</p>
           <div class="card__actions">
             <button class="btn">Open</button>
-            <button class="btn btn-ghost">Edit</button>
+            <button class="btn btn-ghost">Regenerate</button>
           </div>
         </div>
       </div>
@@ -56,7 +55,7 @@
     <section id="vocab" class="panel" role="tabpanel" aria-labelledby="vocab-tab" hidden>
       <div class="panel__header">
         <h2>Vocab</h2>
-        <button class="btn btn-primary">New set</button>
+        <button class="btn btn-primary">Generate set</button>
       </div>
       <div class="grid">
         <div class="card">
@@ -64,7 +63,7 @@
           <p>20 words • A1</p>
           <div class="card__actions">
             <button class="btn">Practice</button>
-            <button class="btn btn-ghost">Edit</button>
+            <button class="btn btn-ghost">Regenerate</button>
           </div>
         </div>
         <div class="card">
@@ -72,15 +71,18 @@
           <p>32 words • A2</p>
           <div class="card__actions">
             <button class="btn">Practice</button>
-            <button class="btn btn-ghost">Edit</button>
+            <button class="btn btn-ghost">Regenerate</button>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="chatbot" class="panel" role="tabpanel" aria-labelledby="chatbot-tab" hidden>
+    <section id="chatbot" class="panel" role="tabpanel" aria-labelledby="chatbot-tab" style="display:none;">
       <div class="panel__header">
-        <h2>Chatbot</h2>
+          <div class="chat-header" style="display:flex; align-items:center; gap:0.5rem;">
+              <button type="button" id="back-to-list" class="btn btn-secondary">&larr; Back</button>
+              <h2 id="chat-title" style="margin:0;"></h2>
+          </div>
       </div>
       <div class="chat">
         <div class="chat__messages" id="chatMessages" aria-live="polite">
@@ -94,32 +96,33 @@
     </section>
 
     <section id="dialogue" class="panel" role="tabpanel" aria-labelledby="dialogue-tab" hidden>
-      <div class="panel__header">
-        <h2>Dialogue</h2>
-        <button class="btn btn-primary">New dialogue</button>
-      </div>
-      <ul class="list">
-        <li class="list__item">
-          <div>
-            <strong>At the Restaurant</strong>
-            <p class="muted">Ordering food and asking about the menu.</p>
-          </div>
-          <div class="list__actions">
-            <button class="btn">Open</button>
-            <button class="btn btn-ghost">Edit</button>
-          </div>
-        </li>
-        <li class="list__item">
-          <div>
-            <strong>Checking In</strong>
-            <p class="muted">Hotel check-in conversation.</p>
-          </div>
-          <div class="list__actions">
-            <button class="btn">Open</button>
-            <button class="btn btn-ghost">Edit</button>
-          </div>
-        </li>
-      </ul>
+        <div class="panel__header">
+            <h2>Dialogue</h2>
+            <button class="btn btn-primary">Generate dialogue</button>
+        </div>
+        <ul class="dialog-list">
+            <% dialogs.forEach(function(d) { %>
+            <li class="dialog-item">
+                <div class="dialog-meta">
+                    <strong><%= d.title %></strong>
+                    <p class="muted"><%= d.info %></p>
+                </div>
+
+                <div class="list__actions">
+                    <button
+                        type="button"
+                        class="btn btn-primary open-dialog"
+                        data-action="open-dialog"
+                        data-dialog-id="<%= d.id %>"
+                        data-dialog-title="<%- d.title %>"
+                        >
+                        Open
+                    </button>
+                    <button class="btn btn-ghost">Regenerate</button>
+                </div>
+            </li>
+            <% }) %>
+        </ul>
     </section>
   </main>
 

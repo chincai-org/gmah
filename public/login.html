@@ -169,6 +169,17 @@
                 document.getElementById("signUpForm").style.display = "none";
                 document.getElementById("loginForm").style.display = "block";
             }
+
+            // ✅ Detect URL parameter
+            window.onload = function () {
+                const params = new URLSearchParams(window.location.search);
+                const mode = params.get("mode");
+                if (mode === "signup") {
+                    showSignUp();
+                } else {
+                    showLogin();
+                }
+            };
         </script>
     </body>
 </html>
