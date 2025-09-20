@@ -6,7 +6,12 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
 
-import { putUser, getUser, verifyUserCredentials } from "./util/database.js";
+import {
+    putUser,
+    getUser,
+    verifyUserCredentials,
+    getUserByUsername
+} from "./util/database.js";
 import { promptBedrock } from "./utils/bedrock.js";
 
 // Load environment variables from .env file
@@ -29,14 +34,14 @@ app.use(express.static(path.join(__dirname, "public"))); // serve static files
 function cookieAuth(req, res, next) {
     const token = req.cookies?.token;
     if (!token) {
-        return res.status(401).send("Unauthorized");
+        return res.redirect("/login");
     }
     try {
         const decoded = jwt.verify(token, "super-secret");
         req.user = decoded; // store user info in request
         next();
     } catch (err) {
-        return res.status(403).send("Invalid or expired token");
+        return res.redirect("/login");
     }
 }
 
@@ -83,7 +88,7 @@ app.get("/login", (req, res) => {
 
 app.post("/signup-verifier", async (req, res) => {
     const { name, password } = req.body;
-    //const user = getUser(name); NEED TO FIND USER BY NAME
+    const user = getUserByUsername(name);
     // ===== Validation Rules =====
     const nameRegex = /^[a-zA-Z0-9_-]{3,15}$/;
     const passwordMin = 6;
@@ -102,10 +107,6 @@ app.post("/signup-verifier", async (req, res) => {
             .status(400)
             .send("Username taken, please try another username.");
     }
-    // Check email (basic check, you might add more robust later)
-    // if (!isValidEmail(email)) {
-    // 	return res.status(400).send("Error: Invalid email format.");
-    // }
 
     // Check password length
     if (password.length < passwordMin || password.length > passwordMax) {
@@ -145,7 +146,7 @@ app.post("/signup-verifier", async (req, res) => {
 
 app.post("/login-verifier", async (res, req) => {
     const { name, password } = req.body;
-    //const user = getUser(name); FIND USER BY NAME
+    const user = getUserByUsername(name);
     if (!user) {
         return res.status(400).send("Username doesn't exist");
     }
@@ -165,9 +166,9 @@ app.post("/login-verifier", async (res, req) => {
         });
 
         res.redirect("/dashboard");
+    } else {
+        return res.send("Wrong password");
     }
-    res.send("Haven't do yet");
-    //TODO: check
 });
 
 const courses = [
