@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grammar Lesson</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    body, html {
+      height: 100%;
+      width: 100%;
+      background: #000; 
+      color: #fff;
+      overflow-y: scroll;
+      scrollbar-width: none; 
+    }
+    body::-webkit-scrollbar { display: none; } 
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    h1 {
+      color: #2ecc71; 
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .lesson-card, .quiz-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid #2ecc71;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+    .lesson-card h2, .quiz-card h2 {
+      color: #2ecc71;
+      margin-bottom: 15px;
+    }
+
+    .question-block {
+      margin-bottom: 25px;
+      padding: 15px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid #2ecc71;
+    }
+    .question-block p {
+      margin-bottom: 12px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .quiz-option {
+      display: block;
+      padding: 12px 14px;
+      margin: 8px 0;
+      border: 1px solid #2ecc71;
+      border-radius: 8px;
+      background: #111;
+      cursor: pointer;
+      transition: 0.3s;
+      text-align: left;
+    }
+    .quiz-option:hover {
+      background: #27ae60; 
+      color: black;
+      transform: translateY(-1px);
+    }
+    .correct { border-color: #27ae60; background: rgba(46, 204, 113, 0.2); }
+    .wrong { border-color: #e74c3c; background: rgba(231, 76, 60, 0.2); }
+    .feedback {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Grammar Lesson</h1>
+
+    <!-- Lesson Section -->
+    <div class="lesson-card">
+      <h2>Topic: Present Simple Tense</h2>
+      <p>
+        The Present Simple tense is used for habits, routines, and general facts.
+        <br><br>
+        <strong>Examples:</strong><br>
+        - I <em>play</em> football every weekend.<br>
+        - She <em>works</em> in an office.<br>
+        - The sun <em>rises</em> in the east.
+      </p>
+    </div>
+
+    <!-- Quiz Section -->
+    <div class="quiz-card">
+      <h2>Quick Quiz</h2>
+
+      <!-- Question 1 -->
+      <div class="question-block">
+        <p>1. Choose the correct answer:</p>
+        <div class="quiz-option" onclick="checkAnswer(this, true, 'q1')">She plays the piano.</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false, 'q1')">She play the piano.</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false, 'q1')">She playing the piano.</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false, 'q1')">She played the piano every day.</div>
+        <div id="feedback-q1" class="feedback" aria-live="polite"></div>
+      </div>
+
+      <!-- Question 2 -->
+      <div class="question-block">
+        <p>2. Choose the correct answer:</p>
+        <div class="quiz-option" onclick="checkAnswer(this, false, 'q2')">They plays football every weekend.</div>
+        <div class="quiz-option" onclick="checkAnswer(this, true, 'q2')">They play football every weekend.</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false, 'q2')">They playing football every weekend.</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false, 'q2')">They played football every weekend.</div>
+        <div id="feedback-q2" class="feedback" aria-live="polite"></div>
+      </div>
+
+      <!-- Question 3 -->
+      <div class="question-block">
+        <p>3. Choose the correct answer:</p>
+        <div class="quiz-option" onclick="checkAnswer(this, true, 'q3')">The sun rises in the east.</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false, 'q3')">The sun rise in the east.</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false, 'q3')">The sun rising in the east.</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false, 'q3')">The sun rose in the east.</div>
+        <div id="feedback-q3" class="feedback" aria-live="polite"></div>
+      </div>
+
+      <!-- Question 4 -->
+      <div class="question-block">
+        <p>4. Choose the correct answer:</p>
+        <div class="quiz-option" onclick="checkAnswer(this, false, 'q4')">She is cooking dinner now.</div>
+        <div class="quiz-option" onclick="checkAnswer(this, true, 'q4')">He goes to the gym every morning.</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false, 'q4')">They will go to the party tonight.</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false, 'q4')">We visited the museum yesterday.</div>
+        <div id="feedback-q4" class="feedback" aria-live="polite"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function checkAnswer(option, isCorrect, questionId) {
+      const feedback = document.getElementById("feedback-" + questionId);
+      const options = option.parentElement.querySelectorAll(".quiz-option");
+      options.forEach(el => {
+        el.classList.remove("correct", "wrong");
+      });
+
+      if (isCorrect) {
+        option.classList.add("correct");
+        feedback.innerHTML = "✅ Correct!";
+        feedback.style.color = "#2ecc71";
+      } else {
+        option.classList.add("wrong");
+        feedback.innerHTML = "❌ That’s not correct — please try again.";
+        feedback.style.color = "#e74c3c";
+      }
+    }
+  </script>
+</body>
+</html>
