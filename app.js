@@ -6,13 +6,8 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
 
-import {
-    putUser,
-    getUser,
-    verifyUserCredentials,
-    getUserByUsername
-} from "./util/database.js";
-import { promptBedrock } from "./utils/bedrock.js";
+import { putUser, getUser, verifyUserCredentials } from "./util/database.js";
+import { promptBedrock } from "./util/bedrock.js";
 
 // Load environment variables from .env file
 dotenv.config();
