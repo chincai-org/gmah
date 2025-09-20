@@ -72,12 +72,19 @@ export async function verifyUserCredentials(userId, password) {
     return user.password === hashedPassword;
 }
 
-export async function putCourse(userId, nativeLang, learningLang, context) {
+export async function putCourse(
+    userId,
+    courseName,
+    nativeLang,
+    learningLang,
+    context
+) {
     // Generate a unique course ID using Snowflake-like algorithm
     const courseId = generateSnowflakeId();
 
     const course = {
         courseId,
+        courseName,
         userId,
         nativeLang,
         learningLang,
@@ -88,6 +95,13 @@ export async function putCourse(userId, nativeLang, learningLang, context) {
     await ddb.send(new PutCommand({ TableName: COURSES_TABLE, Item: course }));
     console.log("Course added:", course);
     return course;
+}
+
+export async function getCourse(courseId) {
+    const r = await ddb.send(
+        new GetCommand({ TableName: COURSES_TABLE, Key: { courseId } })
+    );
+    return r.Item || null;
 }
 
 export async function createTopic() {
