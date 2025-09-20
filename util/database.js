@@ -1,4 +1,4 @@
-import { PutCommand, GetCommand } from "@aws-sdk/lib-dynamodb";
+import { PutCommand, GetCommand, ScanCommand } from "@aws-sdk/lib-dynamodb";
 import { ddb } from "./dynamoClient.js";
 import crypto from "crypto";
 
@@ -47,10 +47,18 @@ export async function getUser(userId) {
 }
 
 export async function getUserByUsername(username) {
-    const r = await ddb.send(
-        new GetCommand({ TableName: USERS_TABLE, Key: { username: username } })
-    );
-    return r.Item || null;
+    const params = {
+        TableName: USERS_TABLE,
+        FilterExpression: "username = :username",
+        ExpressionAttributeValues: {
+            ":username": username
+        }
+    };
+
+    const response = await ddb.send(new ScanCommand(params));
+    return response.Items && response.Items.length > 0
+        ? response.Items[0]
+        : null;
 }
 
 export async function verifyUserCredentials(userId, password) {
