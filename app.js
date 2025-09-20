@@ -90,6 +90,7 @@ app.post("/signup-verifier", async (req, res) => {
 	const { name, password } = req.body;
 	console.log(req.body);
 	const user = await getUserByUsername(name);
+	const user = getUserByUsername(name);
 	// ===== Validation Rules =====
 	const nameRegex = /^[a-zA-Z0-9_-]{3,15}$/;
 	const passwordMin = 6;
