@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Settings | GMAH</title>
+        <title>New Course | GMAH</title>
         <link
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
             rel="stylesheet"
@@ -22,10 +22,11 @@
                 background: #000;
                 color: #fff;
             }
-            .settings-page {
+            .page {
                 display: flex;
                 height: 100vh;
             }
+            /* Sidebar */
             .sidebar {
                 width: 220px;
                 background: rgba(0, 0, 0, 0.9);
@@ -58,6 +59,8 @@
             .sidebar ul li a:hover {
                 color: #39ff14;
             }
+
+            /* Main */
             .main {
                 flex: 1;
                 padding: 40px;
@@ -66,24 +69,24 @@
                 color: #39ff14;
                 margin-bottom: 20px;
             }
-            .settings-card {
+            .form-card {
                 background: rgba(255, 255, 255, 0.05);
                 border: 1px solid #39ff14;
                 border-radius: 12px;
                 padding: 30px;
                 max-width: 700px;
             }
-            .setting-item {
+            .form-item {
                 margin-bottom: 20px;
             }
-            .setting-item label {
+            .form-item label {
                 display: block;
                 margin-bottom: 8px;
                 font-weight: bold;
                 color: #39ff14;
             }
-            .setting-item input,
-            .setting-item select {
+            .form-item input,
+            .form-item select {
                 width: 100%;
                 padding: 10px;
                 border: 1px solid #39ff14;
@@ -92,8 +95,8 @@
                 color: #fff;
             }
 
-            /* Save button styles */
-            .save-btn {
+            /* Buttons */
+            .btn {
                 padding: 12px 30px;
                 font-size: 16px;
                 font-weight: bold;
@@ -103,203 +106,93 @@
                 border-radius: 25px;
                 cursor: pointer;
                 transition: 0.3s;
+                margin-top: 10px;
             }
-            .save-btn:hover {
+            .btn:hover {
                 background: #39ff14;
                 color: black;
             }
         </style>
     </head>
+
     <body>
-        <div class="settings-page">
+        <div class="page">
             <!-- Sidebar -->
             <div class="sidebar">
                 <h2><a href="landing_page.html">GMAH</a></h2>
                 <ul>
                     <li>
                         <a href="dashboard.html"
-                            ><i class="fas fa-home"></i>
-                            <span data-translate="dashboard">Dashboard</span></a
+                            ><i class="fas fa-home"></i> Dashboard</a
                         >
                     </li>
                     <li>
                         <a href="profile.html"
-                            ><i class="fas fa-user"></i>
-                            <span data-translate="profile">Profile</span></a
+                            ><i class="fas fa-user"></i> Profile</a
+                        >
+                    </li>
+                    <li>
+                        <a href="course-selection.html"
+                            ><i class="fas fa-book"></i> Courses</a
                         >
                     </li>
                     <li>
                         <a href="settings.html"
-                            ><i class="fas fa-cog"></i>
-                            <span data-translate="settings">Settings</span></a
+                            ><i class="fas fa-cog"></i> Settings</a
                         >
                     </li>
                     <li>
                         <a href="log_in_sign_up_page.html"
-                            ><i class="fas fa-sign-out-alt"></i>
-                            <span data-translate="logout">Logout</span></a
+                            ><i class="fas fa-sign-out-alt"></i> Logout</a
                         >
                     </li>
                 </ul>
             </div>
 
-            <!-- Settings Content -->
+            <!-- Main Content -->
             <div class="main">
-                <h1 data-translate="settingsTitle">Settings</h1>
-                <div class="settings-card">
-                    <div class="setting-item">
-                        <label for="language" data-translate="language"
-                            >Preferred Language</label
+                <h1>Create a New Course</h1>
+                <div class="form-card">
+                    <form action="/createCourseVerifier" method="POST">
+                        <div class="form-item">
+                            <label for="name">Course Name</label>
+                            <input
+                                type="text"
+                                id="name"
+                                maxlength="20"
+                                name="name"
+                                required
+                            />
+                        </div>
+                        <div class="form-item">
+                            <label for="dropdown"
+                                >Choose a language to learn</label
+                            >
+                            <select id="dropdown" name="lang">
+                                <option value="Chinese">Chinese</option>
+                                <option value="Malay">Malay</option>
+                                <option value="English">English</option>
+                            </select>
+                        </div>
+                        <div class="form-item">
+                            <label for="context">Purpose for learning</label>
+                            <input
+                                type="text"
+                                id="context"
+                                maxlength="50"
+                                name="context"
+                                required
+                            />
+                        </div>
+                        <button type="submit" class="btn">Create</button>
+                        <a href="/menu"
+                            ><button type="button" class="btn">
+                                Back to Menu
+                            </button></a
                         >
-                        <select id="language">
-                            <option value="en">English</option>
-                            <option value="es">Español</option>
-                            <option value="fr">Français</option>
-                            <option value="de">Deutsch</option>
-                            <option value="ms">Bahasa Melayu</option>
-                            <option value="zh">简体中文</option>
-                        </select>
-                    </div>
-                    <div class="setting-item">
-                        <label
-                            for="notifications"
-                            data-translate="notifications"
-                            >Notifications</label
-                        >
-                        <select id="notifications">
-                            <option value="enabled">Enabled</option>
-                            <option value="disabled">Disabled</option>
-                        </select>
-                    </div>
-                    <div class="setting-item">
-                        <label for="password" data-translate="password"
-                            >Change Password</label
-                        >
-                        <input
-                            type="password"
-                            id="password"
-                            placeholder="Enter new password"
-                        />
-                    </div>
-                    <button
-                        class="save-btn"
-                        onclick="saveSettings()"
-                        data-translate="save"
-                    >
-                        Save Changes
-                    </button>
+                    </form>
                 </div>
             </div>
         </div>
-
-        <script>
-            // Translations
-            const translations = {
-                en: {
-                    dashboard: "Dashboard",
-                    profile: "Profile",
-                    settings: "Settings",
-                    logout: "Logout",
-                    settingsTitle: "Settings",
-                    language: "Preferred Language",
-                    notifications: "Notifications",
-                    password: "Change Password",
-                    save: "Save Changes"
-                },
-                es: {
-                    dashboard: "Tablero",
-                    profile: "Perfil",
-                    settings: "Configuración",
-                    logout: "Cerrar sesión",
-                    settingsTitle: "Configuración",
-                    language: "Idioma Preferido",
-                    notifications: "Notificaciones",
-                    password: "Cambiar Contraseña",
-                    save: "Guardar Cambios"
-                },
-                fr: {
-                    dashboard: "Tableau de bord",
-                    profile: "Profil",
-                    settings: "Paramètres",
-                    logout: "Déconnexion",
-                    settingsTitle: "Paramètres",
-                    language: "Langue Préférée",
-                    notifications: "Notifications",
-                    password: "Changer le mot de passe",
-                    save: "Enregistrer les modifications"
-                },
-                de: {
-                    dashboard: "Übersicht",
-                    profile: "Profil",
-                    settings: "Einstellungen",
-                    logout: "Abmelden",
-                    settingsTitle: "Einstellungen",
-                    language: "Bevorzugte Sprache",
-                    notifications: "Benachrichtigungen",
-                    password: "Passwort ändern",
-                    save: "Änderungen speichern"
-                },
-                ms: {
-                    dashboard: "Papan Pemuka",
-                    profile: "Profil",
-                    settings: "Tetapan",
-                    logout: "Log Keluar",
-                    settingsTitle: "Tetapan",
-                    language: "Bahasa Pilihan",
-                    notifications: "Notifikasi",
-                    password: "Tukar Kata Laluan",
-                    save: "Simpan Perubahan"
-                },
-                zh: {
-                    dashboard: "仪表盘",
-                    profile: "个人资料",
-                    settings: "设置",
-                    logout: "退出登录",
-                    settingsTitle: "设置",
-                    language: "首选语言",
-                    notifications: "通知",
-                    password: "更改密码",
-                    save: "保存更改"
-                }
-            };
-
-            // Load saved settings
-            window.onload = function () {
-                if (localStorage.getItem("language")) {
-                    document.getElementById("language").value =
-                        localStorage.getItem("language");
-                    applyLanguage(localStorage.getItem("language"));
-                }
-                if (localStorage.getItem("notifications")) {
-                    document.getElementById("notifications").value =
-                        localStorage.getItem("notifications");
-                }
-            };
-
-            // Save settings
-            function saveSettings() {
-                const language = document.getElementById("language").value;
-                const notifications =
-                    document.getElementById("notifications").value;
-                const password = document.getElementById("password").value;
-
-                localStorage.setItem("language", language);
-                localStorage.setItem("notifications", notifications);
-                if (password) localStorage.setItem("password", password);
-
-                applyLanguage(language);
-                alert("✅ Settings saved!");
-            }
-
-            // Apply language instantly
-            function applyLanguage(lang) {
-                document.querySelectorAll("[data-translate]").forEach(el => {
-                    const key = el.getAttribute("data-translate");
-                    if (translations[lang][key]) {
-                        el.innerText = translations[lang][key];
-                    }
-                });
-            }
-        </script>
     </body>
 </html>
