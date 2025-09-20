@@ -15,45 +15,46 @@ const client = new DynamoDBClient({
     }
 });
 
-// Table name for easy editing
-const TABLE_NAME = "user";
+export const USERS_TABLE = process.env.USERS_TABLE || "user";
+export const COURSES_TABLE = process.env.COURSES_TABLE || "course";
+export const TOPIC_TABLE = process.env.TOPIC_TABLE || "topic";
 
-async function createTable() {
+export async function createTable(tableName, attributeDefinitions, keySchema) {
     const cmd = new CreateTableCommand({
-        TableName: TABLE_NAME,
-        AttributeDefinitions: [{ AttributeName: "id", AttributeType: "N" }],
-        KeySchema: [{ AttributeName: "id", KeyType: "HASH" }],
+        TableName: tableName,
+        AttributeDefinitions: attributeDefinitions,
+        KeySchema: keySchema,
         BillingMode: "PAY_PER_REQUEST"
     });
 
     try {
         await client.send(cmd);
-        console.log(`Table ${TABLE_NAME} created!`);
+        console.log(`Table ${tableName} created!`);
     } catch (err) {
         if (err.name === "ResourceInUseException") {
-            console.log(`Table ${TABLE_NAME} already exists`);
+            console.log(`Table ${tableName} already exists`);
         } else {
             throw err;
         }
     }
 }
 
-async function deleteTable() {
-    const cmd = new DeleteTableCommand({ TableName: TABLE_NAME });
+export async function deleteTable(tableName) {
+    const cmd = new DeleteTableCommand({ TableName: tableName });
 
     try {
         await client.send(cmd);
-        console.log(`Table ${TABLE_NAME} deleted successfully`);
+        console.log(`Table ${tableName} deleted successfully`);
     } catch (err) {
         if (err.name === "ResourceNotFoundException") {
-            console.log(`Table ${TABLE_NAME} does not exist`);
+            console.log(`Table ${tableName} does not exist`);
         } else {
             throw err;
         }
     }
 }
 
-async function listTables() {
+export async function listTables() {
     const cmd = new ListTablesCommand({});
 
     try {
@@ -64,10 +65,27 @@ async function listTables() {
     }
 }
 
-// Example usage
-// Uncomment the function you want to run
-createTable();
-// deleteTable();
-// listTables();
+async function setup() {
+    // Create the user table
+    await createTable(
+        USERS_TABLE,
+        [{ AttributeName: "id", AttributeType: "N" }],
+        [{ AttributeName: "id", KeyType: "HASH" }]
+    );
 
-// createTable();
+    // Create the courses table
+    await createTable(
+        COURSES_TABLE,
+        [{ AttributeName: "courseId", AttributeType: "N" }],
+        [{ AttributeName: "courseId", KeyType: "HASH" }]
+    );
+
+    // Create the topic table
+    await createTable(
+        TOPIC_TABLE,
+        [{ AttributeName: "topicId", AttributeType: "N" }],
+        [{ AttributeName: "topicId", KeyType: "HASH" }]
+    );
+}
+
+setup();

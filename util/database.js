@@ -4,6 +4,7 @@ import crypto from "crypto";
 
 export const USERS_TABLE = process.env.USERS_TABLE || "user";
 export const COURSES_TABLE = process.env.COURSES_TABLE || "course";
+export const TOPIC_TABLE = process.env.TOPIC_TABLE || "topic";
 
 let sequence = 0;
 const machineId = 1; // Unique ID for the machine or process
@@ -69,4 +70,42 @@ export async function verifyUserCredentials(userId, password) {
         .update(password)
         .digest("hex");
     return user.password === hashedPassword;
+}
+
+export async function putCourse(userId, nativeLang, learningLang, context) {
+    // Generate a unique course ID using Snowflake-like algorithm
+    const courseId = generateSnowflakeId();
+
+    const course = {
+        courseId,
+        userId,
+        nativeLang,
+        learningLang,
+        context,
+        topics: []
+    };
+
+    await ddb.send(new PutCommand({ TableName: COURSES_TABLE, Item: course }));
+    console.log("Course added:", course);
+    return course;
+}
+
+export async function createTopic() {
+    // TODO: What the fuck does topic have
+}
+
+export async function addTopicToCourse(courseId, topicId) {
+    const course = await ddb.send(
+        new GetCommand({ TableName: COURSES_TABLE, Key: { courseId } })
+    );
+
+    if (!course.Item) {
+        throw new Error("Course not found");
+    }
+
+    course.Item.topics.push(topicId);
+
+    await ddb.send(
+        new PutCommand({ TableName: COURSES_TABLE, Item: course.Item })
+    );
 }
