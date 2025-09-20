@@ -194,7 +194,7 @@
                 <h2><a href="landing_page.html">GMAH</a></h2>
                 <ul>
                     <li>
-                        <a href="dashboard.html"
+                        <a href="/dashboard"
                             ><i class="fas fa-home"></i> Dashboard</a
                         >
                     </li>
@@ -240,24 +240,41 @@
                     </div>
                 </div>
 
-                <!-- Lesson Path -->
-                <div class="lesson-path">
-                    <h2>Lesson Path</h2>
-                    <div class="extra-buttons">
-                        <button
-                            class="lesson-btn"
-                            onclick="location.href='flashcards_levels.html'"
-                        >
-                            📖 Flashcards
-                        </button>
-                        <button
-                            class="lesson-btn"
-                            onclick="location.href='mcq_levels.html'"
-                        >
-                            ✅ Multiple Choice
-                        </button>
-                    </div>
+                <!-- menu here -->
+                <a href="new_course.html">
+                    <button>Create course</button>
+                </a>
+                <div style="display: flex; justify-content: space-evenly; flex-wrap: wrap;">
+                    <% if (courses.length > 0) {%>
+                    <% courses.forEach(course => { %>
+                    <a href="/courses/<%= course._id || course.id %>" style="text-decoration: none; color: inherit;">
+                        <div style="background-color: aquamarine; padding: 12px; margin: 8px; border-radius: 8px; min-width: 220px;">
+                            <p>Name : <%= course.name %> </p>
+                            <p>Language : <%= course.lang %> </p>
+                            <p>Context : <%= course.context %></p>
+                        </div>
+                    </a>
+                    <% }); %>
+                    <% } %>
                 </div>
+                <!-- Lesson Path -->
+                <!-- <div class="lesson-path"> -->
+                <!--     <h2>Lesson Path</h2> -->
+                <!--     <div class="extra-buttons"> -->
+                <!--         <button -->
+                <!--             class="lesson-btn" -->
+                <!--             onclick="location.href='flashcards_levels.html'" -->
+                <!--         > -->
+                <!--             📖 Flashcards -->
+                <!--         </button> -->
+                <!--         <button -->
+                <!--             class="lesson-btn" -->
+                <!--             onclick="location.href='mcq_levels.html'" -->
+                <!--         > -->
+                <!--             ✅ Multiple Choice -->
+                <!--         </button> -->
+                <!--     </div> -->
+                <!-- </div> -->
             </div>
         </div>
 

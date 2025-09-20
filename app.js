@@ -135,7 +135,7 @@ app.post("/signup-verifier", async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days in ms
         });
 
-        res.redirect("/menu");
+        res.redirect("/dashboard");
     } catch (err) {
         console.error("Error creating user:", err);
         res.status(500).send("Internal server error.");
@@ -163,7 +163,7 @@ app.post("/login-verifier", async (res, req) => {
             maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days in ms
         });
 
-        res.redirect("/menu");
+        res.redirect("/dashboard");
     }
     res.send("Haven't do yet");
     //TODO: check
@@ -175,19 +175,21 @@ app.listen(port, () => {
 
 const courses = [
     {
+        id: 0,
         name: "Course1",
         lang: "Chinese",
         context: "None"
     },
     {
+        id: 1,
         name: "Course2",
         lang: "Malay",
         context: "Hello"
     }
 ];
 
-app.get("/menu", (req, res) => {
-    res.render("menu", { courses: courses });
+app.get("/dashboard", (req, res) => {
+    res.render("dashboard", { courses: courses });
 });
 app.post("/createCourseVerifier", (req, res) => {
     console.log(req.body);
@@ -197,7 +199,7 @@ app.post("/createCourseVerifier", (req, res) => {
     } else {
         courses.push({ ...req.body, id: courses.length }); //supposed to save it into db
     }
-    res.redirect("/menu");
+    res.redirect("/dashboard");
 });
 
 app.get("/courses/:id", (req, res) => {
