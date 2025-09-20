@@ -177,13 +177,15 @@ app.post("/login-verifier", async (req, res) => {
 const courses = [
     {
         id: 0,
-        name: "Course1",
+        courseName: "Course1",
+        native: "native1",
         lang: "Chinese",
         context: "None"
     },
     {
         id: 1,
-        name: "Course2",
+        courseName: "Course2",
+        native: "native2",
         lang: "Malay",
         context: "Hello"
     }
@@ -195,8 +197,13 @@ app.get("/dashboard", (req, res) => {
 
 app.post("/createCourseVerifier", (req, res) => {
     console.log(req.body);
-    const { name, lang, context } = req.body;
-    if (!name.trim() || !lang.trim() || !context.trim()) {
+    const { courseName, native, lang, context } = req.body;
+    if (
+        !courseName.trim() ||
+        !lang.trim() ||
+        !context.trim() ||
+        !native.trim()
+    ) {
         return res.status(400).send("Error: Fields cannot be empty.");
     } else {
         courses.push({ ...req.body, id: courses.length }); //supposed to save it into db
@@ -221,6 +228,15 @@ app.get("/ask", async (req, res) => {
     } catch (e) {
         res.status(500).json({ error: e.message });
     }
+});
+
+app.get("/logout", (req, res) => {
+    res.clearCookie("token", {
+        httpOnly: true,
+        sameSite: "strict"
+    });
+
+    res.redirect("/landing_page.html");
 });
 
 app.listen(port, () => {

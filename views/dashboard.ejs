@@ -290,7 +290,7 @@
                     </li>
                     <!-- ✅ Logout redirects to login/signup -->
                     <li>
-                        <a href="landing_page.html"
+                        <a href="/logout"
                             ><i class="fas fa-sign-out-alt"></i> Logout</a
                         >
                     </li>
@@ -329,7 +329,7 @@
                     <% courses.forEach(course => { %>
                     <a href="/courses/<%= course._id || course.id %>" class="course-card">
                         <div class="course-card-info">
-                            <p>Name : <%= course.name %> </p>
+                            <p>Name : <%= course.courseName %> </p>
                             <p>Language : <%= course.lang %> </p>
                             <p>Context : <%= course.context %></p>
                         </div>
