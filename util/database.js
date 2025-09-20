@@ -47,6 +47,31 @@ export async function getUser(userId) {
     return r.Item || null;
 }
 
+export async function updateUser(userId, username, password) {
+    const user = await getUser(userId);
+    if (!user) {
+        throw new Error("User not found");
+    }
+
+    // Update username if provided
+    if (username) {
+        user.username = username;
+    }
+
+    // Update password if provided
+    if (password) {
+        const hashedPassword = crypto
+            .createHash("sha256")
+            .update(password)
+            .digest("hex");
+        user.password = hashedPassword;
+    }
+
+    await ddb.send(new PutCommand({ TableName: USERS_TABLE, Item: user }));
+    console.log("User updated:", user);
+    return user;
+}
+
 export async function getUserByUsername(username) {
     const params = {
         TableName: USERS_TABLE,

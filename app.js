@@ -10,7 +10,8 @@ import {
     putUser,
     getUser,
     verifyUserCredentials,
-    getUserByUsername
+    getUserByUsername,
+    updateUser
 } from "./util/database.js";
 import { promptBedrock } from "./util/bedrock.js";
 
@@ -268,7 +269,10 @@ app.post("/profile", async (req, res) => {
         return res.status(400).send(check);
     } else {
         console.log("Signup data is valid! User can be created.");
-        // TODO: Update user info in db
+
+        const user = await getUserByUsername(name);
+        await updateUser(user.id, name, password);
+
         res.redirect("/profile");
     }
 });
