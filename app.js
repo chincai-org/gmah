@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
 
 import { putUser, getUser, verifyUserCredentials } from "./util/database.js";
+import { promptBedrock } from "./utils/bedrock.js";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -169,10 +170,6 @@ app.post("/login-verifier", async (res, req) => {
     //TODO: check
 });
 
-app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
-});
-
 const courses = [
     {
         name: "Course1",
@@ -189,6 +186,7 @@ const courses = [
 app.get("/menu", (req, res) => {
     res.render("menu", { courses: courses });
 });
+
 app.post("/createCourseVerifier", (req, res) => {
     console.log(req.body);
     const { name, lang, context } = req.body;
@@ -207,4 +205,18 @@ app.get("/courses/:id", (req, res) => {
     }
     // Renders views/course.ejs (make sure this file exists)
     res.render("course", { course });
+});
+
+app.get("/ask", async (req, res) => {
+    const q = req.query.q || "Hello";
+    try {
+        const answer = await promptBedrock(q);
+        res.json({ question: q, answer });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
 });
