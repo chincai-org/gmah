@@ -48,28 +48,28 @@ export async function getUser(userId) {
 }
 
 export async function updateUser(userId, username, password) {
-    const user = await getUser(userId);
-    if (!user) {
-        throw new Error("User not found");
-    }
+	const user = await getUser(userId);
+	if (!user) {
+		throw new Error("User not found");
+	}
 
-    // Update username if provided
-    if (username) {
-        user.username = username;
-    }
+	// Update username if provided
+	if (username) {
+		user.username = username;
+	}
 
-    // Update password if provided
-    if (password) {
-        const hashedPassword = crypto
-            .createHash("sha256")
-            .update(password)
-            .digest("hex");
-        user.password = hashedPassword;
-    }
+	// Update password if provided
+	if (password) {
+		const hashedPassword = crypto
+			.createHash("sha256")
+			.update(password)
+			.digest("hex");
+		user.password = hashedPassword;
+	}
 
-    await ddb.send(new PutCommand({ TableName: USERS_TABLE, Item: user }));
-    console.log("User updated:", user);
-    return user;
+	await ddb.send(new PutCommand({ TableName: USERS_TABLE, Item: user }));
+	console.log("User updated:", user);
+	return user;
 }
 
 export async function getUserByUsername(username) {
@@ -99,24 +99,24 @@ export async function verifyUserCredentials(userId, password) {
 
 <<<<<<< HEAD
 export async function putCourse(
-    userId,
-    courseName,
-    nativeLang,
-    learningLang,
-    context
+	userId,
+	courseName,
+	nativeLang,
+	learningLang,
+	context
 ) {
-    // Generate a unique course ID using Snowflake-like algorithm
-    const courseId = generateSnowflakeId();
+	// Generate a unique course ID using Snowflake-like algorithm
+	const courseId = generateSnowflakeId();
 
-    const course = {
-        courseId,
-        courseName,
-        userId,
-        nativeLang,
-        learningLang,
-        context,
-        topics: []
-    };
+	const course = {
+		courseId,
+		courseName,
+		userId,
+		nativeLang,
+		learningLang,
+		context,
+		topics: []
+	};
 =======
 export async function putCourse(userId, nativeLang, learningLang, context) {
 	// Generate a unique course ID using Snowflake-like algorithm
@@ -140,10 +140,17 @@ export async function putCourse(userId, nativeLang, learningLang, context) {
 }
 
 export async function getCourse(courseId) {
-    const r = await ddb.send(
-        new GetCommand({ TableName: COURSES_TABLE, Key: { courseId } })
-    );
-    return r.Item || null;
+<<<<<<< HEAD
+	const r = await ddb.send(
+		new GetCommand({ TableName: COURSES_TABLE, Key: { courseId } })
+	);
+	return r.Item || null;
+=======
+	const r = await ddb.send(
+		new GetCommand({ TableName: COURSES_TABLE, Key: { courseId } })
+	);
+	return r.Item || null;
+>>>>>>> 48c536a (merge conflict resolve)
 }
 
 export async function createTopic() {
