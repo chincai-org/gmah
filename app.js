@@ -6,7 +6,12 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
 
-import { putUser, getUser, verifyUserCredentials } from "./util/database.js";
+import {
+    putUser,
+    getUser,
+    verifyUserCredentials,
+    getUserByUsername
+} from "./util/database.js";
 import { promptBedrock } from "./util/bedrock.js";
 
 // Load environment variables from .env file
@@ -83,7 +88,8 @@ app.get("/login", (req, res) => {
 
 app.post("/signup-verifier", async (req, res) => {
     const { name, password } = req.body;
-    const user = getUserByUsername(name);
+    console.log(req.body);
+    const user = await getUserByUsername(name);
     // ===== Validation Rules =====
     const nameRegex = /^[a-zA-Z0-9_-]{3,15}$/;
     const passwordMin = 6;
@@ -98,6 +104,7 @@ app.post("/signup-verifier", async (req, res) => {
             );
     }
     if (user) {
+        console.log(user);
         return res
             .status(400)
             .send("Username taken, please try another username.");
@@ -139,9 +146,10 @@ app.post("/signup-verifier", async (req, res) => {
     }
 });
 
-app.post("/login-verifier", async (res, req) => {
+app.post("/login-verifier", async (req, res) => {
     const { name, password } = req.body;
-    const user = getUserByUsername(name);
+    console.log(req.body);
+    const user = await getUserByUsername(name);
     if (!user) {
         return res.status(400).send("Username doesn't exist");
     }
