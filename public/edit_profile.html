@@ -15,6 +15,7 @@
                 box-sizing: border-box;
                 font-family: Arial, sans-serif;
             }
+
             body,
             html {
                 height: 100%;
@@ -22,30 +23,37 @@
                 background: #000;
                 color: #fff;
             }
+
             .edit-page {
                 display: flex;
                 height: 100vh;
             }
+
             .sidebar {
                 width: 220px;
                 background: rgba(0, 0, 0, 0.9);
                 border-right: 2px solid #39ff14;
                 padding: 20px;
             }
+
             .sidebar h2 {
                 margin-bottom: 30px;
                 text-align: center;
             }
+
             .sidebar h2 a {
                 color: #39ff14;
                 text-decoration: none;
             }
+
             .sidebar ul {
                 list-style: none;
             }
+
             .sidebar ul li {
                 margin: 20px 0;
             }
+
             .sidebar ul li a {
                 text-decoration: none;
                 color: #fff;
@@ -55,17 +63,21 @@
                 gap: 10px;
                 transition: 0.3s;
             }
+
             .sidebar ul li a:hover {
                 color: #39ff14;
             }
+
             .main {
                 flex: 1;
                 padding: 40px;
             }
+
             .main h1 {
                 color: #39ff14;
                 margin-bottom: 20px;
             }
+
             .edit-card {
                 background: rgba(255, 255, 255, 0.05);
                 border: 1px solid #39ff14;
@@ -73,15 +85,18 @@
                 padding: 30px;
                 max-width: 600px;
             }
+
             .form-group {
                 margin-bottom: 20px;
             }
+
             .form-group label {
                 display: block;
                 margin-bottom: 8px;
                 font-weight: bold;
                 color: #39ff14;
             }
+
             .form-group input {
                 width: 100%;
                 padding: 10px;
@@ -90,11 +105,13 @@
                 background: #111;
                 color: #fff;
             }
+
             .btn-group {
                 margin-top: 20px;
                 display: flex;
                 gap: 15px;
             }
+
             .save-btn,
             .cancel-btn {
                 padding: 10px 20px;
@@ -106,10 +123,12 @@
                 cursor: pointer;
                 transition: 0.3s;
             }
+
             .save-btn:hover {
                 background: #39ff14;
                 color: black;
             }
+
             .cancel-btn:hover {
                 background: crimson;
                 border-color: crimson;
@@ -117,6 +136,7 @@
             }
         </style>
     </head>
+
     <body>
         <div class="edit-page">
             <!-- Sidebar -->
@@ -124,7 +144,7 @@
                 <h2><a href="landing_page.html">GMAH</a></h2>
                 <ul>
                     <li>
-                        <a href="/dashboard"
+                        <a href="dashboard.html"
                             ><i class="fas fa-home"></i> Dashboard</a
                         >
                     </li>
@@ -142,7 +162,7 @@
             </div>
 
             <!-- Edit Profile Content -->
-            <div class="main">
+            <form class="main" method="post" action="/profile">
                 <h1>Edit Profile</h1>
                 <div class="edit-card">
                     <div class="form-group">
@@ -161,55 +181,19 @@
                             placeholder="Enter new password"
                         />
                     </div>
-                    <div class="form-group">
-                        <label for="profilePic">Profile Picture</label>
-                        <input type="file" id="profilePic" accept="image/*" />
-                    </div>
                     <div class="btn-group">
-                        <button class="save-btn" onclick="saveProfile()">
-                            Save Changes
-                        </button>
-                        <button
-                            class="cancel-btn"
-                            onclick="window.location.href='profile.html'"
-                        >
-                            Cancel
-                        </button>
+                        <input
+                            type="submit"
+                            id="submit-edit"
+                            class="save-btn"
+                            value="Save Changes"
+                        />
+                        <a href="/profile">
+                            <button class="cancel-btn">Cancel</button>
+                        </a>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
-
-        <script>
-            // Load saved profile details
-            window.onload = function () {
-                if (localStorage.getItem("username")) {
-                    document.getElementById("username").value =
-                        localStorage.getItem("username");
-                }
-            };
-
-            // Save profile details
-            function saveProfile() {
-                const username = document.getElementById("username").value;
-                const password = document.getElementById("password").value;
-                const profilePic =
-                    document.getElementById("profilePic").files[0];
-
-                if (username) localStorage.setItem("username", username);
-                if (password) localStorage.setItem("password", password);
-
-                if (profilePic) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        localStorage.setItem("profilePic", e.target.result);
-                    };
-                    reader.readAsDataURL(profilePic);
-                }
-
-                alert("✅ Profile updated!");
-                window.location.href = "profile.html";
-            }
-        </script>
     </body>
 </html>
