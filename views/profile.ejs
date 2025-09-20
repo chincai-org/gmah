@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>New Course | GMAH</title>
+        <title>User Profile | GMAH</title>
         <link
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
             rel="stylesheet"
@@ -15,6 +15,7 @@
                 box-sizing: border-box;
                 font-family: Arial, sans-serif;
             }
+
             body,
             html {
                 height: 100%;
@@ -22,31 +23,37 @@
                 background: #000;
                 color: #fff;
             }
-            .page {
+
+            .profile-page {
                 display: flex;
                 height: 100vh;
             }
-            /* Sidebar */
+
             .sidebar {
                 width: 220px;
                 background: rgba(0, 0, 0, 0.9);
                 border-right: 2px solid #39ff14;
                 padding: 20px;
             }
+
             .sidebar h2 {
                 margin-bottom: 30px;
                 text-align: center;
             }
+
             .sidebar h2 a {
                 color: #39ff14;
                 text-decoration: none;
             }
+
             .sidebar ul {
                 list-style: none;
             }
+
             .sidebar ul li {
                 margin: 20px 0;
             }
+
             .sidebar ul li a {
                 text-decoration: none;
                 color: #fff;
@@ -56,59 +63,60 @@
                 gap: 10px;
                 transition: 0.3s;
             }
+
             .sidebar ul li a:hover {
                 color: #39ff14;
             }
 
-            /* Main */
             .main {
                 flex: 1;
                 padding: 40px;
             }
+
             .main h1 {
                 color: #39ff14;
                 margin-bottom: 20px;
             }
-            .form-card {
+
+            .profile-card {
                 background: rgba(255, 255, 255, 0.05);
                 border: 1px solid #39ff14;
                 border-radius: 12px;
                 padding: 30px;
-                max-width: 700px;
-            }
-            .form-item {
-                margin-bottom: 20px;
-            }
-            .form-item label {
-                display: block;
-                margin-bottom: 8px;
-                font-weight: bold;
-                color: #39ff14;
-            }
-            .form-item input,
-            .form-item select {
-                width: 100%;
-                padding: 10px;
-                border: 1px solid #39ff14;
-                border-radius: 8px;
-                background: #111;
-                color: #fff;
+                max-width: 600px;
+                text-align: center;
             }
 
-            /* Buttons */
-            .btn {
-                padding: 12px 30px;
+            .profile-pic {
+                width: 120px;
+                height: 120px;
+                border-radius: 50%;
+                border: 2px solid #39ff14;
+                object-fit: cover;
+                margin-bottom: 20px;
+            }
+
+            .profile-info {
+                margin-bottom: 20px;
+                font-size: 18px;
+            }
+
+            .profile-info strong {
+                color: #39ff14;
+            }
+
+            .edit-btn {
+                padding: 10px 20px;
                 font-size: 16px;
-                font-weight: bold;
                 border: 2px solid #39ff14;
                 background: transparent;
                 color: white;
                 border-radius: 25px;
                 cursor: pointer;
                 transition: 0.3s;
-                margin-top: 10px;
             }
-            .btn:hover {
+
+            .edit-btn:hover {
                 background: #39ff14;
                 color: black;
             }
@@ -116,16 +124,15 @@
     </head>
 
     <body>
-        <div class="page">
+        <div class="profile-page">
             <!-- Sidebar -->
             <div class="sidebar">
                 <h2><a href="landing_page.html">GMAH</a></h2>
                 <ul>
                     <li>
-                        <a href="/dashboard">
-                            <i class="fas fa-home"></i>
-                            <span data-translate="dashboard">Dashboard</span>
-                        </a>
+                        <a href="/dashboard"
+                            ><i class="fas fa-home"></i> Dashboard</a
+                        >
                     </li>
                     <li>
                         <a href="/profile"
@@ -140,50 +147,38 @@
                 </ul>
             </div>
 
-            <!-- Main Content -->
+            <!-- Profile Content -->
             <div class="main">
-                <h1>Create a New Course</h1>
-                <div class="form-card">
-                    <form action="/createCourseVerifier" method="POST">
-                        <div class="form-item">
-                            <label for="name">Course Name</label>
-                            <input
-                                type="text"
-                                id="name"
-                                maxlength="20"
-                                name="name"
-                                required
-                            />
-                        </div>
-                        <div class="form-item">
-                            <label for="dropdown"
-                                >Choose a language to learn</label
-                            >
-                            <select id="dropdown" name="lang">
-                                <option value="Chinese">Chinese</option>
-                                <option value="Malay">Malay</option>
-                                <option value="English">English</option>
-                            </select>
-                        </div>
-                        <div class="form-item">
-                            <label for="context">Purpose for learning</label>
-                            <input
-                                type="text"
-                                id="context"
-                                maxlength="50"
-                                name="context"
-                                required
-                            />
-                        </div>
-                        <button type="submit" class="btn">Create</button>
-                        <a href="/menu"
-                            ><button type="button" class="btn">
-                                Back to Menu
-                            </button></a
-                        >
-                    </form>
+                <h1>Your Profile</h1>
+                <div class="profile-card">
+                    <div class="profile-info">
+                        <strong>Username:</strong>
+                        <span id="usernameDisplay"><%= user && user.username ? user.username : "Placeholder" %></span>
+                    </div>
+                    <div class="profile-info">
+                        <strong>Joined:</strong> January 2025
+                    </div>
+                    <div class="profile-info"><strong>XP:</strong> 350</div>
+                    <div class="profile-info">
+                        <strong>Streak:</strong> 12 Days 🔥
+                    </div>
+                    <a href="/edit-profile">
+                        <button class="edit-btn">Edit Profile</button>
+                    </a>
                 </div>
             </div>
         </div>
+
+        <script>
+            // Load profile data BEFORE the page fully renders
+            const savedUsername = localStorage.getItem("username");
+
+            if (savedUsername) {
+                document.addEventListener("DOMContentLoaded", () => {
+                    document.getElementById("usernameDisplay").innerText =
+                        savedUsername;
+                });
+            }
+        </script>
     </body>
 </html>

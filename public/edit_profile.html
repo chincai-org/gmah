@@ -144,12 +144,12 @@
                 <h2><a href="landing_page.html">GMAH</a></h2>
                 <ul>
                     <li>
-                        <a href="dashboard.html"
+                        <a href="/dashboard"
                             ><i class="fas fa-home"></i> Dashboard</a
                         >
                     </li>
                     <li>
-                        <a href="profile.html"
+                        <a href="/profile"
                             ><i class="fas fa-user"></i> Profile</a
                         >
                     </li>
@@ -170,6 +170,7 @@
                         <input
                             type="text"
                             id="username"
+                            name="name"
                             placeholder="Enter new username"
                         />
                     </div>
@@ -178,6 +179,7 @@
                         <input
                             type="password"
                             id="password"
+                            name="password"
                             placeholder="Enter new password"
                         />
                     </div>
@@ -188,9 +190,13 @@
                             class="save-btn"
                             value="Save Changes"
                         />
-                        <a href="/profile">
-                            <button class="cancel-btn">Cancel</button>
-                        </a>
+                        <button
+                            type="button"
+                            class="cancel-btn"
+                            onclick="window.location.href='/profile'"
+                        >
+                            Cancel
+                        </button>
                     </div>
                 </div>
             </form>

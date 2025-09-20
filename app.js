@@ -23,7 +23,6 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 3000;
-// const jwt = require("jsonwebtoken");
 app.use(cookieParser());
 
 // middlewares
@@ -43,6 +42,25 @@ function cookieAuth(req, res, next) {
     } catch (err) {
         return res.redirect("/login");
     }
+}
+async function signup_verification(name, password) {
+    // ===== Validation Rules =====
+    const nameRegex = /^[a-zA-Z0-9_-]{3,15}$/;
+    const passwordMin = 6;
+    const passwordMax = 30;
+
+    // Check name
+    if (!nameRegex.test(name)) {
+        return "Error: Name must be 3-15 characters, only letters, numbers, _ or - allowed.";
+    }
+
+    // Check password length
+    if (password.length < passwordMin || password.length > passwordMax) {
+        return `Error: Password must be between ${passwordMin}-${passwordMax} characters.`;
+    }
+
+    // All good
+    return "";
 }
 
 // routes
@@ -90,37 +108,19 @@ app.post("/signup-verifier", async (req, res) => {
     const { name, password } = req.body;
     console.log(req.body);
     const user = await getUserByUsername(name);
-    // ===== Validation Rules =====
-    const nameRegex = /^[a-zA-Z0-9_-]{3,15}$/;
-    const passwordMin = 6;
-    const passwordMax = 30;
-
-    // Check name
-    if (!nameRegex.test(name)) {
-        return res
-            .status(400)
-            .send(
-                "Error: Name must be 3-15 characters, only letters, numbers, _ or - allowed."
-            );
-    }
     if (user) {
         console.log(user);
         return res
             .status(400)
             .send("Username taken, please try another username.");
     }
-
-    // Check password length
-    if (password.length < passwordMin || password.length > passwordMax) {
-        return res
-            .status(400)
-            .send(
-                `Error: Password must be between ${passwordMin}-${passwordMax} characters.`
-            );
+    const check = await signup_verification(name, password);
+    if (check) {
+        return res.status(400).send(check);
+    } else {
+        console.log("Signup data is valid! User can be created.");
     }
 
-    // If all good
-    console.log("Signup data is valid! User can be created.");
     try {
         // Create the user in DynamoDB
         const newUser = await putUser(name, password);
@@ -250,6 +250,27 @@ app.get("/logout", (req, res) => {
     });
 
     res.redirect("/landing_page.html");
+});
+
+app.get("/edit-profile", (req, res) => {
+    res.sendFile(path.join(__dirname, "public/edit_profile.html"));
+});
+
+app.get("/profile", (req, res) => {
+    res.sendFile(path.join(__dirname, "public/profile.html"));
+    // TODO: make it give dynamic ejs file instead with user info
+});
+
+app.post("/profile", async (req, res) => {
+    const { name, password } = req.body;
+    const check = await signup_verification(name, password);
+    if (check) {
+        return res.status(400).send(check);
+    } else {
+        console.log("Signup data is valid! User can be created.");
+        // TODO: Update user info in db
+        res.redirect("/profile");
+    }
 });
 
 app.listen(port, () => {
