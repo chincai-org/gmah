@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multiple Choice Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #39ff14;
+    }
+    .question {
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+      width: 100%;
+      max-width: 400px;
+    }
+    .option {
+      padding: 12px 20px;
+      border: 2px solid #39ff14;
+      background: transparent;
+      color: white;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .option:hover {
+      background: #39ff14;
+      color: black;
+    }
+    .feedback {
+      font-size: 18px;
+      margin: 15px 0;
+      font-weight: bold;
+    }
+    .btn {
+      padding: 10px 20px;
+      border: 2px solid #39ff14;
+      background: transparent;
+      color: white;
+      font-weight: bold;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+      margin: 5px;
+    }
+    .btn:hover {
+      background: #39ff14;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="quizTitle">✅ Multiple Choice Quiz</h1>
+  <div class="question" id="question">Loading...</div>
+  <div class="options" id="options"></div>
+  <div class="feedback" id="feedback"></div>
+  <button class="btn" id="nextBtn" style="display:none;">Next Question</button>
+  <button class="btn" id="backBtn" style="display:none;" onclick="location.href='mcq-levels.html'">⬅ Back to Levels</button>
+
+  <script>
+    // Get the level from URL (?level=1,2,3)
+    const params = new URLSearchParams(window.location.search);
+    const level = params.get("level") || "1";
+
+    // Different question sets for each level
+    const quizData = {
+      1: [
+        { question: "What is the Malay word for 'Book'?", options: ["Kerusi", "Meja", "Buku", "Pensil"], answer: "Buku" },
+        { question: "What is the Chinese word for 'Hello'?", options: ["Xièxiè", "Nǐ hǎo", "Zàijiàn", "Qǐng"], answer: "Nǐ hǎo" },
+        { question: "What is the English translation of 'Kerusi'?", options: ["Table", "Chair", "Book", "Bag"], answer: "Chair" }
+      ],
+      2: [
+        { question: "What is the Malay word for 'Hospital'?", options: ["Sekolah", "Hospital", "Kedai", "Pasar"], answer: "Hospital" },
+        { question: "What does 'Zàijiàn' mean in Chinese?", options: ["Hello", "Goodbye", "Please", "Thanks"], answer: "Goodbye" },
+        { question: "What is the English translation of 'Pensil'?", options: ["Pen", "Pencil", "Eraser", "Marker"], answer: "Pencil" }
+      ],
+      3: [
+        { question: "What is the Malay word for 'Environment'?", options: ["Persekitaran", "Kesihatan", "Pendidikan", "Ekonomi"], answer: "Persekitaran" },
+        { question: "What does 'Xuéshēng' mean in Chinese?", options: ["Teacher", "Student", "Doctor", "Friend"], answer: "Student" },
+        { question: "What is the English translation of 'Perpustakaan'?", options: ["School", "Library", "Classroom", "Office"], answer: "Library" }
+      ]
+    };
+
+    const questions = quizData[level];
+    document.getElementById("quizTitle").textContent = `✅ Multiple Choice Quiz - Level ${level}`;
+
+    let currentQuestion = 0;
+
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options");
+    const feedbackEl = document.getElementById("feedback");
+    const nextBtn = document.getElementById("nextBtn");
+    const backBtn = document.getElementById("backBtn");
+
+    function loadQuestion() {
+      feedbackEl.textContent = "";
+      nextBtn.style.display = "none";
+      optionsEl.innerHTML = "";
+
+      const q = questions[currentQuestion];
+      questionEl.textContent = q.question;
+
+      q.options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.classList.add("option");
+        btn.textContent = opt;
+        btn.onclick = () => checkAnswer(opt);
+        optionsEl.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected) {
+      const q = questions[currentQuestion];
+      if (selected === q.answer) {
+        feedbackEl.textContent = "✅ Correct!";
+        feedbackEl.style.color = "#39ff14";
+      } else {
+        feedbackEl.textContent = "❌ Wrong! The correct answer is " + q.answer;
+        feedbackEl.style.color = "red";
+      }
+      nextBtn.style.display = "inline-block";
+    }
+
+    nextBtn.onclick = () => {
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        loadQuestion();
+      } else {
+        questionEl.textContent = `🎉 You've completed Level ${level}!`;
+        optionsEl.innerHTML = "";
+        feedbackEl.textContent = "";
+        nextBtn.style.display = "none";
+        backBtn.style.display = "inline-block";
+      }
+    };
+
+    // Load first question
+    loadQuestion();
+  </script>
+</body>
+</html>
