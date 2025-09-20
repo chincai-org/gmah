@@ -1,73 +1,87 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Choose MCQ Level</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-                color: white;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                height: 100vh;
-                margin: 0;
-            }
-            h1 {
-                margin-bottom: 30px;
-                color: #39ff14;
-            }
-            .levels {
-                display: flex;
-                gap: 20px;
-            }
-            .level-btn {
-                padding: 15px 30px;
-                border: 2px solid #39ff14;
-                background: transparent;
-                color: white;
-                border-radius: 15px;
-                cursor: pointer;
-                transition: 0.3s;
-                font-size: 18px;
-            }
-            .level-btn:hover {
-                background: #39ff14;
-                color: black;
-            }
-            .back-btn {
-                margin-top: 40px;
-                padding: 10px 20px;
-                border: 2px solid #39ff14;
-                background: transparent;
-                color: white;
-                border-radius: 15px;
-                cursor: pointer;
-                transition: 0.3s;
-            }
-            .back-btn:hover {
-                background: #39ff14;
-                color: black;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>✅ Choose Quiz Level</h1>
-        <div class="levels">
-            <button class="level-btn" onclick="goToLevel(1)">Level 1</button>
-            <button class="level-btn" onclick="goToLevel(2)">Level 2</button>
-            <button class="level-btn" onclick="goToLevel(3)">Level 3</button>
-        </div>
-        <button class="back-btn" onclick="location.href='/dashboard'">
-            ⬅ Back to Dashboard
-        </button>
-        <script>
-            function goToLevel(level) {
-                location.href = `mcq.html?level=${level}`;
-            }
-        </script>
-    </body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<title>Choose MCQ Level</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				background: linear-gradient(
+					135deg,
+					#0f2027,
+					#203a43,
+					#2c5364
+				);
+				color: white;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				height: 100vh;
+				margin: 0;
+			}
+			h1 {
+				margin-bottom: 30px;
+				color: #39ff14;
+			}
+			.levels {
+				display: flex;
+				gap: 20px;
+			}
+			.level-btn {
+				padding: 15px 30px;
+				border: 2px solid #39ff14;
+				background: transparent;
+				color: white;
+				border-radius: 15px;
+				cursor: pointer;
+				transition: 0.3s;
+				font-size: 18px;
+			}
+			.level-btn:hover {
+				background: #39ff14;
+				color: black;
+			}
+			.back-btn {
+				margin-top: 40px;
+				padding: 10px 20px;
+				border: 2px solid #39ff14;
+				background: transparent;
+				color: white;
+				border-radius: 15px;
+				cursor: pointer;
+				transition: 0.3s;
+			}
+			.back-btn:hover {
+				background: #39ff14;
+				color: black;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>✅ Choose Quiz Level</h1>
+		<div class="levels">
+			<button class="level-btn" onclick="goToLevel(1)">
+				Level 1
+			</button>
+			<button class="level-btn" onclick="goToLevel(2)">
+				Level 2
+			</button>
+			<button class="level-btn" onclick="goToLevel(3)">
+				Level 3
+			</button>
+		</div>
+		<button class="back-btn" onclick="location.href='/dashboard'">
+			⬅ Back to Dashboard
+		</button>
+		<script>
+			function goToLevel(level) {
+				location.href = `mcq.html?level=${level}`;
+			}
+		</script>
+	</body>
 </html>
