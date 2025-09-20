@@ -191,6 +191,19 @@ const courses = [
     }
 ];
 
+const dialogs = [
+    {
+        id: 0,
+        title: "Going on the plane",
+        info: "Wth with plane"
+    },
+    {
+        id: 1,
+        title: "balls",
+        info: "hello"
+    }
+];
+
 app.get("/dashboard", (req, res) => {
     res.render("dashboard", { courses: courses });
 });
@@ -217,7 +230,7 @@ app.get("/courses/:id", (req, res) => {
         return res.status(404).send("Course not found");
     }
     // Renders views/course.ejs (make sure this file exists)
-    res.render("course", { course });
+    res.render("course", { course, dialogs });
 });
 
 app.get("/ask", async (req, res) => {
