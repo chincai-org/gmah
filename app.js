@@ -26,17 +26,17 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public"))); // serve static files
 function cookieAuth(req, res, next) {
-	const token = req.cookies?.token;
-	if (!token) {
-		return res.status(401).send("Unauthorized");
-	}
-	try {
-		const decoded = jwt.verify(token, "super-secret");
-		req.user = decoded; // store user info in request
-		next();
-	} catch (err) {
-		return res.status(403).send("Invalid or expired token");
-	}
+    const token = req.cookies?.token;
+    if (!token) {
+        return res.status(401).send("Unauthorized");
+    }
+    try {
+        const decoded = jwt.verify(token, "super-secret");
+        req.user = decoded; // store user info in request
+        next();
+    } catch (err) {
+        return res.status(403).send("Invalid or expired token");
+    }
 }
 
 // routes
@@ -81,88 +81,92 @@ app.get("/login", (req, res) => {
 });
 
 app.post("/signup-verifier", async (req, res) => {
-	const { name, password } = req.body;
-	//const user = getUser(name); NEED TO FIND USER BY NAME
-	// ===== Validation Rules =====
-	const nameRegex = /^[a-zA-Z0-9_-]{3,15}$/;
-	const passwordMin = 6;
-	const passwordMax = 30;
+    const { name, password } = req.body;
+    //const user = getUser(name); NEED TO FIND USER BY NAME
+    // ===== Validation Rules =====
+    const nameRegex = /^[a-zA-Z0-9_-]{3,15}$/;
+    const passwordMin = 6;
+    const passwordMax = 30;
 
-	// Check name
-	if (!nameRegex.test(name)) {
-		return res.status(400).send(
-		"Error: Name must be 3-15 characters, only letters, numbers, _ or - allowed."
-		);
-	}
-	if (user){
-		return res.status(400).send(
-			"Username taken, please try another username."
-		)
-	}
-	// Check email (basic check, you might add more robust later)
-	// if (!isValidEmail(email)) {
-	// 	return res.status(400).send("Error: Invalid email format.");
-	// }
+    // Check name
+    if (!nameRegex.test(name)) {
+        return res
+            .status(400)
+            .send(
+                "Error: Name must be 3-15 characters, only letters, numbers, _ or - allowed."
+            );
+    }
+    if (user) {
+        return res
+            .status(400)
+            .send("Username taken, please try another username.");
+    }
+    // Check email (basic check, you might add more robust later)
+    // if (!isValidEmail(email)) {
+    // 	return res.status(400).send("Error: Invalid email format.");
+    // }
 
-	// Check password length
-	if (password.length < passwordMin || password.length > passwordMax) {
-		return res.status(400).send(
-		`Error: Password must be between ${passwordMin}-${passwordMax} characters.`
-		);
-	}
+    // Check password length
+    if (password.length < passwordMin || password.length > passwordMax) {
+        return res
+            .status(400)
+            .send(
+                `Error: Password must be between ${passwordMin}-${passwordMax} characters.`
+            );
+    }
 
-	// If all good
-	console.log("Signup data is valid! User can be created.");
-	try {
-		// Create the user in DynamoDB
-		const newUser = await putUser(name, password);
-		
-		// Create JWT (valid 7 days)
-		const token = jwt.sign(
-			{ id: newUser.id, username: newUser.username },
-			"super-secret", // 🔑 move this to process.env.JWT_SECRET in real app
-			{ expiresIn: "7d" }
-		);
+    // If all good
+    console.log("Signup data is valid! User can be created.");
+    try {
+        // Create the user in DynamoDB
+        const newUser = await putUser(name, password);
 
-		// Set cookie with 7-day expiry
-		res.cookie("token", token, {
-			httpOnly: true,
-			sameSite: "strict",
-			maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days in ms
-		});
+        // Create JWT (valid 7 days)
+        const token = jwt.sign(
+            { id: newUser.id, username: newUser.username },
+            "super-secret", // 🔑 move this to process.env.JWT_SECRET in real app
+            { expiresIn: "7d" }
+        );
 
-		res.redirect("/menu");
-	} catch (err) {
-		console.error("Error creating user:", err);
-		res.status(500).send("Internal server error.");
-	}
+        // Set cookie with 7-day expiry
+        res.cookie("token", token, {
+            httpOnly: true,
+            sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days in ms
+        });
+
+        res.redirect("/menu");
+    } catch (err) {
+        console.error("Error creating user:", err);
+        res.status(500).send("Internal server error.");
+    }
 });
 
-app.post("/login-verifier", async(res, req) => {
-	const {name, password} = req.body;
-	//const user = getUser(name); FIND USER BY NAME
-	if (!user) {
-		return res.status(400).send("Username doesn't exist")
-	}
-	if (verifyUserCredentials(user.id, password)){
-		// Create JWT (valid 7 days)
-		const token = jwt.sign(
-			{ id: user.id, username: newUser.username },
-			"super-secret", // 🔑 move this to process.env.JWT_SECRET in real app
-			{ expiresIn: "7d" }
-		);
+app.post("/login-verifier", async (res, req) => {
+    const { name, password } = req.body;
+    //const user = getUser(name); FIND USER BY NAME
+    if (!user) {
+        return res.status(400).send("Username doesn't exist");
+    }
+    if (verifyUserCredentials(user.id, password)) {
+        // Create JWT (valid 7 days)
+        const token = jwt.sign(
+            { id: user.id, username: newUser.username },
+            "super-secret", // 🔑 move this to process.env.JWT_SECRET in real app
+            { expiresIn: "7d" }
+        );
 
-		// Set cookie with 7-day expiry
-		res.cookie("token", token, {
-			httpOnly: true,
-			sameSite: "strict",
-			maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days in ms
-		});
-		
-		res.redirect("/menu")
-	}
-	res.send("Haven't do yet");
-	//TODO: check
+        // Set cookie with 7-day expiry
+        res.cookie("token", token, {
+            httpOnly: true,
+            sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days in ms
+        });
+
+        res.redirect("/menu");
+    }
+    res.send("Haven't do yet");
+    //TODO: check
 });
 
 app.listen(port, () => {

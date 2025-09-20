@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>User Profile | GMAH</title>
+        <title>Edit Profile | GMAH</title>
         <link
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
             rel="stylesheet"
@@ -22,7 +22,7 @@
                 background: #000;
                 color: #fff;
             }
-            .profile-page {
+            .edit-page {
                 display: flex;
                 height: 100vh;
             }
@@ -66,30 +66,37 @@
                 color: #39ff14;
                 margin-bottom: 20px;
             }
-            .profile-card {
+            .edit-card {
                 background: rgba(255, 255, 255, 0.05);
                 border: 1px solid #39ff14;
                 border-radius: 12px;
                 padding: 30px;
                 max-width: 600px;
-                text-align: center;
             }
-            .profile-pic {
-                width: 120px;
-                height: 120px;
-                border-radius: 50%;
-                border: 2px solid #39ff14;
-                object-fit: cover;
+            .form-group {
                 margin-bottom: 20px;
             }
-            .profile-info {
-                margin-bottom: 20px;
-                font-size: 18px;
-            }
-            .profile-info strong {
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: bold;
                 color: #39ff14;
             }
-            .edit-btn {
+            .form-group input {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #39ff14;
+                border-radius: 8px;
+                background: #111;
+                color: #fff;
+            }
+            .btn-group {
+                margin-top: 20px;
+                display: flex;
+                gap: 15px;
+            }
+            .save-btn,
+            .cancel-btn {
                 padding: 10px 20px;
                 font-size: 16px;
                 border: 2px solid #39ff14;
@@ -99,14 +106,19 @@
                 cursor: pointer;
                 transition: 0.3s;
             }
-            .edit-btn:hover {
+            .save-btn:hover {
                 background: #39ff14;
                 color: black;
+            }
+            .cancel-btn:hover {
+                background: crimson;
+                border-color: crimson;
+                color: white;
             }
         </style>
     </head>
     <body>
-        <div class="profile-page">
+        <div class="edit-page">
             <!-- Sidebar -->
             <div class="sidebar">
                 <h2><a href="landing_page.html">GMAH</a></h2>
@@ -134,58 +146,75 @@
                 </ul>
             </div>
 
-            <!-- Profile Content -->
+            <!-- Edit Profile Content -->
             <div class="main">
-                <h1>Your Profile</h1>
-                <div class="profile-card">
-                    <!-- Profile picture loads instantly from localStorage if available -->
-                    <img
-                        id="profilePicDisplay"
-                        class="profile-pic"
-                        src=""
-                        alt="Profile Picture"
-                    />
-                    <div class="profile-info">
-                        <strong>Username:</strong>
-                        <span id="usernameDisplay">MyUser123</span>
+                <h1>Edit Profile</h1>
+                <div class="edit-card">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input
+                            type="text"
+                            id="username"
+                            placeholder="Enter new username"
+                        />
                     </div>
-                    <div class="profile-info">
-                        <strong>Joined:</strong> January 2025
+                    <div class="form-group">
+                        <label for="password">New Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Enter new password"
+                        />
                     </div>
-                    <div class="profile-info"><strong>XP:</strong> 350</div>
-                    <div class="profile-info">
-                        <strong>Streak:</strong> 12 Days 🔥
+                    <div class="form-group">
+                        <label for="profilePic">Profile Picture</label>
+                        <input type="file" id="profilePic" accept="image/*" />
                     </div>
-                    <button
-                        class="edit-btn"
-                        onclick="window.location.href='edit_profile.html'"
-                    >
-                        Edit Profile
-                    </button>
+                    <div class="btn-group">
+                        <button class="save-btn" onclick="saveProfile()">
+                            Save Changes
+                        </button>
+                        <button
+                            class="cancel-btn"
+                            onclick="window.location.href='profile.html'"
+                        >
+                            Cancel
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
 
         <script>
-            // Load profile data BEFORE the page fully renders
-            (function () {
-                const savedUsername = localStorage.getItem("username");
-                const savedPic = localStorage.getItem("profilePic");
+            // Load saved profile details
+            window.onload = function () {
+                if (localStorage.getItem("username")) {
+                    document.getElementById("username").value =
+                        localStorage.getItem("username");
+                }
+            };
 
-                if (savedUsername) {
-                    document.addEventListener("DOMContentLoaded", () => {
-                        document.getElementById("usernameDisplay").innerText =
-                            savedUsername;
-                    });
+            // Save profile details
+            function saveProfile() {
+                const username = document.getElementById("username").value;
+                const password = document.getElementById("password").value;
+                const profilePic =
+                    document.getElementById("profilePic").files[0];
+
+                if (username) localStorage.setItem("username", username);
+                if (password) localStorage.setItem("password", password);
+
+                if (profilePic) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        localStorage.setItem("profilePic", e.target.result);
+                    };
+                    reader.readAsDataURL(profilePic);
                 }
-                if (savedPic) {
-                    document.getElementById("profilePicDisplay").src = savedPic;
-                } else {
-                    // Fallback to placeholder if no profile picture is saved
-                    document.getElementById("profilePicDisplay").src =
-                        "https://via.placeholder.com/120";
-                }
-            })();
+
+                alert("✅ Profile updated!");
+                window.location.href = "profile.html";
+            }
         </script>
     </body>
 </html>

@@ -1,245 +1,310 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Dashboard | AI Vocabulary Guide</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
-    body, html {
-      height: 100%;
-      width: 100%;
-      background: #000;
-      color: #fff;
-      overflow: hidden;
-    }
-    .dashboard {
-      display: flex;
-      height: 100vh;
-      position: relative;
-    }
-    .sidebar {
-      width: 220px;
-      background: rgba(0, 0, 0, 0.9);
-      border-right: 2px solid #39ff14;
-      padding: 20px;
-      z-index: 2;
-    }
-    .sidebar h2 {
-      margin-bottom: 30px;
-      text-align: center;
-    }
-    .sidebar h2 a {
-      color: #39ff14;
-      text-decoration: none;
-    }
-    .sidebar ul { list-style: none; }
-    .sidebar ul li { margin: 20px 0; }
-    .sidebar ul li a {
-      text-decoration: none;
-      color: #fff;
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      transition: 0.3s;
-    }
-    .sidebar ul li a:hover { color: #39ff14; }
-    .main {
-      flex: 1;
-      padding: 30px;
-      position: relative;
-      z-index: 1;
-      overflow-y: auto;
-      height: 100vh;
-    }
-    .main h1 {
-      margin-bottom: 20px;
-      color: #39ff14;
-    }
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-bottom: 40px;
-    }
-    .progress-circle {
-      background: rgba(255,255,255,0.05);
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-      border: 1px solid #39ff14;
-    }
-    .progress-circle h3 { margin-bottom: 10px; }
-    .circle {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      border: 10px solid #222;
-      border-top-color: #39ff14;
-      margin: 0 auto 10px;
-      animation: spin 4s linear infinite;
-    }
-    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    .xp-card {
-      background: rgba(255,255,255,0.05);
-      border-radius: 12px;
-      padding: 20px;
-      border: 1px solid #39ff14;
-    }
-    .xp-bar {
-      width: 100%;
-      height: 20px;
-      background: #222;
-      border-radius: 10px;
-      overflow: hidden;
-      border: 1px solid #39ff14;
-    }
-    .xp-fill {
-      width: 70%;
-      height: 100%;
-      background: linear-gradient(90deg, #39ff14, #00eaff);
-    }
-    .streak-card {
-      background: rgba(255,255,255,0.05);
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-      border: 1px solid #39ff14;
-    }
-    .streak-card i { font-size: 40px; color: #ff4500; margin-bottom: 10px; }
-    .streak-card p { font-size: 18px; color: #39ff14; font-weight: bold; }
-    .lesson-path {
-      margin-top: 30px;
-      padding: 20px;
-      background: rgba(255,255,255,0.05);
-      border-radius: 12px;
-      border: 1px solid #39ff14;
-    }
-    .lesson-path h2 { margin-bottom: 20px; color: #39ff14; }
-    .extra-buttons {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-    }
-    .lesson-btn {
-      padding: 12px 30px;
-      font-size: 16px;
-      font-weight: bold;
-      border: 2px solid #39ff14;
-      background: transparent;
-      color: white;
-      border-radius: 25px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    .lesson-btn:hover { background: #39ff14; color: black; }
-    #particles {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
-  </style>
-</head>
-<body>
-  <div class="dashboard">
-    <canvas id="particles"></canvas>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>User Dashboard | AI Vocabulary Guide</title>
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+            rel="stylesheet"
+        />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: Arial, sans-serif;
+            }
+            body,
+            html {
+                height: 100%;
+                width: 100%;
+                background: #000;
+                color: #fff;
+                overflow: hidden;
+            }
+            .dashboard {
+                display: flex;
+                height: 100vh;
+                position: relative;
+            }
+            .sidebar {
+                width: 220px;
+                background: rgba(0, 0, 0, 0.9);
+                border-right: 2px solid #39ff14;
+                padding: 20px;
+                z-index: 2;
+            }
+            .sidebar h2 {
+                margin-bottom: 30px;
+                text-align: center;
+            }
+            .sidebar h2 a {
+                color: #39ff14;
+                text-decoration: none;
+            }
+            .sidebar ul {
+                list-style: none;
+            }
+            .sidebar ul li {
+                margin: 20px 0;
+            }
+            .sidebar ul li a {
+                text-decoration: none;
+                color: #fff;
+                font-size: 16px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                transition: 0.3s;
+            }
+            .sidebar ul li a:hover {
+                color: #39ff14;
+            }
+            .main {
+                flex: 1;
+                padding: 30px;
+                position: relative;
+                z-index: 1;
+                overflow-y: auto;
+                height: 100vh;
+            }
+            .main h1 {
+                margin-bottom: 20px;
+                color: #39ff14;
+            }
+            .dashboard-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+                margin-bottom: 40px;
+            }
+            .progress-circle {
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 12px;
+                padding: 20px;
+                text-align: center;
+                border: 1px solid #39ff14;
+            }
+            .progress-circle h3 {
+                margin-bottom: 10px;
+            }
+            .circle {
+                width: 120px;
+                height: 120px;
+                border-radius: 50%;
+                border: 10px solid #222;
+                border-top-color: #39ff14;
+                margin: 0 auto 10px;
+                animation: spin 4s linear infinite;
+            }
+            @keyframes spin {
+                from {
+                    transform: rotate(0deg);
+                }
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+            .xp-card {
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 12px;
+                padding: 20px;
+                border: 1px solid #39ff14;
+            }
+            .xp-bar {
+                width: 100%;
+                height: 20px;
+                background: #222;
+                border-radius: 10px;
+                overflow: hidden;
+                border: 1px solid #39ff14;
+            }
+            .xp-fill {
+                width: 70%;
+                height: 100%;
+                background: linear-gradient(90deg, #39ff14, #00eaff);
+            }
+            .streak-card {
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 12px;
+                padding: 20px;
+                text-align: center;
+                border: 1px solid #39ff14;
+            }
+            .streak-card i {
+                font-size: 40px;
+                color: #ff4500;
+                margin-bottom: 10px;
+            }
+            .streak-card p {
+                font-size: 18px;
+                color: #39ff14;
+                font-weight: bold;
+            }
+            .lesson-path {
+                margin-top: 30px;
+                padding: 20px;
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 12px;
+                border: 1px solid #39ff14;
+            }
+            .lesson-path h2 {
+                margin-bottom: 20px;
+                color: #39ff14;
+            }
+            .extra-buttons {
+                display: flex;
+                gap: 20px;
+                justify-content: center;
+            }
+            .lesson-btn {
+                padding: 12px 30px;
+                font-size: 16px;
+                font-weight: bold;
+                border: 2px solid #39ff14;
+                background: transparent;
+                color: white;
+                border-radius: 25px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            .lesson-btn:hover {
+                background: #39ff14;
+                color: black;
+            }
+            #particles {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 0;
+                pointer-events: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="dashboard">
+            <canvas id="particles"></canvas>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <!-- ✅ Clickable Logo -->
-      <h2><a href="landing page.html">GMAH</a></h2>
-      <ul>
-        <li><a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
-        <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
-        <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
-        <!-- ✅ Logout redirects to login/signup -->
-        <li><a href="log in sign up page.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-      </ul>
-    </div>
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- ✅ Clickable Logo -->
+                <h2><a href="landing_page.html">GMAH</a></h2>
+                <ul>
+                    <li>
+                        <a href="dashboard.html"
+                            ><i class="fas fa-home"></i> Dashboard</a
+                        >
+                    </li>
+                    <li>
+                        <a href="profile.html"
+                            ><i class="fas fa-user"></i> Profile</a
+                        >
+                    </li>
+                    <li>
+                        <a href="settings.html"
+                            ><i class="fas fa-cog"></i> Settings</a
+                        >
+                    </li>
+                    <!-- ✅ Logout redirects to login/signup -->
+                    <li>
+                        <a href="log_in_sign_up_page.html"
+                            ><i class="fas fa-sign-out-alt"></i> Logout</a
+                        >
+                    </li>
+                </ul>
+            </div>
 
-    <!-- Main -->
-    <div class="main">
-      <h1>Welcome back, User!</h1>
-      <p>Keep up your learning streak and reach today’s goal 🚀</p>
+            <!-- Main -->
+            <div class="main">
+                <h1>Welcome back, User!</h1>
+                <p>Keep up your learning streak and reach today’s goal 🚀</p>
 
-      <div class="dashboard-grid">
-        <div class="progress-circle">
-          <h3>Daily Goal</h3>
-          <div class="circle"></div>
-          <p>7 / 10 words</p>
+                <div class="dashboard-grid">
+                    <div class="progress-circle">
+                        <h3>Daily Goal</h3>
+                        <div class="circle"></div>
+                        <p>7 / 10 words</p>
+                    </div>
+                    <div class="xp-card">
+                        <h3>XP Progress</h3>
+                        <div class="xp-bar"><div class="xp-fill"></div></div>
+                        <p>350 / 500 XP</p>
+                    </div>
+                    <div class="streak-card">
+                        <i class="fas fa-fire"></i>
+                        <h3>Streak</h3>
+                        <p>12 Days 🔥</p>
+                    </div>
+                </div>
+
+                <!-- Lesson Path -->
+                <div class="lesson-path">
+                    <h2>Lesson Path</h2>
+                    <div class="extra-buttons">
+                        <button
+                            class="lesson-btn"
+                            onclick="location.href='flashcards_levels.html'"
+                        >
+                            📖 Flashcards
+                        </button>
+                        <button
+                            class="lesson-btn"
+                            onclick="location.href='mcq_levels.html'"
+                        >
+                            ✅ Multiple Choice
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="xp-card">
-          <h3>XP Progress</h3>
-          <div class="xp-bar"><div class="xp-fill"></div></div>
-          <p>350 / 500 XP</p>
-        </div>
-        <div class="streak-card">
-          <i class="fas fa-fire"></i>
-          <h3>Streak</h3>
-          <p>12 Days 🔥</p>
-        </div>
-      </div>
 
-      <!-- Lesson Path -->
-      <div class="lesson-path">
-        <h2>Lesson Path</h2>
-        <div class="extra-buttons">
-          <button class="lesson-btn" onclick="location.href='flashcards-levels.html'">📖 Flashcards</button>
-          <button class="lesson-btn" onclick="location.href='mcq-levels.html'">✅ Multiple Choice</button>
-        </div>
-      </div>
-    </div>
-  </div>
+        <script>
+            /* ===== Particles Effect ===== */
+            const canvasP = document.getElementById("particles");
+            const ctxP = canvasP.getContext("2d");
+            canvasP.width = window.innerWidth;
+            canvasP.height = window.innerHeight;
 
-  <script>
-    /* ===== Particles Effect ===== */
-    const canvasP = document.getElementById('particles');
-    const ctxP = canvasP.getContext('2d');
-    canvasP.width = window.innerWidth;
-    canvasP.height = window.innerHeight;
-
-    class Particle {
-      constructor() {
-        this.x = Math.random() * canvasP.width;
-        this.y = Math.random() * canvasP.height;
-        this.size = Math.random() * 3 + 1;
-        this.speedX = (Math.random() - 0.5) * 0.5;
-        this.speedY = (Math.random() - 0.5) * 0.5;
-      }
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        if(this.x < 0 || this.x > canvasP.width) this.speedX *= -1;
-        if(this.y < 0 || this.y > canvasP.height) this.speedY *= -1;
-      }
-      draw() {
-        ctxP.beginPath();
-        ctxP.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctxP.fillStyle = "rgba(57,255,20,0.5)";
-        ctxP.fill();
-      }
-    }
-    const particlesArray = [];
-    for(let i=0; i<80; i++) particlesArray.push(new Particle());
-    function animateParticles() {
-      ctxP.clearRect(0, 0, canvasP.width, canvasP.height);
-      particlesArray.forEach(p => { p.update(); p.draw(); });
-      requestAnimationFrame(animateParticles);
-    }
-    animateParticles();
-    window.addEventListener("resize", () => {
-      canvasP.width = window.innerWidth;
-      canvasP.height = window.innerHeight;
-    });
-  </script>
-</body>
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvasP.width;
+                    this.y = Math.random() * canvasP.height;
+                    this.size = Math.random() * 3 + 1;
+                    this.speedX = (Math.random() - 0.5) * 0.5;
+                    this.speedY = (Math.random() - 0.5) * 0.5;
+                }
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    if (this.x < 0 || this.x > canvasP.width) this.speedX *= -1;
+                    if (this.y < 0 || this.y > canvasP.height)
+                        this.speedY *= -1;
+                }
+                draw() {
+                    ctxP.beginPath();
+                    ctxP.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctxP.fillStyle = "rgba(57,255,20,0.5)";
+                    ctxP.fill();
+                }
+            }
+            const particlesArray = [];
+            for (let i = 0; i < 80; i++) particlesArray.push(new Particle());
+            function animateParticles() {
+                ctxP.clearRect(0, 0, canvasP.width, canvasP.height);
+                particlesArray.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                requestAnimationFrame(animateParticles);
+            }
+            animateParticles();
+            window.addEventListener("resize", () => {
+                canvasP.width = window.innerWidth;
+                canvasP.height = window.innerHeight;
+            });
+        </script>
+    </body>
 </html>

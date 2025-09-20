@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>AI Vocabulary Guide</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: Arial, sans-serif;
+            }
+            body,
+            html {
+                height: 100%;
+                width: 100%;
+                overflow: hidden;
+            }
+
+            .hero {
+                position: relative;
+                background: url("img/ai.jpg") no-repeat center center/cover;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                color: #fff;
+                text-align: center;
+                overflow: hidden;
+            }
+            .hero::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 0;
+            }
+            #particles {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 0;
+                pointer-events: none;
+            }
+
+            /* Navbar */
+            .navbar {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 20px 50px;
+                font-size: 16px;
+                position: relative;
+                z-index: 1;
+            }
+            .navbar ul {
+                list-style: none;
+                display: flex;
+                gap: 30px;
+            }
+            .navbar ul li a {
+                text-decoration: none;
+                color: #fff;
+                transition: 0.3s;
+                font-weight: bold;
+            }
+            .navbar ul li a:hover {
+                color: #39ff14;
+            }
+
+            /* Logo */
+            .logo-hero {
+                position: absolute;
+                top: 20px;
+                left: 30px;
+                font-size: 42px;
+                font-weight: bold;
+                background: linear-gradient(90deg, #39ff14, #00eaff, #ff00ff);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                text-shadow: 0 0 10px rgba(57, 255, 20, 0.6);
+                z-index: 2;
+            }
+            .logo-hero a {
+                text-decoration: none;
+                color: inherit;
+            }
+
+            /* Center content */
+            .hero-content {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 1;
+            }
+            .hero-content h1 {
+                font-size: 36px;
+                font-weight: bold;
+                margin-bottom: 20px;
+                line-height: 1.4;
+                color: #fff;
+            }
+            .hero-content p {
+                font-size: 18px;
+                margin-bottom: 30px;
+                color: #f1f1f1;
+            }
+
+            /* GMAH glowing */
+            .logo-text {
+                font-size: 52px;
+                font-weight: bold;
+                background: linear-gradient(90deg, #39ff14, #00eaff, #ff00ff);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                letter-spacing: 4px;
+                margin-bottom: 25px;
+                text-shadow:
+                    0 0 10px rgba(57, 255, 20, 0.6),
+                    0 0 20px rgba(0, 234, 255, 0.6),
+                    0 0 30px rgba(255, 0, 255, 0.6);
+                animation: glowShift 3s infinite alternate;
+            }
+            @keyframes glowShift {
+                from {
+                    text-shadow:
+                        0 0 8px rgba(57, 255, 20, 0.7),
+                        0 0 16px rgba(0, 234, 255, 0.6);
+                }
+                to {
+                    text-shadow:
+                        0 0 16px rgba(255, 0, 255, 0.7),
+                        0 0 32px rgba(0, 234, 255, 0.7),
+                        0 0 48px rgba(57, 255, 20, 0.8);
+                }
+            }
+
+            /* Start button */
+            .cta-btn {
+                background: linear-gradient(to bottom, #39ff14, #2ecc10);
+                border: none;
+                padding: 15px 45px;
+                border-radius: 40px;
+                font-size: 18px;
+                font-weight: bold;
+                color: #000;
+                cursor: pointer;
+                box-shadow:
+                    0 6px #1a8c08,
+                    0 4px 12px rgba(0, 0, 0, 0.4);
+                transition: all 0.2s ease;
+            }
+            .cta-btn:active {
+                transform: translateY(4px);
+                box-shadow:
+                    0 2px #1a8c08,
+                    0 2px 6px rgba(0, 0, 0, 0.4);
+            }
+            .cta-wrapper {
+                position: relative;
+                display: inline-block;
+            }
+
+            /* Arrow hint */
+            .arrow-hint {
+                position: absolute;
+                top: 50%;
+                left: 105%;
+                transform: translateY(-50%);
+                font-size: 14px;
+                font-weight: bold;
+                color: #fff;
+                animation: bounce 1.5s infinite;
+            }
+            .arrow-hint .arrow-text {
+                position: absolute;
+                top: 40px;
+                left: 75px;
+                font-size: 18px;
+                font-weight: 800;
+                color: #fff;
+                line-height: 1.3;
+                -webkit-text-stroke: 0.6px black;
+                text-shadow: 1px 1px 2px black;
+            }
+            .arrow-hint svg {
+                width: 100px;
+                height: 60px;
+                overflow: visible;
+            }
+            @keyframes bounce {
+                0%,
+                100% {
+                    transform: translateY(-50%) translateX(0);
+                }
+                50% {
+                    transform: translateY(-52%) translateX(3px);
+                }
+            }
+
+            /* Login/SignUp buttons */
+            .auth {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                display: flex;
+                gap: 15px;
+                z-index: 1;
+            }
+            .auth button {
+                padding: 8px 18px;
+                border-radius: 20px;
+                border: 2px solid #39ff14;
+                background: transparent;
+                color: #fff;
+                font-weight: bold;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            .auth button:hover {
+                background: #39ff14;
+                color: #000;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="hero">
+            <canvas id="particles"></canvas>
+
+            <!-- ✅ Clickable Logo -->
+            <div class="logo-hero">
+                <a href="landing_page.html">GMAH</a>
+            </div>
+
+            <!-- Navbar -->
+            <div class="navbar">
+                <ul>
+                    <li><a href="landing_page.html">Main</a></li>
+                    <li><a href="about_page.html">About Us</a></li>
+                </ul>
+            </div>
+
+            <!-- Hero Content -->
+            <div class="hero-content">
+                <div class="logo-text">GMAH</div>
+                <h1>LEARN NEW WORDS EVERY DAY<br />WITH A FRIENDLY AI GUIDE</h1>
+                <p>
+                    Grow your vocabulary through simple daily practice<br />
+                    with an AI companion that makes learning easy and fun
+                </p>
+
+                <!-- Start Button -->
+                <div class="cta-wrapper">
+                    <button
+                        class="cta-btn"
+                        onclick="location.href='dashboard.html'"
+                    >
+                        START
+                    </button>
+                    <div class="arrow-hint">
+                        <svg
+                            viewBox="0 0 120 60"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <defs>
+                                <marker
+                                    id="arrowhead"
+                                    markerWidth="8"
+                                    markerHeight="6"
+                                    refX="8"
+                                    refY="3"
+                                    orient="auto"
+                                >
+                                    <polygon
+                                        points="0 0, 8 3, 0 6"
+                                        fill="white"
+                                    />
+                                </marker>
+                            </defs>
+                            <path
+                                d="M 100 40 C 70 10, 40 10, 10 30"
+                                stroke="white"
+                                stroke-width="2.5"
+                                fill="none"
+                                marker-end="url(#arrowhead)"
+                            />
+                        </svg>
+                        <span class="arrow-text"
+                            >Start from<br />
+                            here</span
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <!-- Auth Buttons -->
+            <div class="auth">
+                <button
+                    onclick="location.href='log in sign up page.html?mode=login'"
+                >
+                    Login
+                </button>
+                <button
+                    onclick="location.href='log in sign up page.html?mode=signup'"
+                >
+                    Sign Up
+                </button>
+            </div>
+        </div>
+
+        <script>
+            /* Particles */
+            const canvasP = document.getElementById("particles");
+            const ctxP = canvasP.getContext("2d");
+            canvasP.width = window.innerWidth;
+            canvasP.height = window.innerHeight;
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvasP.width;
+                    this.y = Math.random() * canvasP.height;
+                    this.size = Math.random() * 3 + 1;
+                    this.speedX = (Math.random() - 0.5) * 0.5;
+                    this.speedY = (Math.random() - 0.5) * 0.5;
+                }
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    if (this.x < 0 || this.x > canvasP.width) this.speedX *= -1;
+                    if (this.y < 0 || this.y > canvasP.height)
+                        this.speedY *= -1;
+                }
+                draw() {
+                    ctxP.beginPath();
+                    ctxP.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctxP.fillStyle = "rgba(57,255,20,0.5)";
+                    ctxP.fill();
+                }
+            }
+
+            const particlesArray = [];
+            for (let i = 0; i < 80; i++) {
+                particlesArray.push(new Particle());
+            }
+
+            function handleParticles() {
+                ctxP.clearRect(0, 0, canvasP.width, canvasP.height);
+                for (let i = 0; i < particlesArray.length; i++) {
+                    particlesArray[i].update();
+                    particlesArray[i].draw();
+                }
+                requestAnimationFrame(handleParticles);
+            }
+            handleParticles();
+        </script>
+    </body>
+</html>
