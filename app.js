@@ -151,7 +151,6 @@ app.post("/signup-verifier", async (req, res) => {
 
 app.post("/login-verifier", async (req, res) => {
 	const { name, password } = req.body;
-	console.log(req.body);
 	const user = await getUserByUsername(name);
 	if (!user) {
 		return res.status(400).send("Username doesn't exist");
@@ -261,12 +260,12 @@ app.get("/edit-profile", (req, res) => {
 	res.sendFile(path.join(__dirname, "public/edit_profile.html"));
 });
 
-app.get("/profile", (req, res) => {
-	res.sendFile(path.join(__dirname, "public/profile.html"));
-	// TODO: make it give dynamic ejs file instead with user info
+app.get("/profile", cookieAuth, (req, res) => {
+	console.log("current user info", req.user);
+	res.render("profile", { user: req.user });
 });
 
-app.post("/profile", async (req, res) => {
+app.post("/profile", cookieAuth, async (req, res) => {
 	const { name, password } = req.body;
 	const check = await signup_verification(name, password);
 	if (check) {
@@ -274,8 +273,19 @@ app.post("/profile", async (req, res) => {
 	} else {
 		console.log("Signup data is valid! User can be created.");
 
-		const user = await getUserByUsername(name);
-		await updateUser(user.id, name, password);
+		const user = req.user;
+		const updatedUser = await updateUser(user.id, name, password);
+		const token = jwt.sign(
+			{ id: updatedUser.id, username: updatedUser.username },
+			"super-secret",
+			{ expiresIn: "7d" }
+		);
+
+		res.cookie("token", token, {
+			httpOnly: true,
+			sameSite: "strict",
+			maxAge: 7 * 24 * 60 * 60 * 1000,
+		});
 
 		res.redirect("/profile");
 	}
