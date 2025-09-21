@@ -4,7 +4,10 @@ import crypto from "crypto";
 
 export const USERS_TABLE = process.env.USERS_TABLE || "user";
 export const COURSES_TABLE = process.env.COURSES_TABLE || "course";
-export const TOPIC_TABLE = process.env.TOPIC_TABLE || "topic";
+export const TOPICS_TABLE = process.env.TOPIC_TABLE || "topic";
+export const QUESTIONS_TABLE = process.env.QUESTIONS_TABLE || "question";
+
+export const TOPIC_TYPES = ["grammar", "vocabulary", "dialogue"];
 
 let sequence = 0;
 const machineId = 1; // Unique ID for the machine or process
@@ -114,7 +117,11 @@ export async function putCourse(
         nativeLang,
         learningLang,
         context,
-        topics: []
+        topics: {
+            grammar: [],
+            vocabulary: [],
+            dialogue: []
+        }
     };
 
     await ddb.send(new PutCommand({ TableName: COURSES_TABLE, Item: course }));
@@ -129,22 +136,117 @@ export async function getCourse(courseId) {
     return r.Item || null;
 }
 
-export async function createTopic() {
-    // TODO: What the fuck does topic have
+export async function putTopic(topicTitle, topicType, content, description) {
+    const typeId = TOPIC_TYPES.indexOf(topicType);
+    if (typeId === -1) {
+        throw new Error("Invalid topic type");
+    }
+
+    const topicId = generateSnowflakeId();
+    const topic = {
+        topicId: topicId,
+        title: topicTitle,
+        type: typeId,
+        content,
+        description,
+        items: []
+    };
+
+    await ddb.send(new PutCommand({ TableName: TOPICS_TABLE, Item: topic }));
+    console.log("Topic added:", topic);
+    return topic;
+}
+
+export async function getTopic(topicId) {
+    const r = await ddb.send(
+        new GetCommand({ TableName: TOPICS_TABLE, Key: { topicId } })
+    );
+    return r.Item || null;
 }
 
 export async function addTopicToCourse(courseId, topicId) {
-    const course = await ddb.send(
-        new GetCommand({ TableName: COURSES_TABLE, Key: { courseId } })
-    );
+    const course = await getCourse(courseId);
+    const topic = await getTopic(topicId);
 
-    if (!course.Item) {
+    if (!course) {
         throw new Error("Course not found");
     }
 
-    course.Item.topics.push(topicId);
+    if (!topic) {
+        throw new Error("Topic not found");
+    }
+
+    course.topics[TOPIC_TYPES[topic.type]].push(topicId);
+
+    await ddb.send(new PutCommand({ TableName: COURSES_TABLE, Item: course }));
+}
+
+export async function removeTopicFromCourse(courseId, topicId) {
+    const course = await getCourse(courseId);
+    const topic = await getTopic(topicId);
+
+    if (!course) {
+        throw new Error("Course not found");
+    }
+
+    if (!topic) {
+        throw new Error("Topic not found");
+    }
+
+    course.Item.topics[TOPIC_TYPES[topic.Item.type]] = course.Item.topics[
+        TOPIC_TYPES[topic.Item.type]
+    ].filter(id => id !== topicId);
+
+    await ddb.send(new PutCommand({ TableName: COURSES_TABLE, Item: course }));
+}
+
+export async function getItemsFromTopic(topicId) {
+    const topic = await getTopic(topicId);
+    if (!topic) {
+        throw new Error("Topic not found");
+    }
+
+    return topic.items;
+}
+
+export async function addItemToTopic(topicId, item) {
+    const topic = await getTopic(topicId);
+    if (!topic) {
+        throw new Error("Topic not found");
+    }
+
+    topic.items.push(item);
+
+    await ddb.send(new PutCommand({ TableName: TOPICS_TABLE, Item: topic }));
+    console.log("Item added to topic:", item);
+    return topic;
+}
+
+export async function updateTopicItems(topicId, items) {
+    const topic = await getTopic(topicId);
+    if (!topic) {
+        throw new Error("Topic not found");
+    }
+
+    topic.items = items;
+
+    await ddb.send(new PutCommand({ TableName: TOPICS_TABLE, Item: topic }));
+    console.log("Topic items updated:", topic);
+    return topic;
+}
+
+/**
+ *
+ * @param {number} topicId
+ * @param {Object} question Who knows what is inside question
+ */
+export async function createQuestion(question) {
+    const questionId = generateSnowflakeId();
+    const questionWithId = { questionId, ...question };
 
     await ddb.send(
-        new PutCommand({ TableName: COURSES_TABLE, Item: course.Item })
+        new PutCommand({ TableName: QUESTIONS_TABLE, Item: questionWithId })
     );
+    console.log("Question added:", questionWithId);
+    return questionWithId;
 }

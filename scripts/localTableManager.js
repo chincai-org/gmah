@@ -17,7 +17,8 @@ const client = new DynamoDBClient({
 
 export const USERS_TABLE = process.env.USERS_TABLE || "user";
 export const COURSES_TABLE = process.env.COURSES_TABLE || "course";
-export const TOPIC_TABLE = process.env.TOPIC_TABLE || "topic";
+export const TOPICS_TABLE = process.env.TOPIC_TABLE || "topic";
+export const QUESTIONS_TABLE = process.env.QUESTIONS_TABLE || "question";
 
 export async function createTable(tableName, attributeDefinitions, keySchema) {
     const cmd = new CreateTableCommand({
@@ -82,9 +83,16 @@ async function setup() {
 
     // Create the topic table
     await createTable(
-        TOPIC_TABLE,
+        TOPICS_TABLE,
         [{ AttributeName: "topicId", AttributeType: "N" }],
         [{ AttributeName: "topicId", KeyType: "HASH" }]
+    );
+
+    // Create the question table
+    await createTable(
+        QUESTIONS_TABLE,
+        [{ AttributeName: "questionId", AttributeType: "N" }],
+        [{ AttributeName: "questionId", KeyType: "HASH" }]
     );
 }
 
