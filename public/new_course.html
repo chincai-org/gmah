@@ -162,8 +162,7 @@
 					<!-- Native Language -->
 					<div class="form-item">
 						<label for="native"> Native language </label>
-						<input type="text" id="searchInput"
-							placeholder="Search bar for choosing the language, select a language from dropdown to paste it in search bar">
+						<input type="text" id="searchInput" placeholder="Search for language" />
 						<select id="native" name="native">
 							<option value="Algerian Arabic">
 								Algerian Arabic
@@ -323,7 +322,7 @@
 					<div class="form-item">
 						<label for="dropdown">Choose a language to learn</label>
 						<input type="text" id="searchInputLang"
-							placeholder="Search bar for choosing the language, select a language from dropdown to paste it in search bar">
+							placeholder="Search for language" />
 						<select id="dropdown" name="lang">
 							<option value="Algerian Arabic">
 								Algerian Arabic
@@ -492,7 +491,7 @@
 							Describe your proficiency level in the language
 							you are learning
 						</label>
-						<input type="text" id="level" maxlength="50" name="level"
+						<input type="text" id="level" maxlength="1000" name="level"
 							placeholder="Ex: I can hold a basic conversation, but I struggle with complex sentences."
 							required />
 					</div>
@@ -537,7 +536,10 @@
 		{name: "Vietnamese", value: "Vietnamese"},
 		{name: "Western Punjabi", value: "Western Punjabi"},
 		{name: "Wu Chinese", value: "Wu Chinese"},
-		{name: "Yue Chinese (Cantonese)", value: "Yue Chinese (Cantonese)"},
+		{
+			name: "Yue Chinese (Cantonese)",
+			value: "Yue Chinese (Cantonese)"
+		},
 		{name: "Moroccan Arabic", value: "Moroccan Arabic"},
 		{name: "Sudanese Arabic", value: "Sudanese Arabic"},
 		{name: "Eastern Punjabi", value: "Eastern Punjabi"},
@@ -564,87 +566,79 @@
 	];
 
 	const fuse = new Fuse(options, {
-		keys: ['name'],
-		threshold: 0.2,
-	})
+		keys: ["name"],
+		threshold: 0.2
+	});
 
-	document.getElementById('searchInput').addEventListener('input', function () {
-		const query = this.value;
-		// Clear existing options
-		const select = document.getElementById('native');
-		select.style.display = 'block';
-		select.innerHTML = '';
+	document
+		.getElementById("searchInput")
+		.addEventListener("input", function () {
+			const query = this.value;
+			// Clear existing options
+			const select = document.getElementById("native");
+			select.innerHTML = "";
 
-		if (!query) {
-			options.forEach(opt => {
-				const option = document.createElement('option');
-				option.value = opt.name;
-				option.textContent = opt.value;
+			if (!query) {
+				options.forEach(opt => {
+					const option = document.createElement("option");
+					option.value = opt.name;
+					option.textContent = opt.value;
+					select.appendChild(option);
+				});
+				return;
+			}
+			const results = fuse.search(query);
+
+			// Populate select with search results
+			results.forEach(result => {
+				const option = document.createElement("option");
+				option.value = result.item.value;
+				option.textContent = result.item.name;
 				select.appendChild(option);
 			});
-			return;
-		}
-		const results = fuse.search(query);
 
-		// Populate select with search results
-		results.forEach(result => {
-			const option = document.createElement('option');
-			option.value = result.item.value;
-			option.textContent = result.item.name;
-			select.appendChild(option);
+			// If no results, show a placeholder option
+			if (results.length === 0 && query) {
+				const option = document.createElement("option");
+				option.textContent = "No results found";
+				select.appendChild(option);
+			}
 		});
 
-		// If no results, show a placeholder option
-		if (results.length === 0 && query) {
-			const option = document.createElement('option');
-			option.textContent = 'No results found';
-			select.appendChild(option);
-		}
-	});
+	document
+		.getElementById("searchInputLang")
+		.addEventListener("input", function () {
+			const query = this.value;
+			// Clear existing options
+			const select = document.getElementById("dropdown");
+			select.innerHTML = "";
 
-	document.getElementById('native').addEventListener('change', () => {
-		document.getElementById('searchInput').value = document.getElementById('native').value;
-		document.getElementById('native').style.display = 'none';
-	});
+			if (!query) {
+				options.forEach(opt => {
+					const option = document.createElement("option");
+					option.value = opt.name;
+					option.textContent = opt.value;
+					select.appendChild(option);
+				});
+				return;
+			}
+			const results = fuse.search(query);
 
-	document.getElementById('searchInputLang').addEventListener('input', function () {
-		const query = this.value;
-		// Clear existing options
-		const select = document.getElementById('dropdown');
-		select.style.display = 'block';
-		select.innerHTML = '';
-
-		if (!query) {
-			options.forEach(opt => {
-				const option = document.createElement('option');
-				option.value = opt.name;
-				option.textContent = opt.value;
+			// Populate select with search results
+			results.forEach(result => {
+				const option = document.createElement("option");
+				option.value = result.item.value;
+				option.textContent = result.item.name;
 				select.appendChild(option);
 			});
-			return;
-		}
-		const results = fuse.search(query);
 
-		// Populate select with search results
-		results.forEach(result => {
-			const option = document.createElement('option');
-			option.value = result.item.value;
-			option.textContent = result.item.name;
-			select.appendChild(option);
+			// If no results, show a placeholder option
+			if (results.length === 0 && query) {
+				const option = document.createElement("option");
+				option.textContent = "No results found";
+				select.appendChild(option);
+			}
 		});
-
-		// If no results, show a placeholder option
-		if (results.length === 0 && query) {
-			const option = document.createElement('option');
-			option.textContent = 'No results found';
-			select.appendChild(option);
-		}
-	});
-
-	document.getElementById('dropdown').addEventListener('change', () => {
-		document.getElementById('searchInputLang').value = document.getElementById('dropdown').value;
-		document.getElementById('dropdown').style.display = 'none';
-	});
 </script>
 
 </html>
