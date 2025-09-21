@@ -4,6 +4,14 @@ LinguaAI is an innovative platform designed to help users master grammar, vocabu
 
 ---
 
+## ❓ **Problem Statement**
+
+In the market, there are existing popular language learning apps that are the go-to way for language enthusiasts or foreign workers to pick up a new language. However, the learning process often lacks personalization to the needs and learning style of individual learners and may have limited contextual practice with insufficient real-world conversational scenarios.
+
+**Challenge**: Develop a generative AI solution that creates customized language exercises, dialogues, or quizzes based on a learner’s proficiency level, native language, and interests. The system should generate realistic conversational scenarios or cultural context to enhance immersion and retention.
+
+---
+
 ## 🌐 **Live Demo**
 
 🚀 Experience LinguaAI in action:  
