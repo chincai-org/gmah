@@ -49,6 +49,35 @@ export async function promptBedrock(prompt) {
     }
 }
 
+export async function promptBedrockWithHistory(messageHistory) {
+    try {
+        const input = {
+            modelId,
+            contentType: "application/json",
+            accept: "application/json",
+            body: JSON.stringify({
+                // Nova expects "messages" array
+                messages: messageHistory,
+                inferenceConfig: {
+                    maxTokens: 1024,
+                    temperature: 0.7
+                }
+            })
+        };
+
+        const command = new InvokeModelCommand(input);
+        const response = await client.send(command);
+
+        const decoded = new TextDecoder("utf-8").decode(response.body);
+        const json = JSON.parse(decoded);
+
+        // Nova returns `outputText`
+        return json.output.message.content[0].text || JSON.stringify(json);
+    } catch (err) {
+        console.error("Bedrock prompt error:", err);
+    }
+}
+
 export async function promptGenerateGrammarsTitle(
     language,
     previousTopics,
@@ -106,7 +135,7 @@ export async function promptGenerateDialogueTitle(
     const prompt = `Create a real-life scenario for a ${language} language enthusiast who wants to learn this language because of ${context}. Avoid scenarios related to this list: ${previousTopics}. 
 
     Format the response as: 
-    { "scenario title": "short description" }
+    { "<scenario title>": "<short description>" }
 
     Example:
     { "Ordering Coffee in Paris": "Learn how to confidently order coffee and pastries in a French café while practicing polite expressions and basic vocabulary." }
@@ -118,64 +147,6 @@ export async function promptGenerateDialogueTitle(
     Consider the user's native language ${nativeLanguage} and proficiency level described as ${profficiencyLevelDescription}. Write the response in their native language.`;
 
     return await promptBedrock(prompt);
-}
-
-export async function promptGenerateDialogue(
-    language,
-    nativeLanguage,
-    scenario
-) {
-    const systemPrompt = `Given the roleplay of ${scenario}, you started the roleplay conversation. Now for every reply sent by the user, you should provide concise feedback on what they did good and what need to improve in ${nativeLanguage}. Feedback should be in ${nativeLanguage}. Then continue the roleplay conversation in ${language} replying to the user.
-	Format:
-	<START of message>
-	Feedback: (insert your feedback in ${nativeLanguage})
-	Better reply: (insert a better way for the user to response in ${language})
-
-	[insert your role]: (continue the roleplay conversation in ${language} replying to user)
-	[Translation]: (provide translation of your roleplay response in ${nativeLanguage})
-	<END of message>
-	Eample output with Malay as language learning and English as user's native language:
-	<START of message>
-	Feedback: Your use of the language is techinically correct, but the response is not releveant to the scenario.
-	Better reply: Baiklah, cikgu. Saya akan membantu kamu mangangkat kerusi ke sana.
-	
-	[Guru Sekolah]: Selepas kamu mengangkat semua kerusi di sini, tolong cikgu panggil murid Ali ke bilik guru saya.
-	[Translation]: After you carry all these chairs here, help me call the student Ali to my office.
-	<END of message>
-	`;
-    try {
-        const input = {
-            modelId,
-            contentType: "application/json",
-            accept: "application/json",
-            body: JSON.stringify({
-                messages: [
-                    {
-                        role: "system",
-                        content: [
-                            {
-                                text: systemPrompt
-                            }
-                        ]
-                    }
-                ],
-                inferenceConfig: {
-                    maxTokens: 200,
-                    temperature: 0.7
-                }
-            })
-        };
-
-        const command = new InvokeModelCommand(input);
-        const response = await client.send(command);
-
-        const decoded = new TextDecoder("utf-8").decode(response.body);
-        const json = JSON.parse(decoded);
-
-        return json.outputText || JSON.stringify(json);
-    } catch (err) {
-        console.error("Bedrock prompt error:", err);
-    }
 }
 
 export async function promptGenerateGrammarLesson(language, grammarTopic) {
@@ -276,17 +247,72 @@ export async function promptGenerateVocabQuiz(
     return await promptBedrock(prompt);
 }
 
-export async function promptGenerateDialogueFirstSentence() {
-    const prompt = `Based on a topic of Exploring Malaysian Markets with description Discover how to navigate local markets in Malaysia, learning essential phrases and cultural etiquette to enhance your experience., create a roleplaying scenario with 2 roles where one person is talking to another person. State my role and your role in chinese. Your response must be in malay. Give a conversation starter with your role. DO NOT GENERATE ANY OTHER DIALOGUE THAT IS NOT YOUR ROLE, WAIT FOR USER'S REPLY. DO NOT TYPE YOU ARE WAITING FOR MY REPLY. REMEMBER, YOU ARE ROLEPLAYING, AND NOW YOU ARE TALKING TO ME WHO IS PLAYING THE OTHER ROLE. STARTING NOW. START YOUR CONVERSATION WITH [(insert your role)]: what you going to say. For example [grampa]: hi my dear grandson. Here are rules to follow, Rules:
+export function createSystemPrompt(
+    language,
+    nativeLanguage,
+    scenario,
+    userRole,
+    aiRole
+) {
+    return `The scenario is described as: "${scenario}". You will roleplay as "${aiRole}" while the user plays the role of "${userRole}". For every user reply, you must:
 
-   - State my role and your role in chinese
-   - Start the conversation in malay
-   - Stay commited in your role, do not switch to other role, do not talk as someone else
-   - Provided translation below the conversation in chinese to help me because i might not understand malay.
+    1. Provide **concise feedback** in ${nativeLanguage} on the user's response, focusing on:
+    - What they did well.
+    - Areas for improvement (grammar, vocabulary, or relevance to the scenario).
 
-Format: Your role: (insert your role)\n My role: (insert my role)\n Scenario: (insert the scenario/context)\n
+    2. Suggest a **better reply** in ${language} to help the user improve.
 
-[insert your role]: (insert your starter conversation)\n [Translation]: (insert your translated starter conversation)\n `;
+    3. Continue the roleplay conversation in ${language}, staying fully immersed in your role (${aiRole}). Provide a translation of your response in ${nativeLanguage} to assist the user.
+
+    **Format**:
+    <START of message>
+    Feedback: (insert your feedback in ${nativeLanguage})
+    Better reply: (insert a better way for the user to respond in ${language})
+
+    [${aiRole}]: (continue the roleplay conversation in ${language})
+    [Translation]: (provide translation of your roleplay response in ${nativeLanguage})
+    <END of message>
+
+    **Example Output** (with Malay as the learning language and English as the user's native language):
+    <START of message>
+    Feedback: Your sentence is grammatically correct, but the vocabulary could be more relevant to the scenario.
+    Better reply: Baiklah, cikgu. Saya akan membantu kamu mengangkat kerusi ke sana.
+
+    [Guru Sekolah]: Selepas kamu mengangkat semua kerusi di sini, tolong cikgu panggil murid Ali ke bilik guru saya.
+    [Translation]: After you carry all these chairs here, help me call the student Ali to my office.
+    <END of message>
+
+    **Rules**:
+    1. Stay committed to your role (${aiRole}) throughout the conversation.
+    2. Do not break character or provide out-of-context responses.
+    3. Ensure feedback is constructive and encouraging.
+    4. Keep the conversation relevant to the scenario.
+    `;
+}
+
+export async function _promptGenerateDialogue(
+    language,
+    nativeLanguage,
+    scenario
+) {
+    const systemPrompt = `Given the roleplay of ${scenario}, you started the roleplay conversation. Now for every reply sent by the user, you should provide concise feedback on what they did good and what need to improve in ${nativeLanguage}. Feedback should be in ${nativeLanguage}. Then continue the roleplay conversation in ${language} replying to the user.
+	Format:
+	<START of message>
+	Feedback: (insert your feedback in ${nativeLanguage})
+	Better reply: (insert a better way for the user to response in ${language})
+
+	[insert your role]: (continue the roleplay conversation in ${language} replying to user)
+	[Translation]: (provide translation of your roleplay response in ${nativeLanguage})
+	<END of message>
+	Eample output with Malay as language learning and English as user's native language:
+	<START of message>
+	Feedback: Your use of the language is techinically correct, but the response is not releveant to the scenario.
+	Better reply: Baiklah, cikgu. Saya akan membantu kamu mangangkat kerusi ke sana.
+	
+	[Guru Sekolah]: Selepas kamu mengangkat semua kerusi di sini, tolong cikgu panggil murid Ali ke bilik guru saya.
+	[Translation]: After you carry all these chairs here, help me call the student Ali to my office.
+	<END of message>
+	`;
     try {
         const input = {
             modelId,
@@ -295,10 +321,10 @@ Format: Your role: (insert your role)\n My role: (insert my role)\n Scenario: (i
             body: JSON.stringify({
                 messages: [
                     {
-                        role: "user",
+                        role: "system",
                         content: [
                             {
-                                text: prompt
+                                text: systemPrompt
                             }
                         ]
                     }
@@ -320,4 +346,94 @@ Format: Your role: (insert your role)\n My role: (insert my role)\n Scenario: (i
     } catch (err) {
         console.error("Bedrock prompt error:", err);
     }
+}
+
+export async function _promptGenerateDialogueFirstSentence() {
+    const prompt = `Based on a topic of Exploring Malaysian Markets with description Discover how to navigate local markets in Malaysia, learning essential phrases and cultural etiquette to enhance your experience., create a roleplaying scenario with 2 roles where one person is talking to another person. State my role and your role in chinese. Your response must be in malay. Give a conversation starter with your role. DO NOT GENERATE ANY OTHER DIALOGUE THAT IS NOT YOUR ROLE, WAIT FOR USER'S REPLY. DO NOT TYPE YOU ARE WAITING FOR MY REPLY. REMEMBER, YOU ARE ROLEPLAYING, AND NOW YOU ARE TALKING TO ME WHO IS PLAYING THE OTHER ROLE. STARTING NOW. START YOUR CONVERSATION WITH [(insert your role)]: what you going to say. For example [grampa]: hi my dear grandson. Here are rules to follow, Rules:
+
+   - State my role and your role in chinese
+   - Start the conversation in malay
+   - Stay commited in your role, do not switch to other role, do not talk as someone else
+   - Provided translation below the conversation in chinese to help me because i might not understand malay.
+
+    Format: Your role: (insert your role)\n My role: (insert my role)\n Scenario: (insert the scenario/context)\n
+
+    [insert your role]: (insert your starter conversation)\n [Translation]: (insert your translated starter conversation)\n `;
+
+    return await promptBedrock(prompt);
+}
+
+export async function createScenario(title, description) {
+    const prompt = `
+    A scenario titled "${title}", described as "${description}". Your task is to write a **detailed and immersive scenario** based on the title and description provided.
+
+    **Requirements**:
+    1. Expand on the vague title and description to create a rich and engaging scenario.
+    2. Clearly define the roles of two people involved in the scenario:
+    - "person_1": (insert their role in the scenario, often the NPC or supporting character)
+    - "person_2": (insert their role in the scenario, often the user or main character)
+
+    **Format the response as JSON**:
+    {
+    "scenario": "Insert the detailed scenario description here",
+    "roles": {
+        "person_1": "Insert the role of the first person (e.g., Seller)",
+        "person_2": "Insert the role of the second person (e.g., Customer)"
+    }
+    }
+
+    **Example**:
+    {
+    "scenario": "A customer is asking the price of the apple at the supermarket. The seller provides the price and offers additional information about discounts on other fruits.",
+    "roles": {
+        "person_1": "Seller (Person 1 is often the NPC to the user)",
+        "person_2": "Customer"
+    }
+    }
+
+    **Rules**:
+    1. Ensure the scenario is realistic and engaging.
+    2. The roles must be relevant to the scenario and clearly defined.
+    3. Do not include dialogue or additional details outside the specified format, the output must be a clean JSON without any blackticks.
+
+    Generate the scenario in the specified JSON format.
+    `;
+
+    const response = await promptBedrock(prompt);
+
+    console.log("createScenario response:", response);
+
+    return JSON.parse(response);
+}
+
+export async function promptGenerateDialogueFirstSentence(
+    scenario,
+    userRole,
+    aiRole,
+    starterLanguage,
+    translationLanguage
+) {
+    const prompt = `The scenario is described as: "${scenario}". Your task is to roleplay as "${aiRole}" while the user plays the role of "${userRole}". 
+
+    **Instructions**:
+    - Start the conversation in ${starterLanguage}.
+    - Provide a conversation starter from your role (${aiRole}).
+    - DO NOT generate any dialogue for the user's role (${userRole}). WAIT for the user's reply.
+    - Provide a translation of your response in ${translationLanguage} to assist the user.
+
+    **Rules**:
+    - Stay committed to your role (${aiRole}). Do not switch roles or talk as someone else.
+    - Ensure your response is relevant to the scenario.
+    - Provide a translation below your response in ${translationLanguage}.
+
+    **Format**:
+    Your role: ${aiRole}
+    My role: ${userRole}
+    Scenario: ${scenario}
+
+    [${aiRole}]: (insert your starter conversation)
+    [Translation]: (insert your translated starter conversation)
+    `;
+
+    return await promptBedrock(prompt);
 }

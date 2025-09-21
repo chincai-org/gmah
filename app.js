@@ -20,7 +20,8 @@ import {
     addTopicToCourse,
     addItemToTopic,
     getTopic,
-    addItemsToTopic
+    addItemsToTopic,
+    updateTopicItems
 } from "./util/database.js";
 
 import {
@@ -30,7 +31,12 @@ import {
     promptGenerateGrammarLesson,
     promptGenerateGrammarQuiz,
     promptGenerateVocabLesson,
-    promptGenerateVocabQuiz
+    promptGenerateVocabQuiz,
+    promptGenerateDialogueTitle,
+    createScenario,
+    createSystemPrompt,
+    promptGenerateDialogueFirstSentence,
+    promptBedrockWithHistory
 } from "./util/bedrock.js";
 
 // Load environment variables from .env file
@@ -412,7 +418,7 @@ app.post("/courses/:id/vocab/generate", async (req, res) => {
                 course.nativeLang
             );
 
-            console.log("Raw quiz output:", quizzesOutput);
+            // console.log("Raw quiz output:", quizzesOutput);
 
             const quizzes = JSON.parse(quizzesOutput);
 
@@ -434,18 +440,125 @@ app.post("/courses/:id/dialog/generate", async (req, res) => {
             return res.status(404).json({ error: "Course not found" });
         }
 
-        const dialog = {
-            id: Date.now(),
-            title: "New Dialogue",
-            info: "Generated conversation"
-        };
+        // const dialog = {
+        //     id: Date.now(),
+        //     title: "New Dialogue",
+        //     info: "Generated conversation"
+        // };
 
         // Optionally: save to DB here if you want persistence
 
-        res.json({ dialog });
+        const previousTopics = await mapTopics(course.topics.dialogue);
+        const previousTopicsTitles = previousTopics.map(t => t.title);
+
+        // Call Bedrock or other AI service to generate lesson content
+        const output = await promptGenerateDialogueTitle(
+            course.learningLang,
+            previousTopicsTitles,
+            course.context,
+            course.nativeLang,
+            course.langLevelDescription
+        );
+
+        console.log("Raw AI output:", output);
+
+        const [title, description] = Object.entries(JSON.parse(output))[0];
+
+        const dbTopic = await putTopic(title, "dialogue", "", description);
+
+        await addTopicToCourse(courseId, dbTopic.topicId);
+
+        const { scenario, roles } = await createScenario(title, description);
+        const { person_1, person_2 } = roles;
+
+        const systemMessage = createSystemPrompt(
+            course.learningLang,
+            course.nativeLang,
+            scenario,
+            person_2,
+            person_1
+        );
+
+        const firstMessage = await promptGenerateDialogueFirstSentence(
+            scenario,
+            person_2,
+            person_1,
+            course.learningLang,
+            course.nativeLang
+        );
+
+        const chat = [
+            { role: "system", content: { text: systemMessage } },
+            { role: "assistant", content: { text: firstMessage } }
+        ];
+
+        await addItemsToTopic(dbTopic.topicId, chat);
+
+        res.json({ dialog: dbTopic });
     } catch (err) {
         console.error("Generate dialogue error:", err);
         res.status(500).json({ error: "Failed to generate dialogue" });
+    }
+});
+
+app.get("/getDialogues/:id", async (req, res) => {
+    try {
+        const topicId = parseInt(req.params.id, 10);
+        const topic = await getTopic(topicId);
+        console.log("Get dialogues topic:", topic);
+        if (!topic) {
+            return res.status(404).send("Topic not found");
+        }
+
+        const response = {
+            dialogue: topic.items.map(item => {
+                return { who: item.role, text: item.content.text };
+            })
+        };
+
+        console.log("Get dialogues response:", response);
+
+        return res.json(response);
+    } catch (err) {
+        console.error("Get dialogues error:", err);
+        res.status(500).json({ error: "Failed to get dialogues" });
+    }
+});
+
+app.post("/getResponse/:id", async (req, res) => {
+    try {
+        const topicId = parseInt(req.params.id, 10);
+        const topic = await getTopic(topicId);
+        if (!topic) {
+            return res.status(404).send("Topic not found");
+        }
+
+        const userMessage = req.body.message;
+        if (!userMessage || !userMessage.trim()) {
+            return res.status(400).json({ error: "Message cannot be empty" });
+        }
+
+        const chat = [
+            ...topic.items,
+            { role: "user", content: { text: userMessage } }
+        ];
+
+        console.log("Chat history for response:", chat);
+
+        const reply = await promptBedrockWithHistory(chat);
+
+        console.log("AI reply:", reply);
+
+        // Save user message and AI reply to topic items
+        topic.items.push({ role: "user", content: { text: userMessage } });
+        topic.items.push({ role: "assistant", content: { text: reply } });
+
+        await updateTopicItems(topicId, topic.items);
+
+        res.json({ reply });
+    } catch (err) {
+        console.error("Get response error:", err);
+        res.status(500).json({ error: "Failed to get response" });
     }
 });
 
@@ -507,32 +620,6 @@ app.get("/testcookie", cookieAuth, (req, res) => {
     res.send("You have cookie and is valid");
 });
 
-// AI API
-
-app.post("/generate-grammar-lesson", cookieAuth, async (req, res) => {});
-
-app.post("/generate-vocab-lesson", cookieAuth, async (req, res) => {
-    // Get course ID from request body
-    const { courseId } = req.body;
-    if (!courseId) {
-        return res
-            .status(400)
-            .json({ error: "Missing courseId in request body" });
-    }
-
-    // Fetch course details from database
-    const course = await getCourse(parseInt(courseId, 10));
-
-    if (!course) {
-        return res.status(404).json({ error: "Course not found" });
-    }
-
-    // Call Bedrock or other AI service to generate lesson content
-    const output = await promptGenerateGrammarsTitle();
-});
-
-app.post("/generate-dialogue-lesson", cookieAuth, async (req, res) => {});
-
 app.get("/grammar/:id", async (req, res) => {
     const topicId = +req.params.id;
     const topic = await getTopic(topicId);
@@ -555,7 +642,7 @@ app.get("/grammar/:id", async (req, res) => {
     res.render("grammar", { topic });
 });
 
-app.get("/vocab", async (req, res) => {
+app.get("/vocab/:id", async (req, res) => {
     const topicId = +req.params.id;
     const topic = await getTopic(topicId);
     if (!topic) {

@@ -59,7 +59,7 @@
 	            <h3><%= topic.title %></h3>
 	            <p><%= topic.description %></p>
 	            <div class="card__actions">
-	                <a href="../mcq.html">
+	                <a href="/vocab/<%= topic.topicId %>">
 	                    <button class="btn">Open</button>
 	                </a>
 	                <button class="btn btn-ghost">Delete</button>
@@ -101,11 +101,6 @@
         <div class="chat__messages" id="chatMessages" aria-live="polite">
           <div class="chat__bubble chat__bubble--bot">Hi! Ask me anything about this course.</div>
         </div>
-        <% dialogs.forEach(msg => { %>
-            <div class="chat__messages" id="chatMessages" aria-live="polite">
-                <div class="chat__bubble chat__bubble--<%= msg.role == "user" ? "user" : "bot" %>"><%= msg.text %></div>
-            </div>
-        <% }) %>
         <form class="chat__form" id="chatForm">
           <input class="input" id="chatInput" name="message" type="text" placeholder="Type your message..." autocomplete="off"/>
           <button class="btn btn-primary" type="submit">Send</button>
@@ -123,7 +118,7 @@
             <li class="dialog-item">
                 <div class="dialog-meta">
                     <strong><%= d.title %></strong>
-                    <p class="muted"><%= d.info %></p>
+                    <p class="muted"><%= d.description%></p>
                 </div>
 
                 <div class="list__actions">
@@ -131,7 +126,7 @@
                         type="button"
                         class="btn btn-primary open-dialog"
                         data-action="open-dialog"
-                        data-dialog-id="<%= d.id %>"
+                        data-dialog-id="<%= d.topicId %>"
                         data-dialog-title="<%- d.title %>"
                         >
                         Open
