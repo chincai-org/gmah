@@ -141,9 +141,9 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Missing course id.");
             return;
         }
-        const prevText = genBtn.textContent;
-        genBtn.disabled = true;
-        genBtn.textContent = "Generating...";
+        const prevText = vocabBtn.textContent;
+        vocabBtn.disabled = true;
+        vocabBtn.textContent = "Generating...";
 
         try {
             // Call your API. Replace the URL if you have a different endpoint.
@@ -161,8 +161,8 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error(err);
             alert("Failed to generate vocab lesson. " + (err?.message || ""));
         } finally {
-            genBtn.disabled = false;
-            genBtn.textContent = prevText;
+            vocabBtn.disabled = false;
+            vocabBtn.textContent = prevText;
         }
     }
 
