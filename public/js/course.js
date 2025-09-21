@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <h3>${topic.title ?? "New Lesson"}</h3>
             <p>${topic.description ?? ""}</p>
             <div class="card__actions">
-                <a href="../grammar.html">
+                <a href="/grammar/${topic.topicId}">
                     <button class="btn">Open</button>
                 </a>
                 <button class="btn btn-ghost">Delete</button>
@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <h3>${topic.title ?? "New Lesson"}</h3>
             <p>${topic.description ?? ""}</p>
             <div class="card__actions">
-                <a href="../mcq.html">
+                <a href="/grammar/${topic.topicId}">
                     <button class="btn">Open</button>
                 </a>
                 <button class="btn btn-ghost">Delete</button>

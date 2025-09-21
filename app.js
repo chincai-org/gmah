@@ -332,7 +332,7 @@ app.post("/courses/:id/grammar/generate", async (req, res) => {
 
         for (const topic of topics) {
             const [title, description] = Object.entries(topic)[0];
-            topicObjects.push({ title, description });
+            // topicObjects.push({ title, description });
 
             const dbTopic = await putTopic(
                 title,
@@ -341,6 +341,12 @@ app.post("/courses/:id/grammar/generate", async (req, res) => {
                 description
             );
             await addTopicToCourse(courseId, dbTopic.topicId);
+
+            topicObjects.push({
+                title: dbTopic.title,
+                description: dbTopic.description,
+                topicId: dbTopic.topicId
+            });
 
             const quizzesOutput = await promptGenerateGrammarQuiz(
                 course.learningLang,
@@ -397,7 +403,7 @@ app.post("/courses/:id/vocab/generate", async (req, res) => {
 
         for (const topic of topics) {
             const [title, description] = Object.entries(topic)[0];
-            topicObjects.push({ title, description });
+            // topicObjects.push({ title, description });
 
             const lesson = await promptGenerateVocabLesson(
                 course.learningLang,
@@ -411,6 +417,12 @@ app.post("/courses/:id/vocab/generate", async (req, res) => {
                 description
             );
             await addTopicToCourse(courseId, dbTopic.topicId);
+
+            topicObjects.push({
+                title: dbTopic.title,
+                description: dbTopic.description,
+                topicId: dbTopic.topicId
+            });
 
             const quizzesOutput = await promptGenerateVocabQuiz(
                 course.learningLang,
