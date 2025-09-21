@@ -1,4 +1,5 @@
 # gmah
+## If you want to host it locally
 
 Setup: `npm install` \
 Dev: `npm run dev` \
