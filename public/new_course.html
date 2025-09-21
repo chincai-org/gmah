@@ -126,6 +126,7 @@
 			color: black;
 		}
 	</style>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.basic.min.js"></script>
 </head>
 
 <body>
@@ -161,6 +162,8 @@
 					<!-- Native Language -->
 					<div class="form-item">
 						<label for="native"> Native language </label>
+						<input type="text" id="searchInput"
+							placeholder="Search bar for choosing the language, select a language from dropdown to paste it in search bar">
 						<select id="native" name="native">
 							<option value="Algerian Arabic">
 								Algerian Arabic
@@ -319,6 +322,8 @@
 					<!-- Language to Learn -->
 					<div class="form-item">
 						<label for="dropdown">Choose a language to learn</label>
+						<input type="text" id="searchInputLang"
+							placeholder="Search bar for choosing the language, select a language from dropdown to paste it in search bar">
 						<select id="dropdown" name="lang">
 							<option value="Algerian Arabic">
 								Algerian Arabic
@@ -504,5 +509,142 @@
 		</div>
 	</div>
 </body>
+
+<script>
+	const options = [
+		{name: "Algerian Arabic", value: "Algerian Arabic"},
+		{name: "Bengali", value: "Bengali"},
+		{name: "Bhojpuri", value: "Bhojpuri"},
+		{name: "Egyptian Arabic", value: "Egyptian Arabic"},
+		{name: "English", value: "English"},
+		{name: "French", value: "French"},
+		{name: "German", value: "German"},
+		{name: "Gujarati", value: "Gujarati"},
+		{name: "Hindi", value: "Hindi"},
+		{name: "Japanese", value: "Japanese"},
+		{name: "Javanese", value: "Javanese"},
+		{name: "Kannada", value: "Kannada"},
+		{name: "Korean", value: "Korean"},
+		{name: "Mandarin Chinese", value: "Mandarin Chinese"},
+		{name: "Marathi", value: "Marathi"},
+		{name: "Portuguese", value: "Portuguese"},
+		{name: "Russian", value: "Russian"},
+		{name: "Spanish", value: "Spanish"},
+		{name: "Tamil", value: "Tamil"},
+		{name: "Telugu", value: "Telugu"},
+		{name: "Turkish", value: "Turkish"},
+		{name: "Urdu", value: "Urdu"},
+		{name: "Vietnamese", value: "Vietnamese"},
+		{name: "Western Punjabi", value: "Western Punjabi"},
+		{name: "Wu Chinese", value: "Wu Chinese"},
+		{name: "Yue Chinese (Cantonese)", value: "Yue Chinese (Cantonese)"},
+		{name: "Moroccan Arabic", value: "Moroccan Arabic"},
+		{name: "Sudanese Arabic", value: "Sudanese Arabic"},
+		{name: "Eastern Punjabi", value: "Eastern Punjabi"},
+		{name: "Hausa", value: "Hausa"},
+		{name: "Hakka", value: "Hakka"},
+		{name: "Igbo", value: "Igbo"},
+		{name: "Indonesian", value: "Indonesian"},
+		{name: "Iranian Persian", value: "Iranian Persian"},
+		{name: "Italian", value: "Italian"},
+		{name: "Jin Chinese", value: "Jin Chinese"},
+		{name: "Maithili", value: "Maithili"},
+		{name: "Malay", value: "Malay"},
+		{name: "Northern Uzbek", value: "Northern Uzbek"},
+		{name: "North Levantine Arabic", value: "North Levantine Arabic"},
+		{name: "Odia", value: "Odia"},
+		{name: "Polish", value: "Polish"},
+		{name: "Romanian", value: "Romanian"},
+		{name: "Sindhi", value: "Sindhi"},
+		{name: "Southern Min", value: "Southern Min"},
+		{name: "Sunda", value: "Sunda"},
+		{name: "Ukrainian", value: "Ukrainian"},
+		{name: "Xiang Chinese", value: "Xiang Chinese"},
+		{name: "Yoruba", value: "Yoruba"}
+	];
+
+	const fuse = new Fuse(options, {
+		keys: ['name'],
+		threshold: 0.2,
+	})
+
+	document.getElementById('searchInput').addEventListener('input', function () {
+		const query = this.value;
+		// Clear existing options
+		const select = document.getElementById('native');
+		select.style.display = 'block';
+		select.innerHTML = '';
+
+		if (!query) {
+			options.forEach(opt => {
+				const option = document.createElement('option');
+				option.value = opt.name;
+				option.textContent = opt.value;
+				select.appendChild(option);
+			});
+			return;
+		}
+		const results = fuse.search(query);
+
+		// Populate select with search results
+		results.forEach(result => {
+			const option = document.createElement('option');
+			option.value = result.item.value;
+			option.textContent = result.item.name;
+			select.appendChild(option);
+		});
+
+		// If no results, show a placeholder option
+		if (results.length === 0 && query) {
+			const option = document.createElement('option');
+			option.textContent = 'No results found';
+			select.appendChild(option);
+		}
+	});
+
+	document.getElementById('native').addEventListener('change', () => {
+		document.getElementById('searchInput').value = document.getElementById('native').value;
+		document.getElementById('native').style.display = 'none';
+	});
+
+	document.getElementById('searchInputLang').addEventListener('input', function () {
+		const query = this.value;
+		// Clear existing options
+		const select = document.getElementById('dropdown');
+		select.style.display = 'block';
+		select.innerHTML = '';
+
+		if (!query) {
+			options.forEach(opt => {
+				const option = document.createElement('option');
+				option.value = opt.name;
+				option.textContent = opt.value;
+				select.appendChild(option);
+			});
+			return;
+		}
+		const results = fuse.search(query);
+
+		// Populate select with search results
+		results.forEach(result => {
+			const option = document.createElement('option');
+			option.value = result.item.value;
+			option.textContent = result.item.name;
+			select.appendChild(option);
+		});
+
+		// If no results, show a placeholder option
+		if (results.length === 0 && query) {
+			const option = document.createElement('option');
+			option.textContent = 'No results found';
+			select.appendChild(option);
+		}
+	});
+
+	document.getElementById('dropdown').addEventListener('change', () => {
+		document.getElementById('searchInputLang').value = document.getElementById('dropdown').value;
+		document.getElementById('dropdown').style.display = 'none';
+	});
+</script>
 
 </html>
