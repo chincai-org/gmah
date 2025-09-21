@@ -1,175 +1,163 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>New Course | GMAH</title>
-        <link
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-            rel="stylesheet"
-        />
-        <style>
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-                font-family: Arial, sans-serif;
-            }
 
-            body,
-            html {
-                height: 100%;
-                width: 100%;
-                background: #000;
-                color: #fff;
-            }
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>New Course | GMAH</title>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: Arial, sans-serif;
+		}
 
-            .page {
-                display: flex;
-                height: 100vh;
-            }
+		body,
+		html {
+			height: 100%;
+			width: 100%;
+			background: #000;
+			color: #fff;
+		}
 
-            /* Sidebar */
-            .sidebar {
-                width: 220px;
-                background: rgba(0, 0, 0, 0.9);
-                border-right: 2px solid #39ff14;
-                padding: 20px;
-            }
+		.page {
+			display: flex;
+			height: 100vh;
+		}
 
-            .sidebar h2 {
-                margin-bottom: 30px;
-                text-align: center;
-            }
+		/* Sidebar */
+		.sidebar {
+			width: 220px;
+			background: rgba(0, 0, 0, 0.9);
+			border-right: 2px solid #39ff14;
+			padding: 20px;
+		}
 
-            .sidebar h2 a {
-                color: #39ff14;
-                text-decoration: none;
-            }
+		.sidebar h2 {
+			margin-bottom: 30px;
+			text-align: center;
+		}
 
-            .sidebar ul {
-                list-style: none;
-            }
+		.sidebar h2 a {
+			color: #39ff14;
+			text-decoration: none;
+		}
 
-            .sidebar ul li {
-                margin: 20px 0;
-            }
+		.sidebar ul {
+			list-style: none;
+		}
 
-            .sidebar ul li a {
-                text-decoration: none;
-                color: #fff;
-                font-size: 16px;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                transition: 0.3s;
-            }
+		.sidebar ul li {
+			margin: 20px 0;
+		}
 
-            .sidebar ul li a:hover {
-                color: #39ff14;
-            }
+		.sidebar ul li a {
+			text-decoration: none;
+			color: #fff;
+			font-size: 16px;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			transition: 0.3s;
+		}
 
-            /* Main */
-            .main {
-                flex: 1;
-                padding: 40px;
-            }
+		.sidebar ul li a:hover {
+			color: #39ff14;
+		}
 
-            .main h1 {
-                color: #39ff14;
-                margin-bottom: 20px;
-            }
+		/* Main */
+		.main {
+			flex: 1;
+			padding: 40px;
+		}
 
-            .form-card {
-                background: rgba(255, 255, 255, 0.05);
-                border: 1px solid #39ff14;
-                border-radius: 12px;
-                padding: 30px;
-                max-width: 700px;
-            }
+		.main h1 {
+			color: #39ff14;
+			margin-bottom: 20px;
+		}
 
-            .form-item {
-                margin-bottom: 20px;
-            }
+		.form-card {
+			background: rgba(255, 255, 255, 0.05);
+			border: 1px solid #39ff14;
+			border-radius: 12px;
+			padding: 30px;
+			max-width: 700px;
+		}
 
-            .form-item label {
-                display: block;
-                margin-bottom: 8px;
-                font-weight: bold;
-                color: #39ff14;
-            }
+		.form-item {
+			margin-bottom: 20px;
+		}
 
-            .form-item input,
-            .form-item select {
-                width: 100%;
-                padding: 10px;
-                border: 1px solid #39ff14;
-                border-radius: 8px;
-                background: #111;
-                color: #fff;
-            }
+		.form-item label {
+			display: block;
+			margin-bottom: 8px;
+			font-weight: bold;
+			color: #39ff14;
+		}
 
-            /* Buttons */
-            .btn {
-                padding: 12px 30px;
-                font-size: 16px;
-                font-weight: bold;
-                border: 2px solid #39ff14;
-                background: transparent;
-                color: white;
-                border-radius: 25px;
-                cursor: pointer;
-                transition: 0.3s;
-                margin-top: 10px;
-            }
+		.form-item input,
+		.form-item select {
+			width: 100%;
+			padding: 10px;
+			border: 1px solid #39ff14;
+			border-radius: 8px;
+			background: #111;
+			color: #fff;
+		}
 
-            .btn:hover {
-                background: #39ff14;
-                color: black;
-            }
-        </style>
-    </head>
+		/* Buttons */
+		.btn {
+			padding: 12px 30px;
+			font-size: 16px;
+			font-weight: bold;
+			border: 2px solid #39ff14;
+			background: transparent;
+			color: white;
+			border-radius: 25px;
+			cursor: pointer;
+			transition: 0.3s;
+			margin-top: 10px;
+		}
 
-    <body>
-        <div class="page">
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <h2><a href="landing_page.html">GMAH</a></h2>
-                <ul>
-                    <li>
-                        <a href="/dashboard"
-                            ><i class="fas fa-home"></i> Dashboard</a
-                        >
-                    </li>
-                    <li>
-                        <a href="profile.html"
-                            ><i class="fas fa-user"></i> Profile</a
-                        >
-                    </li>
-                    <li>
-                        <a href="/logout"
-                            ><i class="fas fa-sign-out-alt"></i> Logout</a
-                        >
-                    </li>
-                </ul>
-            </div>
+		.btn:hover {
+			background: #39ff14;
+			color: black;
+		}
+	</style>
+	<script src="https://cdn.jsdelivr.net/npm/fuse.js@7.1.0"></script>
+</head>
 
-            <!-- Main Content -->
-            <div class="main">
-                <h1>Create a New Course</h1>
-                <div class="form-card">
-                    <form action="/createCourseVerifier" method="POST">
-                        <!-- Course Name -->
-                        <div class="form-item">
-                            <label for="courseName">Course Name</label>
-                            <input
-                                type="text"
-                                id="courseName"
-                                name="courseName"
-                                maxlength="1000"
-                                required
-                            />
-                        </div>
+<body>
+	<div class="page">
+		<!-- Sidebar -->
+		<div class="sidebar">
+			<h2><a href="landing_page.html">GMAH</a></h2>
+			<ul>
+				<li>
+					<a href="/dashboard"><i class="fas fa-home"></i> Dashboard</a>
+				</li>
+				<li>
+					<a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+				</li>
+				<li>
+					<a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+				</li>
+			</ul>
+		</div>
+
+		<!-- Main Content -->
+		<div class="main">
+			<h1>Create a New Course</h1>
+			<div class="form-card">
+				<form action="/createCourseVerifier" method="POST">
+					<!-- Course Name -->
+					<div class="form-item">
+						<label for="courseName">Course Name</label>
+						<input type="text" id="courseName" name="courseName" maxlength="1000"
+							required />
+					</div>
 
                         <!-- Native Language -->
                         <div class="form-item">
@@ -325,14 +313,14 @@
                                 </option>
                                 <option value="Yoruba">Yoruba</option>
 
-                                <option value="Sunda">Sunda</option>
-                                <option value="Ukrainian">Ukrainian</option>
-                                <option value="Xiang Chinese">
-                                    Xiang Chinese
-                                </option>
-                                <option value="Yoruba">Yoruba</option>
-                            </select>
-                        </div>
+							<option value="Sunda">Sunda</option>
+							<option value="Ukrainian">Ukrainian</option>
+							<option value="Xiang Chinese">
+								Xiang Chinese
+							</option>
+							<option value="Yoruba">Yoruba</option>
+						</select>
+					</div>
 
                         <!-- Language to Learn -->
                         <div class="form-item">
@@ -490,29 +478,21 @@
                                 </option>
                                 <option value="Yoruba">Yoruba</option>
 
-                                <option value="Sunda">Sunda</option>
-                                <option value="Ukrainian">Ukrainian</option>
-                                <option value="Xiang Chinese">
-                                    Xiang Chinese
-                                </option>
-                                <option value="Yoruba">Yoruba</option>
-                            </select>
-                        </div>
+							<option value="Sunda">Sunda</option>
+							<option value="Ukrainian">Ukrainian</option>
+							<option value="Xiang Chinese">
+								Xiang Chinese
+							</option>
+							<option value="Yoruba">Yoruba</option>
+						</select>
+					</div>
 
-                        <!-- Purpose -->
-                        <div class="form-item">
-                            <label for="context"
-                                >Purpose for learning / Interest</label
-                            >
-                            <input
-                                type="text"
-                                id="context"
-                                maxlength="1000"
-                                name="context"
-                                placeholder="Ex: Travel, Work, etc."
-                                required
-                            />
-                        </div>
+					<!-- Purpose -->
+					<div class="form-item">
+						<label for="context">Purpose for learning / Interest</label>
+						<input type="text" id="context" maxlength="1000" name="context"
+							placeholder="Ex: Travel, Work, etc." required />
+					</div>
 
                         <!-- Proficiency Level Description -->
                         <div class="form-item">
