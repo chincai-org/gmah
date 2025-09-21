@@ -1,7 +1,7 @@
 // utils/bedrock.js
 import {
-    BedrockRuntimeClient,
-    InvokeModelCommand
+	BedrockRuntimeClient,
+	InvokeModelCommand
 } from "@aws-sdk/client-bedrock-runtime";
 
 const region = process.env.BEDROCK_REGION || "us-east-1";
@@ -16,47 +16,47 @@ const client = new BedrockRuntimeClient({ region });
  * @returns {Promise<string>} - The model's reply text.
  */
 export async function promptBedrock(prompt) {
-    try {
-        const input = {
-            modelId,
-            contentType: "application/json",
-            accept: "application/json",
-            body: JSON.stringify({
-                // Nova expects "messages" array
-                messages: [
-                    {
-                        role: "user",
-                        content: [{ text: prompt }]
-                    }
-                ],
-                inferenceConfig: {
-                    maxTokens: 200,
-                    temperature: 0.7
-                }
-            })
-        };
+	try {
+		const input = {
+			modelId,
+			contentType: "application/json",
+			accept: "application/json",
+			body: JSON.stringify({
+				// Nova expects "messages" array
+				messages: [
+					{
+						role: "user",
+						content: [{ text: prompt }]
+					}
+				],
+				inferenceConfig: {
+					maxTokens: 200,
+					temperature: 0.7
+				}
+			})
+		};
 
-        const command = new InvokeModelCommand(input);
-        const response = await client.send(command);
+		const command = new InvokeModelCommand(input);
+		const response = await client.send(command);
 
-        const decoded = new TextDecoder("utf-8").decode(response.body);
-        const json = JSON.parse(decoded);
+		const decoded = new TextDecoder("utf-8").decode(response.body);
+		const json = JSON.parse(decoded);
 
-        // Nova returns `outputText`
-        return json.outputText || JSON.stringify(json);
-    } catch (err) {
-        console.error("Bedrock prompt error:", err);
-    }
+		// Nova returns `outputText`
+		return json.outputText || JSON.stringify(json);
+	} catch (err) {
+		console.error("Bedrock prompt error:", err);
+	}
 }
 
 export async function promptGenerateGrammarsTitle(
-    language,
-    previousTopics,
-    numOfTopic,
-    nativeLanguage,
-    proficiencyLevelDescription
+	language,
+	previousTopics,
+	numOfTopic,
+	nativeLanguage,
+	proficiencyLevelDescription
 ) {
-    const prompt = `
+	const prompt = `
 	Generate a list of grammar topics for ${language}. Avoid topics from this list: ${previousTopics}.
 
 	Format the response as:
@@ -70,18 +70,18 @@ export async function promptGenerateGrammarsTitle(
 	Write the response in the user's native language (${nativeLanguage}).
 	`;
 
-    return await promptBedrock(prompt);
+	return await promptBedrock(prompt);
 }
 
 export async function promptGenerateVocabsTitle(
-    language,
-    previousTopics,
-    numOfTopic,
-    context,
-    nativeLanguage,
-    profficiencyLevelDescription
+	language,
+	previousTopics,
+	numOfTopic,
+	context,
+	nativeLanguage,
+	profficiencyLevelDescription
 ) {
-    const prompt = `Generate a list of vocabulary topics for ${language}. Avoid topics from this list: ${previousTopics}. 
+	const prompt = `Generate a list of vocabulary topics for ${language}. Avoid topics from this list: ${previousTopics}. 
 
     Format the response as:
     [ { "topic for vocabulary": "number of words • proficiency level" } ]
@@ -93,17 +93,17 @@ export async function promptGenerateVocabsTitle(
 
     The user's proficiency level is described as "${profficiencyLevelDescription}", and their native language is ${nativeLanguage}. Write the response in their native language.`;
 
-    return await promptBedrock(prompt);
+	return await promptBedrock(prompt);
 }
 
 export async function promptGenerateDialogueTitle(
-    language,
-    previousTopics,
-    context,
-    nativeLanguage,
-    profficiencyLevelDescription
+	language,
+	previousTopics,
+	context,
+	nativeLanguage,
+	profficiencyLevelDescription
 ) {
-    const prompt = `Create a real-life scenario for a ${language} enthusiast who wants to learn this language because of "${context}". Avoid scenarios related to this list: ${previousTopics}. 
+	const prompt = `Create a real-life scenario for a ${language} enthusiast who wants to learn this language because of "${context}". Avoid scenarios related to this list: ${previousTopics}. 
 
     Format the response as: 
     { "scenario title": "short description" }
@@ -117,5 +117,78 @@ export async function promptGenerateDialogueTitle(
 
     Consider the user's native language (${nativeLanguage}) and proficiency level described as (${profficiencyLevelDescription}). Write the response in their native language.`;
 
-    return await promptBedrock(prompt);
+	return await promptBedrock(prompt);
+}
+
+export async function promptGenerateDialogueStarter(
+	language,
+	scenario,
+	scenarioDescription,
+	context,
+	nativeLanguage,
+	proficiencyLevel
+) {
+
+	const systemPrompt = `You are now a language teacher, you are not allowed to be a racist, you are kind and patient teacher willing to help out people to learn a language they wnat. You give them specific and clear feedback to improve the user.`
+	const prompt = `In a scenario of ${scenario} with description of ${scenarioDescription}, Choose a character you want to act base on the scenario above and choose a character the user should act, start a conversation with the user to train them knowing their native language is ${nativeLanguage} and they wanting to learn malay because ${context}. When the user reply your conversation, provide a feedback on the user reply from the perspective of ${language} native speaker base one how natural the user reply before continuing the conversation to reply the user. This conversation will go on until the user decide to stop talking. Remeber to speak with the language they want to learn which is ${language}, you want to help the person to be excellent in ${language} as their proficiency level can be describe as ${proficiencyLevel}.`;
+	try {
+		const input = {
+			modelId,
+			contentType: "application/json",
+			accept: "application/json",
+			body: JSON.stringify({
+				messages: [
+					{
+						role: "system",
+						content: [
+							{
+								text: systemPrompt,
+							},
+						],
+					},
+					{
+						role: "user",
+						content: [
+							{
+								text: prompt,
+							},
+						],
+					},
+				],
+				inferenceConfig: {
+					maxTokens: 200,
+					temperature: 0.7,
+				},
+			}),
+		};
+
+		const command = new InvokeModelCommand(input);
+		const response = await client.send(command);
+
+		const decoded = new TextDecoder("utf-8").decode(response.body);
+		const json = JSON.parse(decoded);
+
+		return json.outputText || JSON.stringify(json);
+	} catch (err) {
+		console.error("Bedrock prompt error:", err);
+	}
+}
+
+export async function promptGenerateGrammarLesson(
+	language,
+	grammarTopic,
+) {
+	const prompt = `Base on the language ${language} grammar lesson topic ${grammarTopic}. You must expect the user is a beginner and must learn the basics of grammar and everything about this topic clearly and specifically. Your lesson must include examples at the end and teach about the lesson at the beginning of your text. Your lesson can include when to use it and and mistakes to avoid. You can generate all nicely in a markdown format. Generate anything extra you think learner need to learn. Do not generate quiz or practice to test the user, only provide knowledge and information.`;
+
+	return await promptBedrock(prompt);
+}
+
+export async function promptGenerateGrammarQuiz(
+	language,
+	grammarTopic,
+	numOfQuiz,
+) {
+	const prompt = `Base on the ${language} grammar lesson topic ${grammarTopic}. You must expect the user is a beginner and must learn the basics of grammar and everything about this topic clearly and specifically. You should generate a multiple choice question with 4 options. The generated format should be {"question" : ["option1", "option2", "option3", "option4"], "explaination" : "why this answer correct" }. For example {"Choose the correct answer" : ["She plays the piano", "She play the piano", "She playing the piano", "She played the piano every day"], "explaination" : "she is singular so need s at the back"}. Generate ${numOfQuiz} question in an array of json. The correct answer must be at index 0. DO NOT have the correct answer at index 1,2 and 3.`;
+
+	return await promptBedrock(prompt);
 }
