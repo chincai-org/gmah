@@ -49,8 +49,12 @@ export async function promptBedrock(prompt) {
 	}
 }
 
-export async function promptGenerateGrammars(language, previousTopic, numOfTopic) {
-	const prompt = `Generate a list of topic related to ${language} grammars. Do not generate topic related to this list ${previousTopic}. You must turn it in a format of [ { "topic for grammar" : "description" } ]. Please be extremely specific as if a beginner is learning grammar. Grammar is important to have the learner to be strong in the language's basics. Generate me ${numOfTopic} number of topic. For example the format should be [ { "verb" : "Words that express actions, states, or occurrences. They can be categorized into action verbs, linking verbs, and auxiliary verbs."}]. This fit the format where the key is topic for grammar and value is description.`
+export async function promptGenerateGrammars(
+	language,
+	previousTopic,
+	numOfTopic
+) {
+	const prompt = `Generate a list of topic related to ${language} grammars. Do not generate topic related to this list ${previousTopic}. You must turn it in a format of [ { "topic for grammar" : "description" } ]. Please be extremely specific as if a beginner is learning grammar. Grammar is important to have the learner to be strong in the language's basics. Generate me ${numOfTopic} number of topic. For example the format should be [ { "verb" : "Words that express actions, states, or occurrences. They can be categorized into action verbs, linking verbs, and auxiliary verbs."}]. This fit the format where the key is topic for grammar and value is description.`;
 	try {
 		const input = {
 			modelId,
@@ -86,8 +90,13 @@ export async function promptGenerateGrammars(language, previousTopic, numOfTopic
 	}
 }
 
-export async function promptGenerateVocabs(language, previousTopic, numOfTopic, context) {
-	const prompt = `Generate a list of topic related to ${language}'s vocabulary. Do not generate topic related to this list ${previousTopic}. You must turn it in a format of [ { "topic for vocabulary" : "number of word • proficiency level" } ]. Generate the vocabulary base on this context "${context}". Generate me ${numOfTopic} number of topic. For example the format should be [ { "Travel" : "32 words • A1"}]. This fit the format where the key is topic for vocabulary and number of words • language profficiency level.`
+export async function promptGenerateVocabs(
+	language,
+	previousTopic,
+	numOfTopic,
+	context
+) {
+	const prompt = `Generate a list of topic related to ${language}'s vocabulary. Do not generate topic related to this list ${previousTopic}. You must turn it in a format of [ { "topic for vocabulary" : "number of word • proficiency level" } ]. Generate the vocabulary base on this context "${context}". Generate me ${numOfTopic} number of topic. For example the format should be [ { "Travel" : "32 words • A1"}]. This fit the format where the key is topic for vocabulary and number of words • language profficiency level.`;
 	try {
 		const input = {
 			modelId,
@@ -124,7 +133,7 @@ export async function promptGenerateVocabs(language, previousTopic, numOfTopic, 
 }
 
 export async function promptGenerateDialogue(language, previousTopic, context) {
-	const prompt = `Generate a real life scenario to a ${language} lover who want to learn this language because of this "${context}". Do not generate a scenario related to this list ${previousTopic}. Generate it in the format of {"scenario" : "short description"}. For example {"meeting kim jung un" : "try not get excecuted as foreigner"}. In this case i have generate the topic as the key and a short description about the topic as the value. The description describe what the topic is about and must be less than 30 words and more than 20 words. Generate scenario related to the user interest.`
+	const prompt = `Generate a real life scenario to a ${language} lover who want to learn this language because of this "${context}". Do not generate a scenario related to this list ${previousTopic}. Generate it in the format of {"scenario" : "short description"}. For example {"meeting kim jung un" : "try not get excecuted as foreigner"}. In this case i have generate the topic as the key and a short description about the topic as the value. The description describe what the topic is about and must be less than 30 words and more than 20 words. Generate scenario related to the user interest.`;
 	try {
 		const input = {
 			modelId,

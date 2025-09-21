@@ -97,27 +97,6 @@ export async function verifyUserCredentials(userId, password) {
 	return user.password === hashedPassword;
 }
 
-<<<<<<< HEAD
-export async function putCourse(
-	userId,
-	courseName,
-	nativeLang,
-	learningLang,
-	context
-) {
-	// Generate a unique course ID using Snowflake-like algorithm
-	const courseId = generateSnowflakeId();
-
-	const course = {
-		courseId,
-		courseName,
-		userId,
-		nativeLang,
-		learningLang,
-		context,
-		topics: []
-	};
-=======
 export async function putCourse(userId, nativeLang, learningLang, context) {
 	// Generate a unique course ID using Snowflake-like algorithm
 	const courseId = generateSnowflakeId();
@@ -130,7 +109,6 @@ export async function putCourse(userId, nativeLang, learningLang, context) {
 		context,
 		topics: [],
 	};
->>>>>>> 646fdff (added prompt to generate vocab,grammar and dialogue)
 
 	await ddb.send(
 		new PutCommand({ TableName: COURSES_TABLE, Item: course })
@@ -140,17 +118,10 @@ export async function putCourse(userId, nativeLang, learningLang, context) {
 }
 
 export async function getCourse(courseId) {
-<<<<<<< HEAD
 	const r = await ddb.send(
 		new GetCommand({ TableName: COURSES_TABLE, Key: { courseId } })
 	);
 	return r.Item || null;
-=======
-	const r = await ddb.send(
-		new GetCommand({ TableName: COURSES_TABLE, Key: { courseId } })
-	);
-	return r.Item || null;
->>>>>>> 48c536a (merge conflict resolve)
 }
 
 export async function createTopic() {
