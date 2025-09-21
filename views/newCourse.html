@@ -1,290 +1,550 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>New Course | GMAH</title>
-        <link
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-            rel="stylesheet"
-        />
-        <style>
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-                font-family: Arial, sans-serif;
-            }
-            body,
-            html {
-                height: 100%;
-                width: 100%;
-                background: #000;
-                color: #fff;
-            }
-            .page {
-                display: flex;
-                height: 100vh;
-            }
-            /* Sidebar */
-            .sidebar {
-                width: 220px;
-                background: rgba(0, 0, 0, 0.9);
-                border-right: 2px solid #39ff14;
-                padding: 20px;
-            }
-            .sidebar h2 {
-                margin-bottom: 30px;
-                text-align: center;
-            }
-            .sidebar h2 a {
-                color: #39ff14;
-                text-decoration: none;
-            }
-            .sidebar ul {
-                list-style: none;
-            }
-            .sidebar ul li {
-                margin: 20px 0;
-            }
-            .sidebar ul li a {
-                text-decoration: none;
-                color: #fff;
-                font-size: 16px;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                transition: 0.3s;
-            }
-            .sidebar ul li a:hover {
-                color: #39ff14;
-            }
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<title>New Course | GMAH</title>
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+			rel="stylesheet"
+		/>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+				font-family: Arial, sans-serif;
+			}
 
-            /* Main */
-            .main {
-                flex: 1;
-                padding: 40px;
-            }
-            .main h1 {
-                color: #39ff14;
-                margin-bottom: 20px;
-            }
-            .form-card {
-                background: rgba(255, 255, 255, 0.05);
-                border: 1px solid #39ff14;
-                border-radius: 12px;
-                padding: 30px;
-                max-width: 700px;
-            }
-            .form-item {
-                margin-bottom: 20px;
-            }
-            .form-item label {
-                display: block;
-                margin-bottom: 8px;
-                font-weight: bold;
-                color: #39ff14;
-            }
-            .form-item input,
-            .form-item select {
-                width: 100%;
-                padding: 10px;
-                border: 1px solid #39ff14;
-                border-radius: 8px;
-                background: #111;
-                color: #fff;
-            }
+			body,
+			html {
+				height: 100%;
+				width: 100%;
+				background: #000;
+				color: #fff;
+			}
 
-            /* Buttons */
-            .btn {
-                padding: 12px 30px;
-                font-size: 16px;
-                font-weight: bold;
-                border: 2px solid #39ff14;
-                background: transparent;
-                color: white;
-                border-radius: 25px;
-                cursor: pointer;
-                transition: 0.3s;
-                margin-top: 10px;
-            }
-            .btn:hover {
-                background: #39ff14;
-                color: black;
-            }
-        </style>
-    </head>
+			.page {
+				display: flex;
+				height: 100vh;
+			}
 
-    <body>
-        <div class="page">
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <h2><a href="landing_page.html">GMAH</a></h2>
-                <ul>
-                    <li>
-                        <a href="dashboard.html"
-                            ><i class="fas fa-home"></i> Dashboard</a
-                        >
-                    </li>
-                    <li>
-                        <a href="profile.html"
-                            ><i class="fas fa-user"></i> Profile</a
-                        >
-                    </li>
-                    <li>
-                        <a href="course-selection.html"
-                            ><i class="fas fa-book"></i> Courses</a
-                        >
-                    </li>
-                    <li>
-                        <a href="settings.html"
-                            ><i class="fas fa-cog"></i> Settings</a
-                        >
-                    </li>
-                    <li>
-                        <a href="log_in_sign_up_page.html"
-                            ><i class="fas fa-sign-out-alt"></i> Logout</a
-                        >
-                    </li>
-                </ul>
-            </div>
+			/* Sidebar */
+			.sidebar {
+				width: 220px;
+				background: rgba(0, 0, 0, 0.9);
+				border-right: 2px solid #39ff14;
+				padding: 20px;
+			}
 
-            <!-- Main Content -->
-            <div class="main">
-                <h1>Create a New Course</h1>
-                <div class="form-card">
-                    <form action="/createCourseVerifier" method="POST">
-                        <!-- Course Name -->
-                        <div class="form-item">
-                            <label for="courseName">Course Name</label>
-                            <input
-                                type="text"
-                                id="courseName"
-                                name="courseName"
-                                maxlength="50"
-                                required
-                            />
-                        </div>
+			.sidebar h2 {
+				margin-bottom: 30px;
+				text-align: center;
+			}
 
-                        <!-- Native Language -->
-                        <div class="form-item">
-                            <label for="native"
-                                >Enter the native language that you use the
-                                most</label
-                            >
-                            <select id="native" name="native">
-                                <option value="Algerian Arabic">
-                                    Algerian Arabic
-                                </option>
-                                <option value="Bengali">Bengali</option>
-                                <option value="Bhojpuri">Bhojpuri</option>
-                                <option value="Egyptian Arabic">
-                                    Egyptian Arabic
-                                </option>
-                                <option value="English">English</option>
-                                <option value="French">French</option>
-                                <option value="German">German</option>
-                                <option value="Gujarati">Gujarati</option>
-                                <option value="Hindi">Hindi</option>
-                                <option value="Japanese">Japanese</option>
-                                <option value="Javanese">Javanese</option>
-                                <option value="Kannada">Kannada</option>
-                                <option value="Korean">Korean</option>
-                                <option value="Mandarin Chinese">
-                                    Mandarin Chinese
-                                </option>
-                                <option value="Marathi">Marathi</option>
-                                <option value="Portuguese">Portuguese</option>
-                                <option value="Russian">Russian</option>
-                                <option value="Spanish">Spanish</option>
-                                <option value="Tamil">Tamil</option>
-                                <option value="Telugu">Telugu</option>
-                                <option value="Turkish">Turkish</option>
-                                <option value="Urdu">Urdu</option>
-                                <option value="Vietnamese">Vietnamese</option>
-                                <option value="Western Punjabi">
-                                    Western Punjabi
-                                </option>
-                                <option value="Wu Chinese">Wu Chinese</option>
-                                <option value="Yue Chinese (Cantonese)">
-                                    Yue Chinese (Cantonese)
-                                </option>
-                                <option value="Moroccan Arabic">
-                                    Moroccan Arabic
-                                </option>
-                                <option value="Sudanese Arabic">
-                                    Sudanese Arabic
-                                </option>
-                                <option value="Eastern Punjabi">
-                                    Eastern Punjabi
-                                </option>
-                                <option value="Hausa">Hausa</option>
-                                <option value="Hakka">Hakka</option>
-                                <option value="Igbo">Igbo</option>
-                                <option value="Indonesian">Indonesian</option>
-                                <option value="Iranian Persian">
-                                    Iranian Persian
-                                </option>
-                                <option value="Italian">Italian</option>
-                                <option value="Jin Chinese">Jin Chinese</option>
-                                <option value="Maithili">Maithili</option>
-                                <option value="Malay">Malay</option>
-                                <option value="Northern Uzbek">
-                                    Northern Uzbek
-                                </option>
-                                <option value="North Levantine Arabic">
-                                    North Levantine Arabic
-                                </option>
-                                <option value="Odia">Odia</option>
-                                <option value="Polish">Polish</option>
-                                <option value="Romanian">Romanian</option>
-                                <option value="Sindhi">Sindhi</option>
-                                <option value="Southern Min">
-                                    Southern Min
-                                </option>
-                                <option value="Sunda">Sunda</option>
-                                <option value="Ukrainian">Ukrainian</option>
-                                <option value="Xiang Chinese">
-                                    Xiang Chinese
-                                </option>
-                                <option value="Yoruba">Yoruba</option>
-                            </select>
-                        </div>
+			.sidebar h2 a {
+				color: #39ff14;
+				text-decoration: none;
+			}
 
-                        <!-- Language to Learn -->
-                        <div class="form-item">
-                            <label for="dropdown"
-                                >Choose a language to learn</label
-                            >
-                            <select id="dropdown" name="lang">
-                                <option value="Chinese">Chinese</option>
-                                <option value="Malay">Malay</option>
-                                <option value="English">English</option>
-                            </select>
-                        </div>
+			.sidebar ul {
+				list-style: none;
+			}
 
-                        <!-- Purpose -->
-                        <div class="form-item">
-                            <label for="context">Purpose for learning</label>
-                            <input
-                                type="text"
-                                id="context"
-                                maxlength="50"
-                                name="context"
-                                required
-                            />
-                        </div>
+			.sidebar ul li {
+				margin: 20px 0;
+			}
 
-                        <!-- Buttons -->
-                        <button type="submit" class="btn">Create</button>
-                        <a href="/menu"
-                            ><button type="button" class="btn">
-                                Back to Menu
-                            </button></a
-                        >
-                    </form>
-                </div>
-            </div>
-        </div>
-    </body>
+			.sidebar ul li a {
+				text-decoration: none;
+				color: #fff;
+				font-size: 16px;
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				transition: 0.3s;
+			}
+
+			.sidebar ul li a:hover {
+				color: #39ff14;
+			}
+
+			/* Main */
+			.main {
+				flex: 1;
+				padding: 40px;
+			}
+
+			.main h1 {
+				color: #39ff14;
+				margin-bottom: 20px;
+			}
+
+			.form-card {
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid #39ff14;
+				border-radius: 12px;
+				padding: 30px;
+				max-width: 700px;
+			}
+
+			.form-item {
+				margin-bottom: 20px;
+			}
+
+			.form-item label {
+				display: block;
+				margin-bottom: 8px;
+				font-weight: bold;
+				color: #39ff14;
+			}
+
+			.form-item input,
+			.form-item select {
+				width: 100%;
+				padding: 10px;
+				border: 1px solid #39ff14;
+				border-radius: 8px;
+				background: #111;
+				color: #fff;
+			}
+
+			/* Buttons */
+			.btn {
+				padding: 12px 30px;
+				font-size: 16px;
+				font-weight: bold;
+				border: 2px solid #39ff14;
+				background: transparent;
+				color: white;
+				border-radius: 25px;
+				cursor: pointer;
+				transition: 0.3s;
+				margin-top: 10px;
+			}
+
+			.btn:hover {
+				background: #39ff14;
+				color: black;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="page">
+			<!-- Sidebar -->
+			<div class="sidebar">
+				<h2><a href="landing_page.html">GMAH</a></h2>
+				<ul>
+					<li>
+						<a href="dashboard.html"
+							><i
+								class="fas fa-home"
+							></i>
+							Dashboard</a
+						>
+					</li>
+					<li>
+						<a href="profile.html"
+							><i
+								class="fas fa-user"
+							></i>
+							Profile</a
+						>
+					</li>
+					<li>
+						<a href="course-selection.html"
+							><i
+								class="fas fa-book"
+							></i>
+							Courses</a
+						>
+					</li>
+					<li>
+						<a href="settings.html"
+							><i
+								class="fas fa-cog"
+							></i>
+							Settings</a
+						>
+					</li>
+					<li>
+						<a
+							href="log_in_sign_up_page.html"
+							><i
+								class="fas fa-sign-out-alt"
+							></i>
+							Logout</a
+						>
+					</li>
+				</ul>
+			</div>
+
+			<!-- Main Content -->
+			<div class="main">
+				<h1>Create a New Course</h1>
+				<div class="form-card">
+					<form
+						action="/createCourseVerifier"
+						method="POST"
+					>
+						<!-- Course Name -->
+						<div class="form-item">
+							<label for="courseName"
+								>Course
+								Name</label
+							>
+							<input
+								type="text"
+								id="courseName"
+								name="courseName"
+								maxlength="50"
+								required
+							/>
+						</div>
+
+						<!-- Native Language -->
+						<div class="form-item">
+							<label for="native"
+								>Enter the
+								native language
+								that you use the
+								most</label
+							>
+							<select
+								id="native"
+								name="native"
+							>
+								<option
+									value="Algerian Arabic"
+								>
+									Algerian
+									Arabic
+								</option>
+								<option
+									value="Bengali"
+								>
+									Bengali
+								</option>
+								<option
+									value="Bhojpuri"
+								>
+									Bhojpuri
+								</option>
+								<option
+									value="Egyptian Arabic"
+								>
+									Egyptian
+									Arabic
+								</option>
+								<option
+									value="English"
+								>
+									English
+								</option>
+								<option
+									value="French"
+								>
+									French
+								</option>
+								<option
+									value="German"
+								>
+									German
+								</option>
+								<option
+									value="Gujarati"
+								>
+									Gujarati
+								</option>
+								<option
+									value="Hindi"
+								>
+									Hindi
+								</option>
+								<option
+									value="Japanese"
+								>
+									Japanese
+								</option>
+								<option
+									value="Javanese"
+								>
+									Javanese
+								</option>
+								<option
+									value="Kannada"
+								>
+									Kannada
+								</option>
+								<option
+									value="Korean"
+								>
+									Korean
+								</option>
+								<option
+									value="Mandarin Chinese"
+								>
+									Mandarin
+									Chinese
+								</option>
+								<option
+									value="Marathi"
+								>
+									Marathi
+								</option>
+								<option
+									value="Portuguese"
+								>
+									Portuguese
+								</option>
+								<option
+									value="Russian"
+								>
+									Russian
+								</option>
+								<option
+									value="Spanish"
+								>
+									Spanish
+								</option>
+								<option
+									value="Tamil"
+								>
+									Tamil
+								</option>
+								<option
+									value="Telugu"
+								>
+									Telugu
+								</option>
+								<option
+									value="Turkish"
+								>
+									Turkish
+								</option>
+								<option
+									value="Urdu"
+								>
+									Urdu
+								</option>
+								<option
+									value="Vietnamese"
+								>
+									Vietnamese
+								</option>
+								<option
+									value="Western Punjabi"
+								>
+									Western
+									Punjabi
+								</option>
+								<option
+									value="Wu Chinese"
+								>
+									Wu
+									Chinese
+								</option>
+								<option
+									value="Yue Chinese (Cantonese)"
+								>
+									Yue
+									Chinese
+									(Cantonese)
+								</option>
+								<option
+									value="Moroccan Arabic"
+								>
+									Moroccan
+									Arabic
+								</option>
+								<option
+									value="Sudanese Arabic"
+								>
+									Sudanese
+									Arabic
+								</option>
+								<option
+									value="Eastern Punjabi"
+								>
+									Eastern
+									Punjabi
+								</option>
+								<option
+									value="Hausa"
+								>
+									Hausa
+								</option>
+								<option
+									value="Hakka"
+								>
+									Hakka
+								</option>
+								<option
+									value="Igbo"
+								>
+									Igbo
+								</option>
+								<option
+									value="Indonesian"
+								>
+									Indonesian
+								</option>
+								<option
+									value="Iranian Persian"
+								>
+									Iranian
+									Persian
+								</option>
+								<option
+									value="Italian"
+								>
+									Italian
+								</option>
+								<option
+									value="Jin Chinese"
+								>
+									Jin
+									Chinese
+								</option>
+								<option
+									value="Maithili"
+								>
+									Maithili
+								</option>
+								<option
+									value="Malay"
+								>
+									Malay
+								</option>
+								<option
+									value="Northern Uzbek"
+								>
+									Northern
+									Uzbek
+								</option>
+								<option
+									value="North Levantine Arabic"
+								>
+									North
+									Levantine
+									Arabic
+								</option>
+								<option
+									value="Odia"
+								>
+									Odia
+								</option>
+								<option
+									value="Polish"
+								>
+									Polish
+								</option>
+								<option
+									value="Romanian"
+								>
+									Romanian
+								</option>
+								<option
+									value="Sindhi"
+								>
+									Sindhi
+								</option>
+								<option
+									value="Southern Min"
+								>
+									Southern
+									Min
+								</option>
+								<option
+									value="Sunda"
+								>
+									Sunda
+								</option>
+								<option
+									value="Ukrainian"
+								>
+									Ukrainian
+								</option>
+								<option
+									value="Xiang Chinese"
+								>
+									Xiang
+									Chinese
+								</option>
+								<option
+									value="Yoruba"
+								>
+									Yoruba
+								</option>
+							</select>
+						</div>
+
+						<!-- Language to Learn -->
+						<div class="form-item">
+							<label for="dropdown"
+								>Choose a
+								language to
+								learn</label
+							>
+							<select
+								id="dropdown"
+								name="lang"
+							>
+								<option
+									value="Chinese"
+								>
+									Chinese
+								</option>
+								<option
+									value="Malay"
+								>
+									Malay
+								</option>
+								<option
+									value="English"
+								>
+									English
+								</option>
+							</select>
+						</div>
+
+						<!-- Purpose -->
+						<div class="form-item">
+							<label for="context"
+								>Purpose for
+								learning</label
+							>
+							<input
+								type="text"
+								id="context"
+								maxlength="50"
+								name="context"
+								required
+							/>
+						</div>
+
+						<!-- Buttons -->
+						<button
+							type="submit"
+							class="btn"
+						>
+							Create
+						</button>
+						<a href="/menu"
+							><button
+								type="button"
+								class="btn"
+							>
+								Back to Menu
+							</button></a
+						>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
 </html>

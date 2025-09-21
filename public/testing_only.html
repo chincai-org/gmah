@@ -1,146 +1,155 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Flashcard Lesson</title>
-        <style>
-            body {
-                margin: 0;
-                font-family: Arial, sans-serif;
-                background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-                color: white;
-                min-height: 100vh;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<title>Flashcard Lesson</title>
+		<style>
+			body {
+				margin: 0;
+				font-family: Arial, sans-serif;
+				background: linear-gradient(
+					135deg,
+					#0f2027,
+					#203a43,
+					#2c5364
+				);
+				color: white;
+				min-height: 100vh;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
 
-            /* Top Bar */
-            .top-bar {
-                width: 100%;
-                padding: 15px 30px;
-                background: rgba(57, 255, 20, 0.9);
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                font-weight: bold;
-                color: #000;
-            }
+			/* Top Bar */
+			.top-bar {
+				width: 100%;
+				padding: 15px 30px;
+				background: rgba(57, 255, 20, 0.9);
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				font-weight: bold;
+				color: #000;
+			}
 
-            /* Progress Bar */
-            .progress-container {
-                width: 80%;
-                background: rgba(255, 255, 255, 0.2);
-                border-radius: 20px;
-                margin: 20px auto;
-                overflow: hidden;
-                height: 15px;
-            }
-            .progress-bar {
-                height: 100%;
-                width: 0%;
-                background: #39ff14;
-                transition: width 0.4s ease;
-            }
+			/* Progress Bar */
+			.progress-container {
+				width: 80%;
+				background: rgba(255, 255, 255, 0.2);
+				border-radius: 20px;
+				margin: 20px auto;
+				overflow: hidden;
+				height: 15px;
+			}
+			.progress-bar {
+				height: 100%;
+				width: 0%;
+				background: #39ff14;
+				transition: width 0.4s ease;
+			}
 
-            /* Flashcard */
-            .flashcard {
-                width: 300px;
-                height: 180px;
-                perspective: 1000px;
-                margin: 50px auto;
-                cursor: pointer;
-            }
-            .flashcard-inner {
-                width: 100%;
-                height: 100%;
-                position: relative;
-                transition: transform 0.6s;
-                transform-style: preserve-3d;
-            }
-            .flashcard.flipped .flashcard-inner {
-                transform: rotateY(180deg);
-            }
-            .flashcard-front,
-            .flashcard-back {
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                backface-visibility: hidden;
-                border: 2px solid #39ff14;
-                border-radius: 15px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: 22px;
-                font-weight: bold;
-                background: rgba(0, 0, 0, 0.7);
-            }
-            .flashcard-back {
-                transform: rotateY(180deg);
-                font-size: 18px;
-                padding: 10px;
-                text-align: center;
-            }
+			/* Flashcard */
+			.flashcard {
+				width: 300px;
+				height: 180px;
+				perspective: 1000px;
+				margin: 50px auto;
+				cursor: pointer;
+			}
+			.flashcard-inner {
+				width: 100%;
+				height: 100%;
+				position: relative;
+				transition: transform 0.6s;
+				transform-style: preserve-3d;
+			}
+			.flashcard.flipped .flashcard-inner {
+				transform: rotateY(180deg);
+			}
+			.flashcard-front,
+			.flashcard-back {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				backface-visibility: hidden;
+				border: 2px solid #39ff14;
+				border-radius: 15px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				font-size: 22px;
+				font-weight: bold;
+				background: rgba(0, 0, 0, 0.7);
+			}
+			.flashcard-back {
+				transform: rotateY(180deg);
+				font-size: 18px;
+				padding: 10px;
+				text-align: center;
+			}
 
-            /* Next Button */
-            .next-btn {
-                margin: 20px;
-                padding: 12px 25px;
-                background: #39ff14;
-                border: none;
-                border-radius: 20px;
-                font-size: 16px;
-                font-weight: bold;
-                cursor: pointer;
-                transition: 0.3s;
-            }
-            .next-btn:hover {
-                opacity: 0.8;
-            }
-        </style>
-    </head>
-    <body>
-        <!-- Top Bar -->
-        <div class="top-bar">
-            <div>Flashcards</div>
-            <div>🔥 Streak: 3 | ⭐ XP: 120</div>
-        </div>
+			/* Next Button */
+			.next-btn {
+				margin: 20px;
+				padding: 12px 25px;
+				background: #39ff14;
+				border: none;
+				border-radius: 20px;
+				font-size: 16px;
+				font-weight: bold;
+				cursor: pointer;
+				transition: 0.3s;
+			}
+			.next-btn:hover {
+				opacity: 0.8;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Top Bar -->
+		<div class="top-bar">
+			<div>Flashcards</div>
+			<div>🔥 Streak: 3 | ⭐ XP: 120</div>
+		</div>
 
-        <!-- Progress Bar -->
-        <div class="progress-container">
-            <div class="progress-bar" id="progress"></div>
-        </div>
+		<!-- Progress Bar -->
+		<div class="progress-container">
+			<div class="progress-bar" id="progress"></div>
+		</div>
 
-        <!-- Lesson Area -->
-        <div id="lesson-area"></div>
+		<!-- Lesson Area -->
+		<div id="lesson-area"></div>
 
-        <!-- Next Button -->
-        <button class="next-btn" onclick="nextCard()">Next</button>
+		<!-- Next Button -->
+		<button class="next-btn" onclick="nextCard()">Next</button>
 
-        <script>
-            const flashcards = [
-                {
-                    front: "Apple",
-                    back: "EN: Apple<br>BM: Epal<br>中文: 苹果 (píngguǒ)"
-                },
-                {
-                    front: "Book",
-                    back: "EN: Book<br>BM: Buku<br>中文: 书 (shū)"
-                },
-                {
-                    front: "House",
-                    back: "EN: House<br>BM: Rumah<br>中文: 房子 (fángzi)"
-                }
-            ];
+		<script>
+			const flashcards = [
+				{
+					front: "Apple",
+					back: "EN: Apple<br>BM: Epal<br>中文: 苹果 (píngguǒ)",
+				},
+				{
+					front: "Book",
+					back: "EN: Book<br>BM: Buku<br>中文: 书 (shū)",
+				},
+				{
+					front: "House",
+					back: "EN: House<br>BM: Rumah<br>中文: 房子 (fángzi)",
+				},
+			];
 
-            let currentIndex = 0;
+			let currentIndex = 0;
 
-            function renderCard() {
-                const lessonArea = document.getElementById("lesson-area");
-                const item = flashcards[currentIndex];
-                lessonArea.innerHTML = `
+			function renderCard() {
+				const lessonArea =
+					document.getElementById("lesson-area");
+				const item = flashcards[currentIndex];
+				lessonArea.innerHTML = `
         <div class="flashcard" onclick="this.classList.toggle('flipped')">
           <div class="flashcard-inner">
             <div class="flashcard-front">${item.front}</div>
@@ -148,27 +157,35 @@
           </div>
         </div>
       `;
-                updateProgress();
-            }
+				updateProgress();
+			}
 
-            function nextCard() {
-                if (currentIndex < flashcards.length - 1) {
-                    currentIndex++;
-                    renderCard();
-                } else {
-                    document.getElementById("lesson-area").innerHTML =
-                        "<h2>🎉 All Flashcards Completed!</h2>";
-                    document.querySelector(".next-btn").style.display = "none";
-                }
-            }
+			function nextCard() {
+				if (currentIndex < flashcards.length - 1) {
+					currentIndex++;
+					renderCard();
+				} else {
+					document.getElementById(
+						"lesson-area"
+					).innerHTML =
+						"<h2>🎉 All Flashcards Completed!</h2>";
+					document.querySelector(
+						".next-btn"
+					).style.display = "none";
+				}
+			}
 
-            function updateProgress() {
-                const progress = ((currentIndex + 1) / flashcards.length) * 100;
-                document.getElementById("progress").style.width =
-                    progress + "%";
-            }
+			function updateProgress() {
+				const progress =
+					((currentIndex + 1) /
+						flashcards.length) *
+					100;
+				document.getElementById(
+					"progress"
+				).style.width = progress + "%";
+			}
 
-            renderCard();
-        </script>
-    </body>
+			renderCard();
+		</script>
+	</body>
 </html>

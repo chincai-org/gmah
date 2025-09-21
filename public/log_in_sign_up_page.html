@@ -1,244 +1,281 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Auth Page</title>
-        <style>
-            body {
-                margin: 0;
-                height: 100vh;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                background: url("img/ai.jpg") no-repeat center center/cover;
-                font-family: Arial, sans-serif;
-            }
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<title>Auth Page</title>
+		<style>
+			body {
+				margin: 0;
+				height: 100vh;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				background: url("img/ai.jpg") no-repeat center
+					center/cover;
+				font-family: Arial, sans-serif;
+			}
 
-            body::before {
-                content: "";
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.6);
-            }
+			body::before {
+				content: "";
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: rgba(0, 0, 0, 0.6);
+			}
 
-            .container {
-                position: relative;
-                z-index: 1;
-                background: rgba(255, 255, 255, 0.1);
-                padding: 40px;
-                border-radius: 20px;
-                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
-                backdrop-filter: blur(12px);
-                width: 350px;
-                text-align: center;
-                transition: all 0.4s ease;
-            }
+			.container {
+				position: relative;
+				z-index: 1;
+				background: rgba(255, 255, 255, 0.1);
+				padding: 40px;
+				border-radius: 20px;
+				box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+				backdrop-filter: blur(12px);
+				width: 350px;
+				text-align: center;
+				transition: all 0.4s ease;
+			}
 
-            .logo {
-                font-size: 32px;
-                font-weight: bold;
-                color: #39ff14;
-                margin-bottom: 25px;
-                text-shadow:
-                    0 0 8px #39ff14,
-                    0 0 16px #2ecc10;
-                letter-spacing: 2px;
-                animation: glow 2s infinite alternate;
-                transition: font-size 0.4s ease;
-            }
+			.logo {
+				font-size: 32px;
+				font-weight: bold;
+				color: #39ff14;
+				margin-bottom: 25px;
+				text-shadow:
+					0 0 8px #39ff14,
+					0 0 16px #2ecc10;
+				letter-spacing: 2px;
+				animation: glow 2s infinite alternate;
+				transition: font-size 0.4s ease;
+			}
 
-            .container.signup-active .logo {
-                font-size: 38px;
-            }
+			.container.signup-active .logo {
+				font-size: 38px;
+			}
 
-            @keyframes glow {
-                from {
-                    text-shadow:
-                        0 0 6px #39ff14,
-                        0 0 12px #2ecc10;
-                }
-                to {
-                    text-shadow:
-                        0 0 12px #39ff14,
-                        0 0 24px #2ecc10,
-                        0 0 36px #1a8c08;
-                }
-            }
+			@keyframes glow {
+				from {
+					text-shadow:
+						0 0 6px #39ff14,
+						0 0 12px #2ecc10;
+				}
+				to {
+					text-shadow:
+						0 0 12px #39ff14,
+						0 0 24px #2ecc10,
+						0 0 36px #1a8c08;
+				}
+			}
 
-            .container h2 {
-                color: #39ff14;
-                margin-bottom: 20px;
-            }
+			.container h2 {
+				color: #39ff14;
+				margin-bottom: 20px;
+			}
 
-            .input-group {
-                margin-bottom: 15px;
-                text-align: left;
-            }
+			.input-group {
+				margin-bottom: 15px;
+				text-align: left;
+			}
 
-            .input-group label {
-                display: block;
-                font-size: 14px;
-                color: #fff;
-                margin-bottom: 5px;
-            }
+			.input-group label {
+				display: block;
+				font-size: 14px;
+				color: #fff;
+				margin-bottom: 5px;
+			}
 
-            .input-group input {
-                width: 100%;
-                padding: 10px;
-                border-radius: 8px;
-                border: 1px solid #39ff14;
-                background: rgba(0, 0, 0, 0.4);
-                color: #fff;
-                font-size: 14px;
-            }
+			.input-group input {
+				width: 100%;
+				padding: 10px;
+				border-radius: 8px;
+				border: 1px solid #39ff14;
+				background: rgba(0, 0, 0, 0.4);
+				color: #fff;
+				font-size: 14px;
+			}
 
-            .btn {
-                width: 100%;
-                padding: 12px;
-                margin-top: 10px;
-                border: none;
-                border-radius: 25px;
-                background: linear-gradient(to bottom, #39ff14, #2ecc10);
-                color: #000;
-                font-weight: bold;
-                cursor: pointer;
-                font-size: 16px;
-                transition: 0.3s;
-            }
-            .btn:hover {
-                opacity: 0.9;
-            }
+			.btn {
+				width: 100%;
+				padding: 12px;
+				margin-top: 10px;
+				border: none;
+				border-radius: 25px;
+				background: linear-gradient(
+					to bottom,
+					#39ff14,
+					#2ecc10
+				);
+				color: #000;
+				font-weight: bold;
+				cursor: pointer;
+				font-size: 16px;
+				transition: 0.3s;
+			}
+			.btn:hover {
+				opacity: 0.9;
+			}
 
-            .toggle {
-                margin-top: 15px;
-                color: #fff;
-                font-size: 14px;
-            }
-            .toggle span {
-                color: #39ff14;
-                cursor: pointer;
-                font-weight: bold;
-            }
+			.toggle {
+				margin-top: 15px;
+				color: #fff;
+				font-size: 14px;
+			}
+			.toggle span {
+				color: #39ff14;
+				cursor: pointer;
+				font-weight: bold;
+			}
 
-            /* ✅ Navbar + Top Logo */
-            .navbar {
-                position: absolute;
-                top: 20px;
-                left: 50%;
-                transform: translateX(-50%);
-                display: flex;
-                gap: 30px;
-                z-index: 2;
-            }
-            .navbar a {
-                text-decoration: none;
-                color: #fff;
-                font-weight: bold;
-            }
-            .navbar a:hover {
-                color: #39ff14;
-            }
-            .logo-hero {
-                position: absolute;
-                top: 20px;
-                left: 30px;
-                font-size: 32px;
-                font-weight: bold;
-                background: linear-gradient(90deg, #39ff14, #00eaff, #ff00ff);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                text-shadow: 0 0 10px rgba(57, 255, 20, 0.6);
-                z-index: 2;
-            }
-            .logo-hero a {
-                text-decoration: none;
-                color: inherit;
-            }
-        </style>
-    </head>
-    <body>
-        <!-- ✅ Clickable Logo -->
-        <div class="logo-hero">
-            <a href="landing_page.html">GMAH</a>
-        </div>
+			/* ✅ Navbar + Top Logo */
+			.navbar {
+				position: absolute;
+				top: 20px;
+				left: 50%;
+				transform: translateX(-50%);
+				display: flex;
+				gap: 30px;
+				z-index: 2;
+			}
+			.navbar a {
+				text-decoration: none;
+				color: #fff;
+				font-weight: bold;
+			}
+			.navbar a:hover {
+				color: #39ff14;
+			}
+			.logo-hero {
+				position: absolute;
+				top: 20px;
+				left: 30px;
+				font-size: 32px;
+				font-weight: bold;
+				background: linear-gradient(
+					90deg,
+					#39ff14,
+					#00eaff,
+					#ff00ff
+				);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				text-shadow: 0 0 10px rgba(57, 255, 20, 0.6);
+				z-index: 2;
+			}
+			.logo-hero a {
+				text-decoration: none;
+				color: inherit;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- ✅ Clickable Logo -->
+		<div class="logo-hero">
+			<a href="landing_page.html">GMAH</a>
+		</div>
 
-        <!-- ✅ Navbar -->
-        <div class="navbar">
-            <a href="landing_page.html">Main</a>
-            <a href="about_page.html">About Us</a>
-        </div>
+		<!-- ✅ Navbar -->
+		<div class="navbar">
+			<a href="landing_page.html">Main</a>
+			<a href="about_page.html">About Us</a>
+		</div>
 
-        <div class="container" id="authContainer">
-            <div class="logo">GMAH</div>
+		<div class="container" id="authContainer">
+			<div class="logo">GMAH</div>
 
-            <!-- Login Form -->
-            <div id="loginForm">
-                <h2>Login</h2>
-                <div class="input-group">
-                    <label>Username</label>
-                    <input type="text" placeholder="Enter your username" />
-                </div>
-                <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" placeholder="Enter your password" />
-                </div>
-                <button class="btn">Login</button>
-                <p class="toggle">
-                    Don't have an account?
-                    <span onclick="showSignUp()">Sign Up</span>
-                </p>
-            </div>
+			<!-- Login Form -->
+			<div id="loginForm">
+				<h2>Login</h2>
+				<div class="input-group">
+					<label>Username</label>
+					<input
+						type="text"
+						placeholder="Enter your username"
+					/>
+				</div>
+				<div class="input-group">
+					<label>Password</label>
+					<input
+						type="password"
+						placeholder="Enter your password"
+					/>
+				</div>
+				<button class="btn">Login</button>
+				<p class="toggle">
+					Don't have an account?
+					<span onclick="showSignUp()"
+						>Sign Up</span
+					>
+				</p>
+			</div>
 
-            <!-- Sign Up Form -->
-            <div id="signUpForm" style="display: none">
-                <h2>Sign Up</h2>
-                <div class="input-group">
-                    <label>Username</label>
-                    <input type="text" placeholder="Choose a username" />
-                </div>
-                <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" placeholder="Create a password" />
-                </div>
-                <button class="btn">Sign Up</button>
-                <p class="toggle">
-                    Already have an account?
-                    <span onclick="showLogin()">Login</span>
-                </p>
-            </div>
-        </div>
+			<!-- Sign Up Form -->
+			<div id="signUpForm" style="display: none">
+				<h2>Sign Up</h2>
+				<div class="input-group">
+					<label>Username</label>
+					<input
+						type="text"
+						placeholder="Choose a username"
+					/>
+				</div>
+				<div class="input-group">
+					<label>Password</label>
+					<input
+						type="password"
+						placeholder="Create a password"
+					/>
+				</div>
+				<button class="btn">Sign Up</button>
+				<p class="toggle">
+					Already have an account?
+					<span onclick="showLogin()">Login</span>
+				</p>
+			</div>
+		</div>
 
-        <script>
-            function showSignUp() {
-                document.getElementById("loginForm").style.display = "none";
-                document.getElementById("signUpForm").style.display = "block";
-                document
-                    .getElementById("authContainer")
-                    .classList.add("signup-active");
-            }
+		<script>
+			function showSignUp() {
+				document.getElementById(
+					"loginForm"
+				).style.display = "none";
+				document.getElementById(
+					"signUpForm"
+				).style.display = "block";
+				document.getElementById(
+					"authContainer"
+				).classList.add("signup-active");
+			}
 
-            function showLogin() {
-                document.getElementById("signUpForm").style.display = "none";
-                document.getElementById("loginForm").style.display = "block";
-                document
-                    .getElementById("authContainer")
-                    .classList.remove("signup-active");
-            }
+			function showLogin() {
+				document.getElementById(
+					"signUpForm"
+				).style.display = "none";
+				document.getElementById(
+					"loginForm"
+				).style.display = "block";
+				document.getElementById(
+					"authContainer"
+				).classList.remove("signup-active");
+			}
 
-            // ✅ Detect URL parameter
-            window.onload = function () {
-                const params = new URLSearchParams(window.location.search);
-                const mode = params.get("mode");
-                if (mode === "signup") {
-                    showSignUp();
-                } else {
-                    showLogin();
-                }
-            };
-        </script>
-    </body>
+			// ✅ Detect URL parameter
+			window.onload = function () {
+				const params = new URLSearchParams(
+					window.location.search
+				);
+				const mode = params.get("mode");
+				if (mode === "signup") {
+					showSignUp();
+				} else {
+					showLogin();
+				}
+			};
+		</script>
+	</body>
 </html>

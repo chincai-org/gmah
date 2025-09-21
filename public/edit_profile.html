@@ -1,205 +1,221 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Edit Profile | GMAH</title>
-        <link
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-            rel="stylesheet"
-        />
-        <style>
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-                font-family: Arial, sans-serif;
-            }
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<title>Edit Profile | GMAH</title>
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+			rel="stylesheet"
+		/>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+				font-family: Arial, sans-serif;
+			}
 
-            body,
-            html {
-                height: 100%;
-                width: 100%;
-                background: #000;
-                color: #fff;
-            }
+			body,
+			html {
+				height: 100%;
+				width: 100%;
+				background: #000;
+				color: #fff;
+			}
 
-            .edit-page {
-                display: flex;
-                height: 100vh;
-            }
+			.edit-page {
+				display: flex;
+				height: 100vh;
+			}
 
-            .sidebar {
-                width: 220px;
-                background: rgba(0, 0, 0, 0.9);
-                border-right: 2px solid #39ff14;
-                padding: 20px;
-            }
+			.sidebar {
+				width: 220px;
+				background: rgba(0, 0, 0, 0.9);
+				border-right: 2px solid #39ff14;
+				padding: 20px;
+			}
 
-            .sidebar h2 {
-                margin-bottom: 30px;
-                text-align: center;
-            }
+			.sidebar h2 {
+				margin-bottom: 30px;
+				text-align: center;
+			}
 
-            .sidebar h2 a {
-                color: #39ff14;
-                text-decoration: none;
-            }
+			.sidebar h2 a {
+				color: #39ff14;
+				text-decoration: none;
+			}
 
-            .sidebar ul {
-                list-style: none;
-            }
+			.sidebar ul {
+				list-style: none;
+			}
 
-            .sidebar ul li {
-                margin: 20px 0;
-            }
+			.sidebar ul li {
+				margin: 20px 0;
+			}
 
-            .sidebar ul li a {
-                text-decoration: none;
-                color: #fff;
-                font-size: 16px;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                transition: 0.3s;
-            }
+			.sidebar ul li a {
+				text-decoration: none;
+				color: #fff;
+				font-size: 16px;
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				transition: 0.3s;
+			}
 
-            .sidebar ul li a:hover {
-                color: #39ff14;
-            }
+			.sidebar ul li a:hover {
+				color: #39ff14;
+			}
 
-            .main {
-                flex: 1;
-                padding: 40px;
-            }
+			.main {
+				flex: 1;
+				padding: 40px;
+			}
 
-            .main h1 {
-                color: #39ff14;
-                margin-bottom: 20px;
-            }
+			.main h1 {
+				color: #39ff14;
+				margin-bottom: 20px;
+			}
 
-            .edit-card {
-                background: rgba(255, 255, 255, 0.05);
-                border: 1px solid #39ff14;
-                border-radius: 12px;
-                padding: 30px;
-                max-width: 600px;
-            }
+			.edit-card {
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid #39ff14;
+				border-radius: 12px;
+				padding: 30px;
+				max-width: 600px;
+			}
 
-            .form-group {
-                margin-bottom: 20px;
-            }
+			.form-group {
+				margin-bottom: 20px;
+			}
 
-            .form-group label {
-                display: block;
-                margin-bottom: 8px;
-                font-weight: bold;
-                color: #39ff14;
-            }
+			.form-group label {
+				display: block;
+				margin-bottom: 8px;
+				font-weight: bold;
+				color: #39ff14;
+			}
 
-            .form-group input {
-                width: 100%;
-                padding: 10px;
-                border: 1px solid #39ff14;
-                border-radius: 8px;
-                background: #111;
-                color: #fff;
-            }
+			.form-group input {
+				width: 100%;
+				padding: 10px;
+				border: 1px solid #39ff14;
+				border-radius: 8px;
+				background: #111;
+				color: #fff;
+			}
 
-            .btn-group {
-                margin-top: 20px;
-                display: flex;
-                gap: 15px;
-            }
+			.btn-group {
+				margin-top: 20px;
+				display: flex;
+				gap: 15px;
+			}
 
-            .save-btn,
-            .cancel-btn {
-                padding: 10px 20px;
-                font-size: 16px;
-                border: 2px solid #39ff14;
-                background: transparent;
-                color: white;
-                border-radius: 25px;
-                cursor: pointer;
-                transition: 0.3s;
-            }
+			.save-btn,
+			.cancel-btn {
+				padding: 10px 20px;
+				font-size: 16px;
+				border: 2px solid #39ff14;
+				background: transparent;
+				color: white;
+				border-radius: 25px;
+				cursor: pointer;
+				transition: 0.3s;
+			}
 
-            .save-btn:hover {
-                background: #39ff14;
-                color: black;
-            }
+			.save-btn:hover {
+				background: #39ff14;
+				color: black;
+			}
 
-            .cancel-btn:hover {
-                background: crimson;
-                border-color: crimson;
-                color: white;
-            }
-        </style>
-    </head>
+			.cancel-btn:hover {
+				background: crimson;
+				border-color: crimson;
+				color: white;
+			}
+		</style>
+	</head>
 
-    <body>
-        <div class="edit-page">
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <h2><a href="landing_page.html">GMAH</a></h2>
-                <ul>
-                    <li>
-                        <a href="/dashboard"
-                            ><i class="fas fa-home"></i> Dashboard</a
-                        >
-                    </li>
-                    <li>
-                        <a href="/profile"
-                            ><i class="fas fa-user"></i> Profile</a
-                        >
-                    </li>
-                    <li>
-                        <a href="/logout"
-                            ><i class="fas fa-sign-out-alt"></i> Logout</a
-                        >
-                    </li>
-                </ul>
-            </div>
+	<body>
+		<div class="edit-page">
+			<!-- Sidebar -->
+			<div class="sidebar">
+				<h2><a href="landing_page.html">GMAH</a></h2>
+				<ul>
+					<li>
+						<a href="/dashboard"
+							><i
+								class="fas fa-home"
+							></i>
+							Dashboard</a
+						>
+					</li>
+					<li>
+						<a href="/profile"
+							><i
+								class="fas fa-user"
+							></i>
+							Profile</a
+						>
+					</li>
+					<li>
+						<a href="/logout"
+							><i
+								class="fas fa-sign-out-alt"
+							></i>
+							Logout</a
+						>
+					</li>
+				</ul>
+			</div>
 
-            <!-- Edit Profile Content -->
-            <form class="main" method="post" action="/profile">
-                <h1>Edit Profile</h1>
-                <div class="edit-card">
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input
-                            type="text"
-                            id="username"
-                            name="name"
-                            placeholder="Enter new username"
-                        />
-                    </div>
-                    <div class="form-group">
-                        <label for="password">New Password</label>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            placeholder="Enter new password"
-                        />
-                    </div>
-                    <div class="btn-group">
-                        <input
-                            type="submit"
-                            id="submit-edit"
-                            class="save-btn"
-                            value="Save Changes"
-                        />
-                        <button
-                            type="button"
-                            class="cancel-btn"
-                            onclick="window.location.href='/profile'"
-                        >
-                            Cancel
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </body>
+			<!-- Edit Profile Content -->
+			<form class="main" method="post" action="/profile">
+				<h1>Edit Profile</h1>
+				<div class="edit-card">
+					<div class="form-group">
+						<label for="username"
+							>Username</label
+						>
+						<input
+							type="text"
+							id="username"
+							name="name"
+							placeholder="Enter new username"
+						/>
+					</div>
+					<div class="form-group">
+						<label for="password"
+							>New Password</label
+						>
+						<input
+							type="password"
+							id="password"
+							name="password"
+							placeholder="Enter new password"
+						/>
+					</div>
+					<div class="btn-group">
+						<input
+							type="submit"
+							id="submit-edit"
+							class="save-btn"
+							value="Save Changes"
+						/>
+						<button
+							type="button"
+							class="cancel-btn"
+							onclick="window.location.href='/profile'"
+						>
+							Cancel
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</body>
 </html>
