@@ -102,6 +102,7 @@ export async function verifyUserCredentials(userId, password) {
 
 export async function putCourse(
     userId,
+    courseName,
     nativeLang,
     learningLang,
     context,
@@ -135,6 +136,19 @@ export async function getCourse(courseId) {
         new GetCommand({ TableName: COURSES_TABLE, Key: { courseId } })
     );
     return r.Item || null;
+}
+
+export async function findCoursesByUserId(userId) {
+    const params = {
+        TableName: COURSES_TABLE,
+        FilterExpression: "userId = :userId",
+        ExpressionAttributeValues: {
+            ":userId": userId
+        }
+    };
+
+    const response = await ddb.send(new ScanCommand(params));
+    return response.Items || [];
 }
 
 export async function putTopic(topicTitle, topicType, content, description) {

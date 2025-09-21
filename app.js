@@ -12,9 +12,11 @@ import {
     verifyUserCredentials,
     getUserByUsername,
     updateUser,
-    putCourse
+    putCourse,
+    findCoursesByUserId
 } from "./util/database.js";
 import { promptBedrock } from "./util/bedrock.js";
+import { get } from "http";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -32,6 +34,7 @@ app.set("view engine", "ejs");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public"))); // serve static files
+
 function cookieAuth(req, res, next) {
     const token = req.cookies?.token;
     if (!token) {
@@ -47,6 +50,21 @@ function cookieAuth(req, res, next) {
         return res.redirect("/login");
     }
 }
+
+function getUserIdFromCookie(req) {
+    const token = req.cookies?.token;
+    if (!token) {
+        throw new Error("No token found in cookies");
+    }
+
+    try {
+        const decoded = jwt.verify(token, "super-secret"); // Replace "super-secret" with your actual secret key
+        return decoded.id; // Extract the user ID from the decoded token
+    } catch (err) {
+        throw new Error("Invalid token");
+    }
+}
+
 async function signup_verification(name, password) {
     // ===== Validation Rules =====
     const nameRegex = /^[a-zA-Z0-9_-]{3,15}$/;
@@ -207,31 +225,41 @@ const dialogs = [
     }
 ];
 
-app.get("/dashboard", (req, res) => {
+app.get("/dashboard", async (req, res) => {
+    const id = getUserIdFromCookie(req);
+
+    console.log("Current user:", id);
+
+    const courses = await findCoursesByUserId(id);
+    console.log("User courses:", courses);
+
     res.render("dashboard", { courses: courses });
 });
 
 app.post("/createCourseVerifier", async (req, res) => {
-    console.log(req.body);
-    const { courseName, native, lang, context, level } = req.body;
-    if (
-        !courseName.trim() ||
-        !lang.trim() ||
-        !context.trim() ||
-        !native.trim()
-    ) {
-        return res.status(400).send("Error: Fields cannot be empty.");
-    } else {
-        // courses.push({ ...req.body, id: courses.length }); //supposed to save it into db
+    try {
+        const { courseName, native, lang, context, level } = req.body;
 
-        // Get user from cookie
-        const user = req.user;
-        console.log("Current user:", user);
+        if (
+            !courseName.trim() ||
+            !lang.trim() ||
+            !context.trim() ||
+            !native.trim()
+        ) {
+            return res.status(400).send("Error: Fields cannot be empty.");
+        }
+
+        // Get user ID from cookie
+        const userId = getUserIdFromCookie(req);
 
         // Save course to database
-        await putCourse(user.id, native, lang, context, level);
+        await putCourse(userId, courseName, native, lang, context, level);
+
+        res.redirect("/dashboard");
+    } catch (err) {
+        console.error(err.message);
+        res.status(401).send("Unauthorized: " + err.message);
     }
-    res.redirect("/dashboard");
 });
 
 app.get("/courses/:id", (req, res) => {
