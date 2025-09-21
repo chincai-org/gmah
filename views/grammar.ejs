@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Grammar Lesson</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background: #000;
+                color: white;
+                margin: 0;
+                padding: 20px;
+            }
+
+            h1 {
+                text-align: center;
+                margin-bottom: 20px;
+                color: #2ecc71;
+            }
+
+            .lesson-card,
+            .quiz-card {
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid #2ecc71;
+                border-radius: 12px;
+                padding: 20px;
+                margin: 20px auto;
+                max-width: 800px;
+            }
+
+            .lesson-card h2,
+            .quiz-card h2 {
+                color: #2ecc71;
+                margin-bottom: 15px;
+            }
+
+            .question-block {
+                margin-bottom: 25px;
+                padding: 15px;
+                border-radius: 10px;
+                background: rgba(255, 255, 255, 0.02);
+                border: 1px solid #2ecc71;
+            }
+
+            .question-block p {
+                margin-bottom: 12px;
+                font-weight: bold;
+            }
+
+            .quiz-option {
+                display: block;
+                padding: 12px 14px;
+                margin: 8px 0;
+                border: 1px solid #2ecc71;
+                border-radius: 8px;
+                background: #111;
+                cursor: pointer;
+                transition: 0.3s;
+                text-align: left;
+            }
+
+            .quiz-option:hover {
+                background: #27ae60;
+                color: black;
+                transform: translateY(-1px);
+            }
+
+            .correct {
+                border-color: #27ae60;
+                background: rgba(46, 204, 113, 0.2);
+            }
+
+            .wrong {
+                border-color: #e74c3c;
+                background: rgba(231, 76, 60, 0.2);
+            }
+
+            .feedback {
+                margin-top: 10px;
+                font-weight: bold;
+            }
+
+            .back-btn {
+                display: inline-block;
+                padding: 10px 18px;
+                border-radius: 10px;
+                border: 1px solid #2ecc71;
+                background: transparent;
+                color: #2ecc71;
+                cursor: pointer;
+                font-weight: 600;
+                transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+            }
+
+            .back-btn:hover {
+                background: #2ecc71;
+                color: #000;
+                transform: translateY(-2px);
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>Grammar Lesson</h1>
+
+        <!-- Lesson Section -->
+        <div class="lesson-card">
+            <h2>Topic: <%= topic.title %></h2>
+            <p> <%= topic.content %>
+            </p>
+        </div>
+
+        <!-- Quiz Section -->
+        <div class="quiz-card">
+            <h2>Quick Quiz</h2>
+            <div id="quiz-container"></div>
+        </div>
+        <div id="quiz-actions" style="text-align:center; margin-top:18px;">
+            <button type="button" id="backBtn" class="back-btn">Finish</button>
+        </div>
+
+        <script>         
+            const questions = <%- JSON.stringify(topic.items) %>; // It works even though squiggly line
+
+            function shuffle(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            };
+
+            document.getElementById('backBtn').addEventListener('click', () => {
+                // Go back if possible, otherwise go to fallback (change fallback as you need)
+                if (window.history.length > 1) {
+                    window.history.back();
+                } else {
+                // fallback: change to a safe page (e.g. course list or homepage)
+                    window.location.href = '/courses'; 
+                }
+            });
+
+            function renderQuiz() {
+                const container = document.getElementById("quiz-container");
+                container.innerHTML = "";
+
+                questions.forEach((q, index) => {
+                    const block = document.createElement("div");
+                    block.className = "question-block";
+
+                    const questionEl = document.createElement("p");
+                    questionEl.textContent = q.question;
+                    block.appendChild(questionEl);
+
+                    // 🔀 Shuffle options before rendering
+                    const shuffledOptions = shuffle([...q.options]);
+
+                    shuffledOptions.forEach(opt => {
+                        const optionEl = document.createElement("div");
+                        optionEl.className = "quiz-option";
+                        optionEl.textContent = opt.text;
+                        optionEl.onclick = () =>
+                            checkAnswer(optionEl, opt.correct, index);
+                        block.appendChild(optionEl);
+                    });
+
+                    const feedback = document.createElement("div");
+                    feedback.id = "feedback-" + index;
+                    feedback.className = "feedback";
+                    block.appendChild(feedback);
+
+                    container.appendChild(block);
+                });
+            }
+
+            function checkAnswer(option, isCorrect, index) {
+                const feedback = document.getElementById("feedback-" + index);
+                const options =
+                    option.parentElement.querySelectorAll(".quiz-option");
+                options.forEach(el => el.classList.remove("correct", "wrong"));
+
+                if (isCorrect) {
+                    option.classList.add("correct");
+                    feedback.textContent = "✅ Correct!";
+                    feedback.style.color = "#2ecc71";
+                } else {
+                    option.classList.add("wrong");
+                    feedback.textContent =
+                        "❌ That’s not correct — please try again.";
+                    feedback.style.color = "#e74c3c";
+                }
+            }
+
+            renderQuiz();
+        </script>
+    </body>
+</html>
