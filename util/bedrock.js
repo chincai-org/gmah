@@ -126,14 +126,24 @@ export async function promptGenerateDialogue(
 	scenario,
 	nativeLanguage,
 ) {
-	const systemPrompt = `Given\n${scenario}, you started the conversation. Now for every reply sent by the user, you should provide concise feedback on what they did good and what need to improve in ${nativeLanguage} then continue back to your conversation in ${language}. Feedback should be in ${nativeLanguage}.\n
+	const systemPrompt = `Given the roleplay of ${scenario}, you started the roleplay conversation. Now for every reply sent by the user, you should provide concise feedback on what they did good and what need to improve in ${nativeLanguage}. Feedback should be in ${nativeLanguage}. Then continue the roleplay conversation in ${language} replying to the user.
 	Format:
 	<START of message>
-	Feedback: (insert your feedback in ${nativeLanguage})\n
-	******
-	[insert your role]: (continue the conversation in ${language})\n
-	[Translation]: (provide translation in ${nativeLanguage})\n
-	<END of message>`;
+	Feedback: (insert your feedback in ${nativeLanguage})
+	Better reply: (insert a better way for the user to response in ${language})
+
+	[insert your role]: (continue the roleplay conversation in ${language} replying to user)
+	[Translation]: (provide translation of your roleplay response in ${nativeLanguage})
+	<END of message>
+	Eample output with Malay as language learning and English as user's native language:
+	<START of message>
+	Feedback: Your use of the language is techinically correct, but the response is not releveant to the scenario.
+	Better reply: Baiklah, cikgu. Saya akan membantu kamu mangangkat kerusi ke sana.
+	
+	[Guru Sekolah]: Selepas kamu mengangkat semua kerusi di sini, tolong cikgu panggil murid Ali ke bilik guru saya.
+	[Translation]: After you carry all these chairs here, help me call the student Ali to my office.
+	<END of message>
+	`;
 	try {
 		const input = {
 			modelId,
