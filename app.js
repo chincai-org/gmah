@@ -506,7 +506,7 @@ app.get("/grammar", (req, res) => {
         topicId: 12345,
         title: "topicTitle",
         content:
-            "This is topic content that teaches about blah blah blah in markdown",
+            "This is topic content that teaches about blah blah blah in markdown. \n # Header \n ## smaller one \n --- \n List stuff \n - someting \n - sumding",
         description: "Placeholder description",
         items: [
             //generate grammar questions

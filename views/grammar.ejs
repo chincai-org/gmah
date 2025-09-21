@@ -107,7 +107,7 @@
         <!-- Lesson Section -->
         <div class="lesson-card">
             <h2>Topic: <%= topic.title %></h2>
-            <p> <%= topic.content %>
+            <p id="content-md"> <%= topic.content %>
             </p>
         </div>
 
@@ -120,6 +120,7 @@
             <button type="button" id="backBtn" class="back-btn">Finish</button>
         </div>
 
+        <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
         <script>         
             const questions = <%- JSON.stringify(topic.items) %>; // It works even though squiggly line
 
@@ -193,6 +194,10 @@
             }
 
             renderQuiz();
+
+             const topicContent = <%- JSON.stringify(topic.content || "") %>;
+            document.getElementById('content-md').innerHTML =
+                marked.parse(topicContent);
         </script>
     </body>
 </html>
