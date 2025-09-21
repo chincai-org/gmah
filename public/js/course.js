@@ -155,8 +155,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             );
 
-            const topic = data?.topic ?? data;
-            appendVocabCard(topic);
+            const topics = data?.topics ?? [];
+            topics.forEach(appendVocabCard);
         } catch (err) {
             console.error(err);
             alert("Failed to generate vocab lesson. " + (err?.message || ""));
