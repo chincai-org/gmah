@@ -103,7 +103,7 @@ export async function promptGenerateDialogueTitle(
 	nativeLanguage,
 	profficiencyLevelDescription
 ) {
-	const prompt = `Create a real-life scenario for a ${language} enthusiast who wants to learn this language because of "${context}". Avoid scenarios related to this list: ${previousTopics}. 
+	const prompt = `Create a real-life scenario for a ${language} language enthusiast who wants to learn this language because of ${context}. Avoid scenarios related to this list: ${previousTopics}. 
 
     Format the response as: 
     { "scenario title": "short description" }
@@ -115,40 +115,25 @@ export async function promptGenerateDialogueTitle(
     - Be between 20 and 30 words.
     - Clearly explain the scenario's purpose and relevance to the learner's interest.
 
-    Consider the user's native language (${nativeLanguage}) and proficiency level described as (${profficiencyLevelDescription}). Write the response in their native language.`;
+    Consider the user's native language ${nativeLanguage} and proficiency level described as ${profficiencyLevelDescription}. Write the response in their native language.`;
 
 	return await promptBedrock(prompt);
 }
 
-export async function promptGenerateDialogueStarter(
+export async function promptGenerateDialogue(
 	language,
-	scenario,
-	scenarioDescription,
-	context,
 	nativeLanguage,
-	proficiencyLevel
+	scenario,
+	nativeLanguage,
 ) {
-	const systemPrompt = `You are interacting with a user who is roleplaying in a ${language} scenario: ${scenario}, described as "${scenarioDescription}".
-	The goal is to help the user practice their ${language} skills.
-
-	Your role:
-
-	Fully immerse yourself as the character the user is speaking to, responding naturally and contextually in ${language}.
-
-	After each user reply, step out of character briefly to provide constructive feedback in ${nativeLanguage}, focusing on:
-
-	Naturalness of phrasing
-
-	Grammatical accuracy
-
-	Suggestions for more authentic word choice
-	Keep the feedback encouraging and tailored to the user’s ${proficiencyLevel}.
-
-	Additional context:
-
-	${context} (e.g. user’s interests, reasons for learning, goals).
-
-	Make sure the roleplay is engaging, improvisational, and adaptive to the user’s input.`;
+	const systemPrompt = `Given\n${scenario}, you started the conversation. Now for every reply sent by the user, you should provide concise feedback on what they did good and what need to improve in ${nativeLanguage} then continue back to your conversation in ${language}. Feedback should be in ${nativeLanguage}.\n
+	Format:
+	<START of message>
+	Feedback: (insert your feedback in ${nativeLanguage})\n
+	******
+	[insert your role]: (continue the conversation in ${language})\n
+	[Translation]: (provide translation in ${nativeLanguage})\n
+	<END of message>`;
 	try {
 		const input = {
 			modelId,
@@ -225,35 +210,17 @@ export async function promptGenerateVocabQuiz(
 }
 
 export async function promptGenerateDialogueFirstSentence(
-	language,
-	scenario,
-	scenarioDescription,
-	context,
-	nativeLanguage,
-	proficiencyLevel
 ) {
-	const prompt = `Now start the conversation with the user acting as the role you chosen for yourself and speaking to the user that is of role you chosen for them to act as. Remeber to provide concise feedback to the user after the user reply before continuing your conversation.`;
-	const systemPrompt = `You are interacting with a user who is roleplaying in a ${language} scenario: ${scenario}, described as "${scenarioDescription}".
-	The goal is to help the user practice their ${language} skills.
+	const prompt = `Based on a topic of Exploring Malaysian Markets with description Discover how to navigate local markets in Malaysia, learning essential phrases and cultural etiquette to enhance your experience., create a roleplaying scenario with 2 roles where one person is talking to another person. State my role and your role in chinese. Your response must be in malay. Give a conversation starter with your role. DO NOT GENERATE ANY OTHER DIALOGUE THAT IS NOT YOUR ROLE, WAIT FOR USER'S REPLY. DO NOT TYPE YOU ARE WAITING FOR MY REPLY. REMEMBER, YOU ARE ROLEPLAYING, AND NOW YOU ARE TALKING TO ME WHO IS PLAYING THE OTHER ROLE. STARTING NOW. START YOUR CONVERSATION WITH [(insert your role)]: what you going to say. For example [grampa]: hi my dear grandson. Here are rules to follow, Rules:
 
-	Your role:
+   - State my role and your role in chinese
+   - Start the conversation in malay
+   - Stay commited in your role, do not switch to other role, do not talk as someone else
+   - Provided translation below the conversation in chinese to help me because i might not understand malay.
 
-	Fully immerse yourself as the character the user is speaking to, responding naturally and contextually in ${language}.
+Format: Your role: (insert your role)\n My role: (insert my role)\n Scenario: (insert the scenario/context)\n
 
-	After each user reply, step out of character briefly to provide constructive feedback in ${nativeLanguage}, focusing on:
-
-	Naturalness of phrasing
-
-	Grammatical accuracy
-
-	Suggestions for more authentic word choice
-	Keep the feedback encouraging and tailored to the user’s ${proficiencyLevel}.
-
-	Additional context:
-
-	${context} (e.g. user’s interests, reasons for learning, goals).
-
-	Make sure the roleplay is engaging, improvisational, and adaptive to the user’s input.`;
+[insert your role]: (insert your starter conversation)\n [Translation]: (insert your translated starter conversation)\n `;
 	try {
 		const input = {
 			modelId,
@@ -261,14 +228,6 @@ export async function promptGenerateDialogueFirstSentence(
 			accept: "application/json",
 			body: JSON.stringify({
 				messages: [
-					{
-						role: "system",
-						content: [
-							{
-								text: systemPrompt
-							}
-						]
-					},
 					{
 						role: "user",
 						content: [
