@@ -533,160 +533,46 @@ app.post("/generate-vocab-lesson", cookieAuth, async (req, res) => {
 
 app.post("/generate-dialogue-lesson", cookieAuth, async (req, res) => {});
 
-app.get("/grammar", (req, res) => {
-    const topic = {
-        //get from db
-        topicId: 12345,
-        title: "topicTitle",
-        content:
-            "This is topic content that teaches about blah blah blah in markdown",
-        description: "Placeholder description",
-        items: [
-            //generate grammar questions
-            {
-                question: "1. First question is zh gay?",
-                options: [
-                    {
-                        text: "Yes definitely.",
-                        correct: true
-                    },
-                    {
-                        text: "Yes 2 definitely.",
-                        correct: false
-                    },
-                    {
-                        text: "Yes 3 definitely.",
-                        correct: false
-                    },
-                    {
-                        text: "Yes 4 definitely.",
-                        correct: false
-                    }
-                ]
-            },
-            {
-                question: "2. second question is zh clanker?",
-                options: [
-                    {
-                        text: "Yes definitely.",
-                        correct: true
-                    },
-                    {
-                        text: "Yes 2 definitely.",
-                        correct: false
-                    },
-                    {
-                        text: "Yes 3 definitely.",
-                        correct: false
-                    },
-                    {
-                        text: "Yes 4 definitely.",
-                        correct: false
-                    }
-                ]
-            },
-            {
-                question: "3. second question is zh short?",
-                options: [
-                    {
-                        text: "Yes definitely.",
-                        correct: true
-                    },
-                    {
-                        text: "Yes 2 definitely.",
-                        correct: false
-                    },
-                    {
-                        text: "Yes 3 definitely.",
-                        correct: false
-                    },
-                    {
-                        text: "Yes 4 definitely.",
-                        correct: false
-                    }
-                ]
-            }
-        ]
-    };
+app.get("/grammar/:id", async (req, res) => {
+    const topicId = +req.params.id;
+    const topic = await getTopic(topicId);
+    if (!topic) {
+        return res.status(404).send("Topic not found");
+    }
+
+    for (let i = 0; i < topic.items.length; i++) {
+        const item = topic.items[i];
+        const options = item.options.map((opt, index) => ({
+            text: opt,
+            correct: false
+        }));
+        options[0].correct = true;
+        topic.items[i].options = options.sort(() => Math.random() - 0.5);
+    }
+
+    console.log(topic);
 
     res.render("grammar", { topic });
 });
 
-app.get("/vocab", (req, res) => {
-    const topic = {
-        //get from db
-        topicId: 12345,
-        title: "vocabTitle",
-        content:
-            "This is vocab content that teaches about blah blah blah in markdown",
-        description: "Placeholder description",
-        items: [
-            //generate grammar questions
-            {
-                question: "1. First question is zh gay?",
-                options: [
-                    {
-                        text: "Yes definitely.",
-                        correct: true
-                    },
-                    {
-                        text: "Yes 2 definitely.",
-                        correct: false
-                    },
-                    {
-                        text: "Yes 3 definitely.",
-                        correct: false
-                    },
-                    {
-                        text: "Yes 4 definitely.",
-                        correct: false
-                    }
-                ]
-            },
-            {
-                question: "2. second question is zh clanker?",
-                options: [
-                    {
-                        text: "Yes definitely.",
-                        correct: true
-                    },
-                    {
-                        text: "Yes 2 definitely.",
-                        correct: false
-                    },
-                    {
-                        text: "Yes 3 definitely.",
-                        correct: false
-                    },
-                    {
-                        text: "Yes 4 definitely.",
-                        correct: false
-                    }
-                ]
-            },
-            {
-                question: "3. second question is zh short?",
-                options: [
-                    {
-                        text: "Yes definitely.",
-                        correct: true
-                    },
-                    {
-                        text: "Yes 2 definitely.",
-                        correct: false
-                    },
-                    {
-                        text: "Yes 3 definitely.",
-                        correct: false
-                    },
-                    {
-                        text: "Yes 4 definitely.",
-                        correct: false
-                    }
-                ]
-            }
-        ]
-    };
+app.get("/vocab", async (req, res) => {
+    const topicId = +req.params.id;
+    const topic = await getTopic(topicId);
+    if (!topic) {
+        return res.status(404).send("Topic not found");
+    }
+
+    for (let i = 0; i < topic.items.length; i++) {
+        const item = topic.items[i];
+        const options = item.options.map((opt, index) => ({
+            text: opt,
+            correct: false
+        }));
+        options[0].correct = true;
+        topic.items[i].options = options.sort(() => Math.random() - 0.5);
+    }
+
+    console.log(topic);
 
     res.render("grammar", { topic });
 });
