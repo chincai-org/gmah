@@ -221,7 +221,7 @@ app.post("/login-verifier", async (req, res) => {
 //     }
 // ];
 
-app.get("/dashboard", async (req, res) => {
+app.get("/dashboard", cookieAuth, async (req, res) => {
     const id = getUserIdFromCookie(req);
 
     console.log("Current user:", id);
