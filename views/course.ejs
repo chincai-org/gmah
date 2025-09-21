@@ -19,7 +19,7 @@
     </div>
   </header>
 
-  <main class="course-main">
+  <main class="course-main" id="course-root" data-course-id="<%= course?.courseId %>">
     <nav class="tabs" role="tablist" aria-label="Course panels">
       <button class="tab is-active" data-target="grammar" role="tab" aria-selected="true">Grammar</button>
       <button class="tab" data-target="vocab" role="tab" aria-selected="false">Vocab</button>
@@ -29,12 +29,12 @@
     <section id="grammar" class="panel is-active" role="tabpanel" aria-labelledby="grammar-tab">
       <div class="panel__header">
         <h2>Grammar</h2>
-        <button class="btn btn-primary">Generate lesson</button>
+        <button class="btn btn-primary" id="generate-grammar" data-action="generate-grammar">Generate lesson</button>
       </div>
       <div class="grid">
         <!-- Example grammar cards -->
         <% grammar.forEach(topic => { %>
-            <div class="card">
+        <div class="card">
             <h3><%= topic.title %></h3>
             <p><%= topic.description %></p>
             <div class="card__actions">
@@ -42,20 +42,10 @@
                     <button class="btn">Open</button>
                 </a>
                 <button class="btn btn-ghost">Delete</button>
-            </div>
-            </div>
-        <% }) %>
-        <!-- <div class="card">
-          <h3>Past Continuous</h3>
-          <p>Actions in progress in the past.</p>
-          <div class="card__actions">
-	        <a href="../grammar.html">
-	            <button class="btn">Open</button>
-	        </a>
-            <button class="btn btn-ghost">Delete</button>
-          </div>
+	        </div>
         </div>
-      </div> -->
+        <% }) %>
+      </div>
     </section>
 
     <section id="vocab" class="panel" role="tabpanel" aria-labelledby="vocab-tab" hidden>

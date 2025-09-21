@@ -196,23 +196,6 @@ app.post("/login-verifier", async (req, res) => {
     }
 });
 
-const courses = [
-    {
-        id: 0,
-        courseName: "Course1",
-        native: "native1",
-        lang: "Chinese",
-        context: "None"
-    },
-    {
-        id: 1,
-        courseName: "Course2",
-        native: "native2",
-        lang: "Malay",
-        context: "Hello"
-    }
-];
-
 // const dialogs = [
 //     {
 //         id: 0,
@@ -232,6 +215,7 @@ app.get("/dashboard", async (req, res) => {
     console.log("Current user:", id);
 
     const courses = await findCoursesByUserId(id);
+
     console.log("User courses:", courses);
 
     res.render("dashboard", { courses: courses });
@@ -277,6 +261,28 @@ app.get("/courses/:id", async (req, res) => {
 
     // Renders views/course.ejs (make sure this file exists)
     res.render("course", { course, dialogs, grammar, vocab });
+});
+
+app.post("/courses/:id/grammar/generate", async (req, res) => {
+    try {
+        const courseId = parseInt(req.params.id, 10);
+        const course = await getCourse(courseId);
+        if (!course) {
+            return res.status(404).json({ error: "Course not found" });
+        }
+
+        const topic = {
+            title: "New Grammar Topic",
+            description: "Generated lesson des".slice(0, 240)
+        };
+
+        // Optionally persist topic here
+
+        res.json({ topic });
+    } catch (err) {
+        console.error("Generate grammar error:", err);
+        res.status(500).json({ error: "Failed to generate lesson" });
+    }
 });
 
 app.get("/ask", async (req, res) => {

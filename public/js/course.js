@@ -49,9 +49,79 @@ document.addEventListener("DOMContentLoaded", () => {
             msgBox.scrollTop = msgBox.scrollHeight;
         });
     }
+
+    const genBtn = document.getElementById("generate-grammar");
+    const courseRoot = document.getElementById("course-root");
+    const courseId = courseRoot?.dataset.courseId;
+    const grammarGrid = document.querySelector("#grammar .grid");
+
+    async function postJSON(url, data) {
+        const res = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: data ? JSON.stringify(data) : "{}"
+        });
+        if (!res.ok) {
+            const text = await res.text().catch(() => "");
+            const msg = text || `Request failed with status ${res.status}`;
+            throw new Error(msg);
+        }
+        return res.json();
+    }
+
+    // Grammar part
+    function appendGrammarCard(topic) {
+        if (!grammarGrid || !topic) return;
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+            <h3>${topic.title ?? "New Lesson"}</h3>
+            <p>${topic.description ?? ""}</p>
+            <div class="card__actions">
+                <a href="../grammar.html">
+                    <button class="btn">Open</button>
+                </a>
+                <button class="btn btn-ghost">Delete</button>
+            </div>
+        `;
+        grammarGrid.prepend(card);
+    }
+
+    async function generateGrammarLesson() {
+        if (!courseId) {
+            alert("Missing course id.");
+            return;
+        }
+        const prevText = genBtn.textContent;
+        genBtn.disabled = true;
+        genBtn.textContent = "Generating...";
+
+        try {
+            // Call your API. Replace the URL if you have a different endpoint.
+            const data = await postJSON(
+                `/courses/${encodeURIComponent(courseId)}/grammar/generate`,
+                {
+                    // Include any context you want the API to use:
+                    // level: "...", learningLang: "...", context: "..."
+                }
+            );
+
+            const topic = data?.topic ?? data?.lesson ?? data;
+            appendGrammarCard(topic);
+        } catch (err) {
+            console.error(err);
+            alert("Failed to generate lesson. " + (err?.message || ""));
+        } finally {
+            genBtn.disabled = false;
+            genBtn.textContent = prevText;
+        }
+    }
+
+    if (genBtn) {
+        genBtn.addEventListener("click", generateGrammarLesson);
+    }
 });
 
-// Safe to append to the end of /js/course.js
 (function () {
     document.addEventListener("DOMContentLoaded", function () {
         const dialoguePanel = document.getElementById("dialogue");
