@@ -30,7 +30,7 @@ export async function promptBedrock(prompt) {
                     }
                 ],
                 inferenceConfig: {
-                    maxTokens: 500,
+                    maxTokens: 1024,
                     temperature: 0.7
                 }
             })
@@ -189,7 +189,37 @@ export async function promptGenerateGrammarQuiz(
     grammarTopic,
     numOfQuiz
 ) {
-    const prompt = `Base on the ${language} grammar lesson topic ${grammarTopic}. You must expect the user is a beginner and must learn the basics of grammar and everything about this topic clearly and specifically. You should generate a multiple choice question with 4 options. The generated format should be {"question" : ["option1", "option2", "option3", "option4"], "explaination" : "why this answer correct" }. For example {"Choose the correct answer" : ["She plays the piano", "She play the piano", "She playing the piano", "She played the piano every day"], "explaination" : "she is singular so need s at the back"}. Generate ${numOfQuiz} question in an array of json. The correct answer must be at index 0. DO NOT have the correct answer at index 1,2 and 3.`;
+    const prompt = `
+	Based on the ${language} grammar lesson topic "${grammarTopic}", generate beginner-friendly multiple-choice questions to help the user learn the basics of this topic clearly and specifically.
+
+	Format the response as:
+	[
+	{
+		"question": "Insert the question text here",
+		"options": ["option1", "option2", "option3", "option4"],
+		"explanation": "why this answer is correct"
+	}
+	]
+
+	Example:
+	[
+	{
+		"question": "Choose the correct sentence:",
+		"options": ["She plays the piano", "She play the piano", "She playing the piano", "She played the piano every day"],
+		"explanation": "The subject 'she' is singular, so the verb needs an 's' at the end."
+	}
+	]
+
+	Requirements:
+	1. Generate ${numOfQuiz} questions in an array of JSON objects.
+	2. The correct answer **must always be at index 0** in the "options" array.
+	3. The incorrect options (index 1, 2, 3) must be plausible but incorrect.
+	4. The questions must strictly test the grammar topic "${grammarTopic}".
+	5. Ensure the questions are beginner-friendly and avoid advanced concepts.
+	6. The explanation must clearly justify why the correct answer is correct.
+
+	Focus on clarity and relevance to the grammar topic. Do not include unrelated or overly complex questions.
+	`;
 
     return await promptBedrock(prompt);
 }
@@ -213,7 +243,35 @@ export async function promptGenerateVocabQuiz(
     vocabLesson,
     nativeLanguage
 ) {
-    const prompt = `Base on the ${language} vocabulary lesson ${vocabLesson}. Generate vocabulary multiple choice questions that are ONLY related to the vocabulary lesson. The generated format should be {"question" : ["option1", "option2", "option3", "option4"], "explaination" : "why this answer correct" }. For example {"旅行" : ["travel", "china", "walk", "run"], "explaination" : "this is the correct way to say it in chinese"}. Generate ${numOfQuiz} question in an array of json. The correct answer must be at index 0. DO NOT have the correct answer at index 1,2 and 3. The question MUST be testing the vocabulary of ${language} and the options MUST be in ${nativeLanguage} language.`;
+    const prompt = `Based on the ${language} vocabulary lesson "${vocabLesson}", generate vocabulary multiple-choice questions strictly related to the lesson. 
+
+    Format the response as:
+    [ 
+      { 
+        "question": "Insert the question text here",
+        "options": ["option1", "option2", "option3", "option4"],
+        "explanation": "why this answer is correct" 
+      } 
+    ]
+
+    Example:
+    [ 
+      { 
+        "question": "What does '旅行' mean?",
+        "options": ["travel", "China", "walk", "run"],
+        "explanation": "'旅行' means 'travel' in Chinese, making it the correct answer." 
+      } 
+    ]
+
+    Requirements:
+    1. Generate ${numOfQuiz} questions in an array of JSON objects.
+    2. The correct answer **must always be at index 0**.
+    3. The incorrect options (index 1, 2, 3) must be plausible but incorrect translations.
+    4. The question must test vocabulary from the lesson "${vocabLesson}".
+    5. The options must be in the user's native language (${nativeLanguage}).
+    6. The explanation must clearly justify why the correct answer is correct.
+
+    Ensure the questions are beginner-friendly and align with the vocabulary lesson. Do not include unrelated or advanced concepts.`;
 
     return await promptBedrock(prompt);
 }

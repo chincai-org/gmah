@@ -18,7 +18,9 @@ import {
     findTopicsByCourseId,
     putTopic,
     addTopicToCourse,
-    getTopic
+    addItemToTopic,
+    getTopic,
+    addItemsToTopic
 } from "./util/database.js";
 
 import {
@@ -332,6 +334,19 @@ app.post("/courses/:id/grammar/generate", async (req, res) => {
                 description
             );
             await addTopicToCourse(courseId, dbTopic.topicId);
+
+            const quizzesOutput = await promptGenerateGrammarQuiz(
+                course.learningLang,
+                7,
+                dbTopic.content,
+                course.nativeLang
+            );
+
+            console.log("Raw quiz output:", quizzesOutput);
+
+            const quizzes = JSON.parse(quizzesOutput);
+
+            await addItemsToTopic(dbTopic.topicId, quizzes);
         }
 
         res.json({ topics: topicObjects });
@@ -377,13 +392,31 @@ app.post("/courses/:id/vocab/generate", async (req, res) => {
             const [title, description] = Object.entries(topic)[0];
             topicObjects.push({ title, description });
 
+            const lesson = await promptGenerateVocabLesson(
+                course.learningLang,
+                title
+            );
+
             const dbTopic = await putTopic(
                 title,
                 "vocabulary",
-                await promptGenerateVocabLesson(course.learningLang, title),
+                lesson,
                 description
             );
             await addTopicToCourse(courseId, dbTopic.topicId);
+
+            const quizzesOutput = await promptGenerateVocabQuiz(
+                course.learningLang,
+                7,
+                lesson,
+                course.nativeLang
+            );
+
+            console.log("Raw quiz output:", quizzesOutput);
+
+            const quizzes = JSON.parse(quizzesOutput);
+
+            await addItemsToTopic(dbTopic.topicId, quizzes);
         }
 
         res.json({ topics: topicObjects });
