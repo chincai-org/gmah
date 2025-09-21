@@ -51,9 +51,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const genBtn = document.getElementById("generate-grammar");
+    const vocabBtn = document.getElementById("generate-vocab");
     const courseRoot = document.getElementById("course-root");
     const courseId = courseRoot?.dataset.courseId;
     const grammarGrid = document.querySelector("#grammar .grid");
+    const vocabGrid = document.querySelector("#vocab .grid");
 
     async function postJSON(url, data) {
         const res = await fetch(url, {
@@ -102,12 +104,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 courseId
             });
 
-            const { topics } = data;
-
-            topics.forEach(topic => appendGrammarCard(topic));
+            const topic = data?.topic ?? data;
+            appendGrammarCard(topic);
         } catch (err) {
             console.error(err);
-            alert("Failed to generate lesson. " + (err?.message || ""));
+            alert("Failed to generate grammar lesson. " + (err?.message || ""));
         } finally {
             genBtn.disabled = false;
             genBtn.textContent = prevText;
@@ -115,7 +116,69 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (genBtn) {
-        genBtn.addEventListener("click", generateGrammarLesson);
+        genBtn.addEventListener("click", generateGrammar);
+    }
+    if (vocabBtn) {
+        vocabBtn.addEventListener("click", generateVocab);
+    }
+
+    const genDlgBtn = document.getElementById("generate-dialogue");
+    const dialogList = document.getElementById("dialog-list");
+
+    function appendDialogueItem(d) {
+        if (!dialogList) return;
+        const safeTitle = (d.title ?? "New Dialogue").replace(/"/g, "&quot;");
+        const li = document.createElement("li");
+        li.className = "dialog-item";
+        li.innerHTML = `
+            <div class="dialog-meta">
+                <strong>${safeTitle}</strong>
+                <p class="muted">${d.info ?? ""}</p>
+            </div>
+            <div class="list__actions">
+                <button
+                    type="button"
+                    class="btn btn-primary open-dialog"
+                    data-action="open-dialog"
+                    data-dialog-id="${d.id ?? Date.now()}"
+                    data-dialog-title="${safeTitle}"
+                >Open</button>
+                <button class="btn btn-ghost">Delete</button>
+            </div>
+        `;
+        dialogList.prepend(li);
+    }
+
+    async function generateDialogue() {
+        if (!courseId) {
+            alert("Missing course id.");
+            return;
+        }
+        if (!genDlgBtn) return;
+
+        const prevText = genDlgBtn.textContent;
+        genDlgBtn.disabled = true;
+        genDlgBtn.textContent = "Generating...";
+
+        try {
+            const data = await postJSON(
+                `/courses/${encodeURIComponent(courseId)}/dialog/generate`,
+                {}
+            );
+
+            const dialog = data?.dialog ?? data;
+            appendDialogueItem(dialog);
+        } catch (err) {
+            console.error(err);
+            alert("Failed to generate dialogue. " + (err?.message || ""));
+        } finally {
+            genDlgBtn.disabled = false;
+            genDlgBtn.textContent = prevText;
+        }
+    }
+
+    if (genDlgBtn) {
+        genDlgBtn.addEventListener("click", generateDialogue);
     }
 });
 

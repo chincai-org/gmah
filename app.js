@@ -291,6 +291,51 @@ app.post("/courses/:id/grammar/generate", async (req, res) => {
     }
 });
 
+app.post("/courses/:id/vocab/generate", async (req, res) => {
+    try {
+        const courseId = parseInt(req.params.id, 10);
+        const course = await getCourse(courseId);
+        if (!course) {
+            return res.status(404).json({ error: "Course not found" });
+        }
+
+        const topic = {
+            title: "New Vocab Topic",
+            description: "Generated vocab des".slice(0, 240)
+        };
+
+        // Optionally persist topic here
+
+        res.json({ topic });
+    } catch (err) {
+        console.error("Generate grammar error:", err);
+        res.status(500).json({ error: "Failed to generate lesson" });
+    }
+});
+
+app.post("/courses/:id/dialog/generate", async (req, res) => {
+    try {
+        const courseId = parseInt(req.params.id, 10);
+        const course = await getCourse(courseId);
+        if (!course) {
+            return res.status(404).json({ error: "Course not found" });
+        }
+
+        const dialog = {
+            id: Date.now(),
+            title: "New Dialogue",
+            info: "Generated conversation"
+        };
+
+        // Optionally: save to DB here if you want persistence
+
+        res.json({ dialog });
+    } catch (err) {
+        console.error("Generate dialogue error:", err);
+        res.status(500).json({ error: "Failed to generate dialogue" });
+    }
+});
+
 app.get("/ask", async (req, res) => {
     const q = req.query.q || "Hello";
     try {

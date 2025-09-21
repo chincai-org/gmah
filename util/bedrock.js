@@ -163,6 +163,7 @@ export async function promptGenerateDialogueStarter(
 
         const command = new InvokeModelCommand(input);
         const response = await client.send(command);
+
         const decoded = new TextDecoder("utf-8").decode(response.body);
         const json = JSON.parse(decoded);
 
@@ -208,6 +209,12 @@ export async function promptGenerateVocabQuiz(
     nativeLanguage
 ) {
     const prompt = `Base on the ${language} vocabulary lesson ${vocabLesson}. Generate vocabulary multiple choice questions that are ONLY related to the vocabulary lesson. The generated format should be {"question" : ["option1", "option2", "option3", "option4"], "explaination" : "why this answer correct" }. For example {"旅行" : ["travel", "china", "walk", "run"], "explaination" : "this is the correct way to say it in chinese"}. Generate ${numOfQuiz} question in an array of json. The correct answer must be at index 0. DO NOT have the correct answer at index 1,2 and 3. The question MUST be testing the vocabulary of ${language} and the options MUST be in ${nativeLanguage} language.`;
+
+    return await promptBedrock(prompt);
+}
+
+export async function promptGenerateDialogueFirstSentence() {
+    const prompt = `Now start the conversation with the user acting as the role you chosen for yourself and speaking to the user that is of role you chosen for them to act as. Remeber to provide concise feedback to the user after the user reply before continuing your conversation.`;
 
     return await promptBedrock(prompt);
 }
