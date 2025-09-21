@@ -51,128 +51,71 @@ export async function promptBedrock(prompt) {
 
 export async function promptGenerateGrammarsTitle(
 	language,
-	previousTopic,
-	numOfTopic
+	previousTopics,
+	numOfTopic,
+	nativeLanguage,
+	proficiencyLevelDescription
 ) {
-	const prompt = `Generate a list of topic related to ${language} grammars. Do not generate topic related to this list ${previousTopic}. You must turn it in a format of [ { "topic for grammar" : "description" } ]. Please be extremely specific as if a beginner is learning grammar. Grammar is important to have the learner to be strong in the language's basics. Generate me ${numOfTopic} number of topic. For example the format should be [ { "verb" : "Words that express actions, states, or occurrences. They can be categorized into action verbs, linking verbs, and auxiliary verbs."}]. This fit the format where the key is topic for grammar and value is description. Please generate your prompt in their native language.`;
-	try {
-		const input = {
-			modelId,
-			contentType: "application/json",
-			accept: "application/json",
-			body: JSON.stringify({
-				messages: [
-					{
-						role: "user",
-						content: [
-							{
-								text: prompt,
-							},
-						],
-					},
-				],
-				inferenceConfig: {
-					maxTokens: 200,
-					temperature: 0.7,
-				},
-			}),
-		};
+	const prompt = `
+	Generate a list of grammar topics for ${language}. Avoid topics from this list: ${previousTopics}.
 
-		const command = new InvokeModelCommand(input);
-		const response = await client.send(command);
+	Format the response as:
+	[ { "topic for grammar": "description" } ]
 
-		const decoded = new TextDecoder("utf-8").decode(response.body);
-		const json = JSON.parse(decoded);
+	Example:
+	[ { "Verb": "Words that express actions, states, or occurrences. They can be categorized into action verbs, linking verbs, and auxiliary verbs." } ]
 
-		return json.outputText || JSON.stringify(json);
-	} catch (err) {
-		console.error("Bedrock prompt error:", err);
-	}
+	Be specific and beginner-friendly, focusing on foundational grammar concepts to strengthen the learner's basics. Tailor the topics to the user's proficiency level described as "${proficiencyLevelDescription}". Generate ${numOfTopic} topics based on this format.
+
+	Write the response in the user's native language (${nativeLanguage}).
+	`;
+
+	return await promptBedrock(prompt);
 }
 
 export async function promptGenerateVocabsTitle(
 	language,
-	previousTopic,
+	previousTopics,
 	numOfTopic,
 	context,
 	nativeLanguage,
-	profficiencyLevel
+	profficiencyLevelDescription
 ) {
-	const prompt = `Generate a list of topic related to ${language}'s vocabulary. Do not generate topic related to this list ${previousTopic}. You must turn it in a format of [ { "topic for vocabulary" : "number of word • proficiency level" } ]. Generate the vocabulary base on this user interest "${context}". Generate me ${numOfTopic} number of topic. For example the format should be [ { "Travel" : "32 words • A1"}]. This fit the format where the key is topic for vocabulary and number of words • language profficiency level. The user profficiency level is ${profficiencyLevel} and their native language is ${nativeLanguage}. Please generate your prompt in their natvie language.`;
-	try {
-		const input = {
-			modelId,
-			contentType: "application/json",
-			accept: "application/json",
-			body: JSON.stringify({
-				messages: [
-					{
-						role: "user",
-						content: [
-							{
-								text: prompt,
-							},
-						],
-					},
-				],
-				inferenceConfig: {
-					maxTokens: 200,
-					temperature: 0.7,
-				},
-			}),
-		};
+	const prompt = `Generate a list of vocabulary topics for ${language}. Avoid topics from this list: ${previousTopics}. 
 
-		const command = new InvokeModelCommand(input);
-		const response = await client.send(command);
+    Format the response as:
+    [ { "topic for vocabulary": "number of words • proficiency level" } ]
 
-		const decoded = new TextDecoder("utf-8").decode(response.body);
-		const json = JSON.parse(decoded);
+    Example:
+    [ { "Travel": "32 words • A1" } ]
 
-		return json.outputText || JSON.stringify(json);
-	} catch (err) {
-		console.error("Bedrock prompt error:", err);
-	}
+    Base the vocabulary on this user interest: "${context}". Generate ${numOfTopic} topics. Ensure the description fits the format where the key is the topic and the value is the number of words and proficiency level.
+
+    The user's proficiency level is described as "${profficiencyLevelDescription}", and their native language is ${nativeLanguage}. Write the response in their native language.`;
+
+	return await promptBedrock(prompt);
 }
 
 export async function promptGenerateDialogueTitle(
 	language,
-	previousTopic,
+	previousTopics,
 	context,
 	nativeLanguage,
 	profficiencyLevel
 ) {
-	const prompt = `Generate a real life scenario to a ${language} lover who want to learn this language because of this "${context}". Do not generate a scenario related to this list ${previousTopic}. Generate it in the format of {"scenario title" : "short description"}. For example {"meeting kim jung un" : "try not get excecuted as foreigner"}. In this case i have generate the scenario as the key and a short description about the topic as the value. The description describe what the topic is about and must be less than 30 words and more than 20 words. Generate scenario related to the user interest. Their native language is ${nativeLanguage} and their language profficiency level is ${profficiencyLevel}. Please generate your prompt in their native language.`;
-	try {
-		const input = {
-			modelId,
-			contentType: "application/json",
-			accept: "application/json",
-			body: JSON.stringify({
-				messages: [
-					{
-						role: "user",
-						content: [
-							{
-								text: prompt,
-							},
-						],
-					},
-				],
-				inferenceConfig: {
-					maxTokens: 200,
-					temperature: 0.7,
-				},
-			}),
-		};
+	const prompt = `Create a real-life scenario for a ${language} enthusiast who wants to learn this language because of "${context}". Avoid scenarios related to this list: ${previousTopics}. 
 
-		const command = new InvokeModelCommand(input);
-		const response = await client.send(command);
+    Format the response as: 
+    { "scenario title": "short description" }
 
-		const decoded = new TextDecoder("utf-8").decode(response.body);
-		const json = JSON.parse(decoded);
+    Example:
+    { "Ordering Coffee in Paris": "Learn how to confidently order coffee and pastries in a French café while practicing polite expressions and basic vocabulary." }
 
-		return json.outputText || JSON.stringify(json);
-	} catch (err) {
-		console.error("Bedrock prompt error:", err);
-	}
+    The description should:
+    - Be between 20 and 30 words.
+    - Clearly explain the scenario's purpose and relevance to the learner's interest.
+
+    Consider the user's native language (${nativeLanguage}) and proficiency level described as (${profficiencyLevel}). Write the response in their native language.`;
+
+	return await promptBedrock(prompt);
 }
