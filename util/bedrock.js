@@ -177,50 +177,6 @@ export async function promptGenerateDialogueTitle(
 	}
 }
 
-You are now a language teacher, you are not allowed to be a racist, you are a kind and patient teacher willing to help out people to learn a language they want.You give them specific and clear feedback to improve the user.In a scenario of "馬來語浪漫之旅" with description of "因為「我愛馬來西亞」，你決定在吉隆坡的夜市學習馬來語，與當地攤販聊天，體驗美食與文化，從零基礎開始。", Choose a character you want to act base on the scenario above and choose a character the user should act, start a conversation with the user to train them knowing their native language is yue chinese and they wanting to learn malay because "i love malaysia".When the user reply your conversation, provide a feedback on the user reply from the perspective of malay native speaker base one how natural the user reply before continuing the conversation to reply the user.This conversation will go on until the user decide to stop talking.Remeber to speak with the language they want to learn which is malay, you want to help the person to be excellent in malay as their proficiency level is C2.
-export async function promptGenerateDialogueTitle(
-	language,
-	previousTopic,
-	context,
-	nativeLanguage,
-	proficiencyLevel
-) {
-	const prompt = `Generate a real life scenario to a ${language} lover who want to learn this language because of this "${context}". Do not generate a scenario related to this list ${previousTopic}. Generate it in the format of {"scenario title" : "short description"}. For example {"meeting kim jung un" : "try not get excecuted as foreigner"}. In this case i have generate the scenario as the key and a short description about the topic as the value. The description describe what the topic is about and must be less than 30 words and more than 20 words. Generate scenario related to the user interest. Their native language is ${nativeLanguage} and their language proficiency level can be describe as "${proficiencyLevel}". Please generate your prompt in their native language.`;
-	try {
-		const input = {
-			modelId,
-			contentType: "application/json",
-			accept: "application/json",
-			body: JSON.stringify({
-				messages: [
-					{
-						role: "user",
-						content: [
-							{
-								text: prompt,
-							},
-						],
-					},
-				],
-				inferenceConfig: {
-					maxTokens: 200,
-					temperature: 0.7,
-				},
-			}),
-		};
-
-		const command = new InvokeModelCommand(input);
-		const response = await client.send(command);
-
-		const decoded = new TextDecoder("utf-8").decode(response.body);
-		const json = JSON.parse(decoded);
-
-		return json.outputText || JSON.stringify(json);
-	} catch (err) {
-		console.error("Bedrock prompt error:", err);
-	}
-}
-
 export async function promptGenerateDialogueStarter(
 	language,
 	scenario,
@@ -229,8 +185,7 @@ export async function promptGenerateDialogueStarter(
 	nativeLanguage,
 	proficiencyLevel
 ) {
-
-	const systemPrompt = `You are now a language teacher, you are not allowed to be a racist, you are kind and patient teacher willing to help out people to learn a language they wnat. YOu give them specific and clear feedback to improve the user.`
+	const systemPrompt = `You are now a language teacher, you are not allowed to be a racist, you are kind and patient teacher willing to help out people to learn a language they wnat. YOu give them specific and clear feedback to improve the user.`;
 	const prompt = `In a scenario of ${scenario} with description of ${scenarioDescription}, Choose a character you want to act base on the scenario above and choose a character the user should act, start a conversation with the user to train them knowing their native language is ${nativeLanguage} and they wanting to learn malay because ${context}. When the user reply your conversation, provide a feedback on the user reply from the perspective of ${language} native speaker base one how natural the user reply before continuing the conversation to reply the user. This conversation will go on until the user decide to stop talking. Remeber to speak with the language they want to learn which is ${language}, you want to help the person to be excellent in ${language} as their proficiency level can be describe as ${proficiencyLevel}.`;
 	try {
 		const input = {
@@ -274,4 +229,3 @@ export async function promptGenerateDialogueStarter(
 		console.error("Bedrock prompt error:", err);
 	}
 }
-
