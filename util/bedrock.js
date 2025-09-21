@@ -137,58 +137,6 @@ export async function promptGenerateDialogueTitle(
 
 export async function promptGenerateDialogueStarter(
 	language,
-	previousTopic,
-	context,
-	nativeLanguage,
-	proficiencyLevel
-) {
-	const systemPrompt = `You are now a language teacher, you are not allowed to be a racist, you are kind and patient teacher willing to help out people to learn a language they wnat. YOu give them specific and clear feedback to improve the user.`;
-	const prompt = `In a scenario of ${scenario} with description of ${scenarioDescription}, Choose a character you want to act base on the scenario above and choose a character the user should act, start a conversation with the user to train them knowing their native language is ${nativeLanguage} and they wanting to learn malay because ${context}. When the user reply your conversation, provide a feedback on the user reply from the perspective of ${language} native speaker base one how natural the user reply before continuing the conversation to reply the user. This conversation will go on until the user decide to stop talking. Remeber to speak with the language they want to learn which is ${language}, you want to help the person to be excellent in ${language} as their proficiency level can be describe as ${proficiencyLevel}.`;
-	try {
-		const input = {
-			modelId,
-			contentType: "application/json",
-			accept: "application/json",
-			body: JSON.stringify({
-				messages: [
-					{
-						role: "system",
-						content: [
-							{
-								text: systemPrompt,
-							},
-						],
-					},
-					{
-						role: "user",
-						content: [
-							{
-								text: prompt,
-							},
-						],
-					},
-				],
-				inferenceConfig: {
-					maxTokens: 200,
-					temperature: 0.7,
-				},
-			}),
-		};
-
-		const command = new InvokeModelCommand(input);
-		const response = await client.send(command);
-
-		const decoded = new TextDecoder("utf-8").decode(response.body);
-		const json = JSON.parse(decoded);
-
-		return json.outputText || JSON.stringify(json);
-	} catch (err) {
-		console.error("Bedrock prompt error:", err);
-	}
-}
-
-export async function promptGenerateDialogueStarter(
-	language,
 	scenario,
 	scenarioDescription,
 	context,
