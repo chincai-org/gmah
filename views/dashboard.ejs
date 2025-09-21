@@ -335,7 +335,7 @@
                 <div class="course-grid">
                     <% if (courses.length > 0) {%>
                     <% courses.forEach(course => { %>
-                    <a href="/courses/<%= course._id || course.id %>" class="course-card">
+                    <a href="/courses/<%= course._id || course.courseId %>" class="course-card">
                         <div class="course-card-info">
                             <p>Name : <%= course.courseName %> </p>
                             <p>Language : <%= course.learningLang %> </p>

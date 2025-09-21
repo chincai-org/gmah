@@ -9,10 +9,10 @@
 <body>
   <header class="course-header">
     <div class="course-header__meta">
-      <a class="back-link" href="/">← Back</a>
-      <h1 class="course-title"><%= course?.name || "Course" %></h1>
+      <a class="back-link" href="/dashboard">← Back</a>
+      <h1 class="course-title"><%= course?.courseName || "Course" %></h1>
       <p class="course-subtitle">
-        <span>Language: <strong><%= course?.lang || "—" %></strong></span>
+        <span>Language: <strong><%= course?.learningLang || "—" %></strong></span>
         <span class="dot">•</span>
         <span>Context: <strong><%= course?.context || "—" %></strong></span>
       </p>
@@ -33,17 +33,19 @@
       </div>
       <div class="grid">
         <!-- Example grammar cards -->
-        <div class="card">
-          <h3>Present Simple</h3>
-          <p>Usage, structure, examples.</p>
-          <div class="card__actions">
-	        <a href="../grammar.html">
-	            <button class="btn">Open</button>
-	        </a>
-            <button class="btn btn-ghost">Delete</button>
-          </div>
-        </div>
-        <div class="card">
+        <% grammar.forEach(topic => { %>
+            <div class="card">
+            <h3><%= topic.title %></h3>
+            <p><%= topic.description %></p>
+            <div class="card__actions">
+                <a href="../grammar.html">
+                    <button class="btn">Open</button>
+                </a>
+                <button class="btn btn-ghost">Delete</button>
+            </div>
+            </div>
+        <% }) %>
+        <!-- <div class="card">
           <h3>Past Continuous</h3>
           <p>Actions in progress in the past.</p>
           <div class="card__actions">
@@ -53,7 +55,7 @@
             <button class="btn btn-ghost">Delete</button>
           </div>
         </div>
-      </div>
+      </div> -->
     </section>
 
     <section id="vocab" class="panel" role="tabpanel" aria-labelledby="vocab-tab" hidden>
@@ -62,7 +64,20 @@
         <button class="btn btn-primary">Generate set</button>
       </div>
       <div class="grid">
-        <div class="card">
+        <% vocab.forEach(topic => { %>
+            <div class="card">
+            <h3><%= topic.title %></h3>
+            <p><%= topic.description %></p>
+            <div class="card__actions">
+                <a href="../mcq.html">
+                    <button class="btn">Open</button>
+                </a>
+                <button class="btn btn-ghost">Delete</button>
+            </div>
+            </div>
+        <% }) %>
+
+        <!-- <div class="card">
           <h3>Daily Activities</h3>
           <p>20 words • A1</p>
           <div class="card__actions">
@@ -71,8 +86,8 @@
 	        </a>
             <button class="btn btn-ghost">Delete</button>
           </div>
-        </div>
-        <div class="card">
+        </div> -->
+        <!-- <div class="card">
           <h3>Travel</h3>
           <p>32 words • A2</p>
           <div class="card__actions">
@@ -81,7 +96,7 @@
 	        </a>
             <button class="btn btn-ghost">Delete</button>
           </div>
-        </div>
+        </div> -->
       </div>
     </section>
 
@@ -93,9 +108,14 @@
           </div>
       </div>
       <div class="chat">
-        <div class="chat__messages" id="chatMessages" aria-live="polite">
+        <!-- <div class="chat__messages" id="chatMessages" aria-live="polite">
           <div class="chat__bubble chat__bubble--bot">Hi! Ask me anything about this course.</div>
-        </div>
+        </div> -->
+        <% dialogs.forEach(msg => { %>
+            <div class="chat__messages" id="chatMessages" aria-live="polite">
+                <div class="chat__bubble chat__bubble--<%= msg.role == "user" ? "user" : "bot" %>"><%= msg.text %></div>
+            </div>
+        <% }) %>
         <form class="chat__form" id="chatForm">
           <input class="input" id="chatInput" name="message" type="text" placeholder="Type your message..." autocomplete="off"/>
           <button class="btn btn-primary" type="submit">Send</button>

@@ -13,6 +13,7 @@ import {
     getUserByUsername,
     updateUser,
     putCourse,
+    getCourse,
     findCoursesByUserId
 } from "./util/database.js";
 import { promptBedrock } from "./util/bedrock.js";
@@ -212,18 +213,18 @@ const courses = [
     }
 ];
 
-const dialogs = [
-    {
-        id: 0,
-        title: "Going on the plane",
-        info: "Wth with plane"
-    },
-    {
-        id: 1,
-        title: "balls",
-        info: "hello"
-    }
-];
+// const dialogs = [
+//     {
+//         id: 0,
+//         title: "Going on the plane",
+//         info: "Wth with plane"
+//     },
+//     {
+//         id: 1,
+//         title: "balls",
+//         info: "hello"
+//     }
+// ];
 
 app.get("/dashboard", async (req, res) => {
     const id = getUserIdFromCookie(req);
@@ -262,13 +263,20 @@ app.post("/createCourseVerifier", async (req, res) => {
     }
 });
 
-app.get("/courses/:id", (req, res) => {
-    const course = courses.find(c => String(c.id) === String(req.params.id));
+app.get("/courses/:id", async (req, res) => {
+    const course = await getCourse(parseInt(req.params.id));
     if (!course) {
         return res.status(404).send("Course not found");
     }
+
+    console.log(course);
+
+    const grammar = course.topics.grammar.map(topicId => getTopic(topicId));
+    const vocab = course.topics.vocabulary.map(topicId => getTopic(topicId));
+    const dialogs = course.topics.dialogue.map(topicId => getTopic(topicId));
+
     // Renders views/course.ejs (make sure this file exists)
-    res.render("course", { course, dialogs });
+    res.render("course", { course, dialogs, grammar, vocab });
 });
 
 app.get("/ask", async (req, res) => {
