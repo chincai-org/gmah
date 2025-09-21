@@ -250,6 +250,19 @@ export async function addItemToTopic(topicId, item) {
     return topic;
 }
 
+export async function addItemsToTopic(topicId, items) {
+    const topic = await getTopic(topicId);
+    if (!topic) {
+        throw new Error("Topic not found");
+    }
+
+    topic.items.push(...items);
+
+    await ddb.send(new PutCommand({ TableName: TOPICS_TABLE, Item: topic }));
+    console.log("Items added to topic:", items);
+    return topic;
+}
+
 export async function updateTopicItems(topicId, items) {
     const topic = await getTopic(topicId);
     if (!topic) {
