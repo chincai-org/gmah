@@ -231,14 +231,14 @@ app.post("/login-verifier", async (req, res) => {
 
 app.get("/dashboard", cookieAuth, async (req, res) => {
     const id = getUserIdFromCookie(req);
-
+    const user = req.user;
     console.log("Current user:", id);
 
     const courses = await findCoursesByUserId(id);
 
     console.log("User courses:", courses);
 
-    res.render("dashboard", { courses: courses });
+    res.render("dashboard", { courses: courses, user: user });
 });
 
 app.post("/createCourseVerifier", async (req, res) => {
