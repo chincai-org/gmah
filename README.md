@@ -4,6 +4,13 @@ LinguaAI is an innovative platform designed to help users master grammar, vocabu
 
 ---
 
+## 🌐 Live Demo
+
+Check out the live version of LinguaAI hosted on AWS Elastic Beanstalk:  
+[http://gmah-env.eba-ppxf88e6.ap-southeast-5.elasticbeanstalk.com](http://gmah-env.eba-ppxf88e6.ap-southeast-5.elasticbeanstalk.com)
+
+---
+
 ## 🚀 Hosting Locally
 
 Follow these steps to set up and run LinguaAI locally:
@@ -47,6 +54,8 @@ To deploy LinguaAI:
 ## 📝 Notes
 
 - If the generation takes too long or the generated content is not relevant to the topic, press `Ctrl + R` to reload the page in the **Grammar**, **Vocabulary**, or **Dialogue** tabs.
+- LinguaAI is built entirely around **AWS services**, leveraging the scalability and reliability of the AWS ecosystem.
+- The app uses **AWS Bedrock's Amazon Nova Lite** for its AI-powered content generation capabilities.
 
 ---
 
