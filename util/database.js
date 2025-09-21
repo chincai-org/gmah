@@ -100,7 +100,13 @@ export async function verifyUserCredentials(userId, password) {
     return user.password === hashedPassword;
 }
 
-export async function putCourse(userId, nativeLang, learningLang, context) {
+export async function putCourse(
+    userId,
+    nativeLang,
+    learningLang,
+    context,
+    langLevelDescription
+) {
     // Generate a unique course ID using Snowflake-like algorithm
     const courseId = generateSnowflakeId();
 
@@ -111,6 +117,7 @@ export async function putCourse(userId, nativeLang, learningLang, context) {
         nativeLang,
         learningLang,
         context,
+        langLevelDescription,
         topics: {
             grammar: [],
             vocabulary: [],

@@ -11,7 +11,8 @@ import {
     getUser,
     verifyUserCredentials,
     getUserByUsername,
-    updateUser
+    updateUser,
+    putCourse
 } from "./util/database.js";
 import { promptBedrock } from "./util/bedrock.js";
 
@@ -210,9 +211,9 @@ app.get("/dashboard", (req, res) => {
     res.render("dashboard", { courses: courses });
 });
 
-app.post("/createCourseVerifier", (req, res) => {
+app.post("/createCourseVerifier", async (req, res) => {
     console.log(req.body);
-    const { courseName, native, lang, context } = req.body;
+    const { courseName, native, lang, context, level } = req.body;
     if (
         !courseName.trim() ||
         !lang.trim() ||
@@ -221,7 +222,14 @@ app.post("/createCourseVerifier", (req, res) => {
     ) {
         return res.status(400).send("Error: Fields cannot be empty.");
     } else {
-        courses.push({ ...req.body, id: courses.length }); //supposed to save it into db
+        // courses.push({ ...req.body, id: courses.length }); //supposed to save it into db
+
+        // Get user from cookie
+        const user = req.user;
+        console.log("Current user:", user);
+
+        // Save course to database
+        await putCourse(user.id, native, lang, context, level);
     }
     res.redirect("/dashboard");
 });
