@@ -14,9 +14,15 @@ import {
     updateUser,
     putCourse,
     getCourse,
-    findCoursesByUserId
+    findCoursesByUserId,
+    findTopicsByCourseId,
+    putTopic
 } from "./util/database.js";
-import { promptBedrock } from "./util/bedrock.js";
+import {
+    promptBedrock,
+    promptGenerateGrammarsTitle,
+    promptGenerateVocabsTitle
+} from "./util/bedrock.js";
 import { get } from "http";
 
 // Load environment variables from .env file
@@ -307,6 +313,29 @@ app.post("/courses/:id/vocab/generate", async (req, res) => {
     }
 });
 
+app.post("/courses/:id/dialog/generate", async (req, res) => {
+    try {
+        const courseId = parseInt(req.params.id, 10);
+        const course = await getCourse(courseId);
+        if (!course) {
+            return res.status(404).json({ error: "Course not found" });
+        }
+
+        const dialog = {
+            id: Date.now(),
+            title: "New Dialogue",
+            info: "Generated conversation"
+        };
+
+        // Optionally: save to DB here if you want persistence
+
+        res.json({ dialog });
+    } catch (err) {
+        console.error("Generate dialogue error:", err);
+        res.status(500).json({ error: "Failed to generate dialogue" });
+    }
+});
+
 app.get("/ask", async (req, res) => {
     const q = req.query.q || "Hello";
     try {
@@ -364,6 +393,78 @@ app.post("/profile", cookieAuth, async (req, res) => {
 app.get("/testcookie", cookieAuth, (req, res) => {
     res.send("You have cookie and is valid");
 });
+
+// AI API
+
+app.post("/generate-grammar-lesson", cookieAuth, async (req, res) => {
+    // Get course ID from request body
+    const { courseId } = req.body;
+    if (!courseId) {
+        return res
+            .status(400)
+            .json({ error: "Missing courseId in request body" });
+    }
+
+    // Fetch course details from database
+    const course = await getCourse(parseInt(courseId, 10));
+    if (!course) {
+        return res.status(404).json({ error: "Course not found" });
+    }
+
+    const previousTopics = await findTopicsByCourseId(courseId);
+    console.log("Previous topics:", previousTopics);
+    const previosTopicsTitles = previousTopics.map(t => t.title);
+
+    console.log("Previous topics:", previosTopicsTitles);
+
+    // Call Bedrock or other AI service to generate lesson content
+    const output = await promptGenerateGrammarsTitle(
+        course.learningLang,
+        previosTopicsTitles,
+        5,
+        course.nativeLang,
+        course.langLevelDescription
+    );
+
+    console.log("Raw AI output:", output);
+
+    const topics = JSON.parse(output);
+
+    if (!topics || !Array.isArray(topics) || topics.length === 0) {
+        return res.status(500).json({ error: "Failed to generate topics" });
+    }
+
+    const topicObjects = [];
+
+    for (const topic of topics) {
+        const [title, description] = Object.entries(topic)[0];
+        topicObjects.push({ title, description });
+    }
+
+    res.json({ topics: topicObjects });
+});
+
+app.post("/generate-vocab-lesson", cookieAuth, async (req, res) => {
+    // Get course ID from request body
+    const { courseId } = req.body;
+    if (!courseId) {
+        return res
+            .status(400)
+            .json({ error: "Missing courseId in request body" });
+    }
+
+    // Fetch course details from database
+    const course = await getCourse(parseInt(courseId, 10));
+
+    if (!course) {
+        return res.status(404).json({ error: "Course not found" });
+    }
+
+    // Call Bedrock or other AI service to generate lesson content
+    const output = await promptGenerateGrammarsTitle();
+});
+
+app.post("/generate-dialogue-lesson", cookieAuth, async (req, res) => {});
 
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);

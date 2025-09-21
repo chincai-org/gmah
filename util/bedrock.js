@@ -30,7 +30,7 @@ export async function promptBedrock(prompt) {
 					}
 				],
 				inferenceConfig: {
-					maxTokens: 200,
+					maxTokens: 500,
 					temperature: 0.7
 				}
 			})
@@ -43,7 +43,7 @@ export async function promptBedrock(prompt) {
 		const json = JSON.parse(decoded);
 
 		// Nova returns `outputText`
-		return json.outputText || JSON.stringify(json);
+		return json.output.message.content[0].text || JSON.stringify(json);
 	} catch (err) {
 		console.error("Bedrock prompt error:", err);
 	}

@@ -98,9 +98,9 @@
           </div>
       </div>
       <div class="chat">
-        <!-- <div class="chat__messages" id="chatMessages" aria-live="polite">
+        <div class="chat__messages" id="chatMessages" aria-live="polite">
           <div class="chat__bubble chat__bubble--bot">Hi! Ask me anything about this course.</div>
-        </div> -->
+        </div>
         <% dialogs.forEach(msg => { %>
             <div class="chat__messages" id="chatMessages" aria-live="polite">
                 <div class="chat__bubble chat__bubble--<%= msg.role == "user" ? "user" : "bot" %>"><%= msg.text %></div>
@@ -116,9 +116,9 @@
     <section id="dialogue" class="panel" role="tabpanel" aria-labelledby="dialogue-tab" hidden>
         <div class="panel__header">
             <h2>Dialogue</h2>
-            <button class="btn btn-primary">Generate dialogue</button>
+            <button class="btn btn-primary" id="generate-dialogue" data-action="generate-vocab">Generate dialogue</button>
         </div>
-        <ul class="dialog-list">
+        <ul class="dialog-list" id="dialog-list">
             <% dialogs.forEach(function(d) { %>
             <li class="dialog-item">
                 <div class="dialog-meta">
