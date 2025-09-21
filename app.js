@@ -68,7 +68,7 @@ async function signup_verification(name, password) {
 
 // routes
 app.get("/", (req, res) => {
-	res.sendFile(path.join(__dirname, "public/index.html"));
+	res.sendFile(path.join(__dirname, "public/landing_page.html"));
 });
 
 app.post("/user", async (req, res) => {
