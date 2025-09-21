@@ -192,3 +192,27 @@ export async function promptGenerateGrammarQuiz(
 
 	return await promptBedrock(prompt);
 }
+
+export async function promptGenerateVocabLesson(
+	language,
+	vocabTopic,
+	context,
+	nativeLanguage,
+	numOfWord,
+	proficiencyLevelDescription,
+) {
+	const prompt = `Base on the language ${language} vocabulary lesson topic ${vocabTopic}. the user native language is ${nativeLanguage} and his proficiency level of ${language} can be describe as ${proficiencyLevelDescription}. He decide to learn ${language} because of ${context}. Your lesson must include ${numOfWord} new word the user learn and explaination next to it generated in the format of word: explaination. The new word must be in ${language} and the explaination must be in ${nativeLanguage}. You can generate all nicely in a markdown format. Generate ONLY ${numOfWord} new words for the user to learn BASED ON his proficiency level and their NATIVE LANGUAGE. Do not generate quiz or practice to test the user, only provide knowledge and information.`;
+
+	return await promptBedrock(prompt);
+}
+
+export async function promptGenerateVocabQuiz(
+	language,
+	numOfQuiz,
+	vocabLesson,
+	nativeLanguage,
+) {
+	const prompt = `Base on the ${language} vocabulary lesson ${vocabLesson}. Generate vocabulary multiple choice questions that are ONLY related to the vocabulary lesson. The generated format should be {"question" : ["option1", "option2", "option3", "option4"], "explaination" : "why this answer correct" }. For example {"旅行" : ["travel", "china", "walk", "run"], "explaination" : "this is the correct way to say it in chinese"}. Generate ${numOfQuiz} question in an array of json. The correct answer must be at index 0. DO NOT have the correct answer at index 1,2 and 3. The question MUST be testing the vocabulary of ${language} and the options MUST be in ${nativeLanguage} language.`;
+
+	return await promptBedrock(prompt);
+}
