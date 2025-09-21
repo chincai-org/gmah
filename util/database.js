@@ -179,6 +179,19 @@ export async function getTopic(topicId) {
     return r.Item || null;
 }
 
+export async function findTopicsByCourseId(courseId) {
+    const params = {
+        TableName: TOPICS_TABLE,
+        FilterExpression: "courseId = :courseId",
+        ExpressionAttributeValues: {
+            ":courseId": courseId
+        }
+    };
+
+    const response = await ddb.send(new ScanCommand(params));
+    return response.Items || [];
+}
+
 export async function addTopicToCourse(courseId, topicId) {
     const course = await getCourse(courseId);
     const topic = await getTopic(topicId);

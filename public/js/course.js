@@ -98,16 +98,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
             // Call your API. Replace the URL if you have a different endpoint.
-            const data = await postJSON(
-                `/courses/${encodeURIComponent(courseId)}/grammar/generate`,
-                {
-                    // Include any context you want the API to use:
-                    // level: "...", learningLang: "...", context: "..."
-                }
-            );
+            const data = await postJSON(`/generate-grammar-lesson`, {
+                courseId
+            });
 
-            const topic = data?.topic ?? data?.lesson ?? data;
-            appendGrammarCard(topic);
+            const { topics } = data;
+
+            topics.forEach(topic => appendGrammarCard(topic));
         } catch (err) {
             console.error(err);
             alert("Failed to generate lesson. " + (err?.message || ""));
