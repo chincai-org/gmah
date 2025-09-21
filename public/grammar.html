@@ -1,261 +1,271 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta
-			name="viewport"
-			content="width=device-width, initial-scale=1.0"
-		/>
-		<title>Grammar Lesson</title>
-		<style>
-			body {
-				font-family: Arial, sans-serif;
-				background: #000;
-				color: white;
-				margin: 0;
-				padding: 20px;
-			}
-			h1 {
-				text-align: center;
-				margin-bottom: 20px;
-				color: #2ecc71;
-			}
-			.lesson-card,
-			.quiz-card {
-				background: rgba(255, 255, 255, 0.05);
-				border: 1px solid #2ecc71;
-				border-radius: 12px;
-				padding: 20px;
-				margin: 20px auto;
-				max-width: 800px;
-			}
-			.lesson-card h2,
-			.quiz-card h2 {
-				color: #2ecc71;
-				margin-bottom: 15px;
-			}
-			.question-block {
-				margin-bottom: 25px;
-				padding: 15px;
-				border-radius: 10px;
-				background: rgba(255, 255, 255, 0.02);
-				border: 1px solid #2ecc71;
-			}
-			.question-block p {
-				margin-bottom: 12px;
-				font-weight: bold;
-			}
-			.quiz-option {
-				display: block;
-				padding: 12px 14px;
-				margin: 8px 0;
-				border: 1px solid #2ecc71;
-				border-radius: 8px;
-				background: #111;
-				cursor: pointer;
-				transition: 0.3s;
-				text-align: left;
-			}
-			.quiz-option:hover {
-				background: #27ae60;
-				color: black;
-				transform: translateY(-1px);
-			}
-			.correct {
-				border-color: #27ae60;
-				background: rgba(46, 204, 113, 0.2);
-			}
-			.wrong {
-				border-color: #e74c3c;
-				background: rgba(231, 76, 60, 0.2);
-			}
-			.feedback {
-				margin-top: 10px;
-				font-weight: bold;
-			}
-		</style>
-	</head>
-	<body>
-		<h1>Grammar Lesson</h1>
 
-		<!-- Lesson Section -->
-		<div class="lesson-card">
-			<h2>Topic: Present Simple Tense</h2>
-			<p>
-				The Present Simple tense is used for habits,
-				routines, and general facts.
-			</p>
-			<p><strong>Examples:</strong></p>
-			<ul>
-				<li>I <em>play</em> football every weekend.</li>
-				<li>She <em>works</em> in an office.</li>
-				<li>The sun <em>rises</em> in the east.</li>
-			</ul>
-		</div>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Grammar Lesson</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background: #000;
+			color: white;
+			margin: 0;
+			padding: 20px;
+		}
 
-		<!-- Quiz Section -->
-		<div class="quiz-card">
-			<h2>Quick Quiz</h2>
-			<div id="quiz-container"></div>
-		</div>
+		h1 {
+			text-align: center;
+			margin-bottom: 20px;
+			color: #2ecc71;
+		}
 
-		<script>
-			const quizData = [
-				{
-					question: "1. Choose the correct answer:",
-					options: [
-						{
-							text: "She plays the piano.",
-							correct: true,
-						},
-						{
-							text: "She play the piano.",
-							correct: false,
-						},
-						{
-							text: "She playing the piano.",
-							correct: false,
-						},
-						{
-							text: "She played the piano every day.",
-							correct: false,
-						},
-					],
-				},
-				{
-					question: "2. Choose the correct answer:",
-					options: [
-						{
-							text: "They plays football every weekend.",
-							correct: false,
-						},
-						{
-							text: "They play football every weekend.",
-							correct: true,
-						},
-						{
-							text: "They playing football every weekend.",
-							correct: false,
-						},
-						{
-							text: "They played football every weekend.",
-							correct: false,
-						},
-					],
-				},
-				{
-					question: "3. Choose the correct answer:",
-					options: [
-						{
-							text: "The sun rises in the east.",
-							correct: true,
-						},
-						{
-							text: "The sun rise in the east.",
-							correct: false,
-						},
-						{
-							text: "The sun rising in the east.",
-							correct: false,
-						},
-						{
-							text: "The sun rose in the east.",
-							correct: false,
-						},
-					],
-				},
-				{
-					question: "4. Choose the correct answer:",
-					options: [
-						{
-							text: "She is cooking dinner now.",
-							correct: false,
-						},
-						{
-							text: "He goes to the gym every morning.",
-							correct: true,
-						},
-						{
-							text: "They will go to the party tonight.",
-							correct: false,
-						},
-						{
-							text: "We visited the museum yesterday.",
-							correct: false,
-						},
-					],
-				},
-			];
+		.lesson-card,
+		.quiz-card {
+			background: rgba(255, 255, 255, 0.05);
+			border: 1px solid #2ecc71;
+			border-radius: 12px;
+			padding: 20px;
+			margin: 20px auto;
+			max-width: 800px;
+		}
 
-			function renderQuiz() {
-				const container =
-					document.getElementById(
-						"quiz-container"
-					);
-				container.innerHTML = "";
+		.lesson-card h2,
+		.quiz-card h2 {
+			color: #2ecc71;
+			margin-bottom: 15px;
+		}
 
-				quizData.forEach((q, index) => {
-					const block =
-						document.createElement("div");
-					block.className = "question-block";
+		.question-block {
+			margin-bottom: 25px;
+			padding: 15px;
+			border-radius: 10px;
+			background: rgba(255, 255, 255, 0.02);
+			border: 1px solid #2ecc71;
+		}
 
-					const questionEl =
-						document.createElement("p");
-					questionEl.textContent = q.question;
-					block.appendChild(questionEl);
+		.question-block p {
+			margin-bottom: 12px;
+			font-weight: bold;
+		}
 
-					q.options.forEach(opt => {
-						const optionEl =
-							document.createElement(
-								"div"
-							);
-						optionEl.className =
-							"quiz-option";
-						optionEl.textContent = opt.text;
-						optionEl.onclick = () =>
-							checkAnswer(
-								optionEl,
-								opt.correct,
-								index
-							);
-						block.appendChild(optionEl);
-					});
+		.quiz-option {
+			display: block;
+			padding: 12px 14px;
+			margin: 8px 0;
+			border: 1px solid #2ecc71;
+			border-radius: 8px;
+			background: #111;
+			cursor: pointer;
+			transition: 0.3s;
+			text-align: left;
+		}
 
-					const feedback =
-						document.createElement("div");
-					feedback.id = "feedback-" + index;
-					feedback.className = "feedback";
-					block.appendChild(feedback);
+		.quiz-option:hover {
+			background: #27ae60;
+			color: black;
+			transform: translateY(-1px);
+		}
 
-					container.appendChild(block);
+		.correct {
+			border-color: #27ae60;
+			background: rgba(46, 204, 113, 0.2);
+		}
+
+		.wrong {
+			border-color: #e74c3c;
+			background: rgba(231, 76, 60, 0.2);
+		}
+
+		.feedback {
+			margin-top: 10px;
+			font-weight: bold;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>Grammar Lesson</h1>
+
+	<!-- Lesson Section -->
+	<div class="lesson-card">
+		<h2>Topic: Present Simple Tense</h2>
+		<p>
+			The Present Simple tense is used for habits,
+			routines, and general facts.
+		</p>
+		<p><strong>Examples:</strong></p>
+		<ul>
+			<li>I <em>play</em> football every weekend.</li>
+			<li>She <em>works</em> in an office.</li>
+			<li>The sun <em>rises</em> in the east.</li>
+		</ul>
+	</div>
+
+	<!-- Quiz Section -->
+	<div class="quiz-card">
+		<h2>Quick Quiz</h2>
+		<div id="quiz-container"></div>
+	</div>
+
+	<script>
+		const quizData = [
+			{
+				question: "1. Choose the correct answer:",
+				options: [
+					{
+						text: "She plays the piano.",
+						correct: true,
+					},
+					{
+						text: "She play the piano.",
+						correct: false,
+					},
+					{
+						text: "She playing the piano.",
+						correct: false,
+					},
+					{
+						text: "She played the piano every day.",
+						correct: false,
+					},
+				],
+			},
+			{
+				question: "2. Choose the correct answer:",
+				options: [
+					{
+						text: "They plays football every weekend.",
+						correct: false,
+					},
+					{
+						text: "They play football every weekend.",
+						correct: true,
+					},
+					{
+						text: "They playing football every weekend.",
+						correct: false,
+					},
+					{
+						text: "They played football every weekend.",
+						correct: false,
+					},
+				],
+			},
+			{
+				question: "3. Choose the correct answer:",
+				options: [
+					{
+						text: "The sun rises in the east.",
+						correct: true,
+					},
+					{
+						text: "The sun rise in the east.",
+						correct: false,
+					},
+					{
+						text: "The sun rising in the east.",
+						correct: false,
+					},
+					{
+						text: "The sun rose in the east.",
+						correct: false,
+					},
+				],
+			},
+			{
+				question: "4. Choose the correct answer:",
+				options: [
+					{
+						text: "She is cooking dinner now.",
+						correct: false,
+					},
+					{
+						text: "He goes to the gym every morning.",
+						correct: true,
+					},
+					{
+						text: "They will go to the party tonight.",
+						correct: false,
+					},
+					{
+						text: "We visited the museum yesterday.",
+						correct: false,
+					},
+				],
+			},
+		];
+
+		function renderQuiz() {
+			const container =
+				document.getElementById(
+					"quiz-container"
+				);
+			container.innerHTML = "";
+
+			quizData.forEach((q, index) => {
+				const block =
+					document.createElement("div");
+				block.className = "question-block";
+
+				const questionEl =
+					document.createElement("p");
+				questionEl.textContent = q.question;
+				block.appendChild(questionEl);
+
+				q.options.forEach(opt => {
+					const optionEl =
+						document.createElement(
+							"div"
+						);
+					optionEl.className =
+						"quiz-option";
+					optionEl.textContent = opt.text;
+					optionEl.onclick = () =>
+						checkAnswer(
+							optionEl,
+							opt.correct,
+							index
+						);
+					block.appendChild(optionEl);
 				});
-			}
 
-			function checkAnswer(option, isCorrect, index) {
-				const feedback = document.getElementById(
-					"feedback-" + index
+				const feedback =
+					document.createElement("div");
+				feedback.id = "feedback-" + index;
+				feedback.className = "feedback";
+				block.appendChild(feedback);
+
+				container.appendChild(block);
+			});
+		}
+
+		function checkAnswer(option, isCorrect, index) {
+			const feedback = document.getElementById(
+				"feedback-" + index
+			);
+			const options =
+				option.parentElement.querySelectorAll(
+					".quiz-option"
 				);
-				const options =
-					option.parentElement.querySelectorAll(
-						".quiz-option"
-					);
-				options.forEach(el =>
-					el.classList.remove("correct", "wrong")
-				);
+			options.forEach(el =>
+				el.classList.remove("correct", "wrong")
+			);
 
-				if (isCorrect) {
-					option.classList.add("correct");
-					feedback.textContent = "✅ Correct!";
-					feedback.style.color = "#2ecc71";
-				} else {
-					option.classList.add("wrong");
-					feedback.textContent =
-						"❌ That’s not correct — please try again.";
-					feedback.style.color = "#e74c3c";
-				}
+			if (isCorrect) {
+				option.classList.add("correct");
+				feedback.textContent = "✅ Correct!";
+				feedback.style.color = "#2ecc71";
+			} else {
+				option.classList.add("wrong");
+				feedback.textContent =
+					"❌ That’s not correct — please try again.";
+				feedback.style.color = "#e74c3c";
 			}
+		}
 
-			renderQuiz();
-		</script>
-	</body>
+		renderQuiz();
+	</script>
+</body>
+
 </html>
