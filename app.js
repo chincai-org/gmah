@@ -48,6 +48,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 3000;
+const jwtSecret = process.env.JWT_SECRET || "super-secret";
 app.use(cookieParser());
 
 // middlewares
@@ -63,7 +64,7 @@ function cookieAuth(req, res, next) {
         return res.redirect("/login");
     }
     try {
-        const decoded = jwt.verify(token, "super-secret");
+        const decoded = jwt.verify(token, jwtSecret);
         req.user = decoded; // store user info in request
         next();
     } catch (err) {
@@ -79,7 +80,7 @@ function getUserIdFromCookie(req) {
     }
 
     try {
-        const decoded = jwt.verify(token, "super-secret"); // Replace "super-secret" with your actual secret key
+        const decoded = jwt.verify(token, jwtSecret);
         return decoded.id; // Extract the user ID from the decoded token
     } catch (err) {
         throw new Error("Invalid token");
@@ -171,7 +172,7 @@ app.post("/signup-verifier", async (req, res) => {
         // Create JWT (valid 7 days)
         const token = jwt.sign(
             { id: newUser.id, username: newUser.username },
-            "super-secret", // 🔑 move this to process.env.JWT_SECRET in real app
+            jwtSecret,
             { expiresIn: "7d" }
         );
 
@@ -199,7 +200,7 @@ app.post("/login-verifier", async (req, res) => {
         // Create JWT (valid 7 days)
         const token = jwt.sign(
             { id: user.id, username: user.username },
-            "super-secret", // 🔑 move this to process.env.JWT_SECRET in real app
+            jwtSecret,
             { expiresIn: "7d" }
         );
 
@@ -602,7 +603,7 @@ app.post("/profile", cookieAuth, async (req, res) => {
         const updatedUser = await updateUser(user.id, name, password);
         const token = jwt.sign(
             { id: updatedUser.id, username: updatedUser.username },
-            "super-secret",
+            jwtSecret,
             { expiresIn: "7d" }
         );
 
