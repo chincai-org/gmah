@@ -16,7 +16,9 @@ import {
     getCourse,
     findCoursesByUserId,
     findTopicsByCourseId,
-    putTopic
+    putTopic,
+    addTopicToCourse,
+    getTopic
 } from "./util/database.js";
 import {
     promptBedrock,
@@ -253,6 +255,17 @@ app.post("/createCourseVerifier", async (req, res) => {
     }
 });
 
+async function mapTopics(topicIds) {
+    const topics = [];
+    for (const topicId of topicIds) {
+        const topic = await getTopic(topicId);
+        if (topic) {
+            topics.push(topic);
+        }
+    }
+    return topics;
+}
+
 app.get("/courses/:id", async (req, res) => {
     const course = await getCourse(parseInt(req.params.id));
     if (!course) {
@@ -261,9 +274,11 @@ app.get("/courses/:id", async (req, res) => {
 
     console.log(course);
 
-    const grammar = course.topics.grammar.map(topicId => getTopic(topicId));
-    const vocab = course.topics.vocabulary.map(topicId => getTopic(topicId));
-    const dialogs = course.topics.dialogue.map(topicId => getTopic(topicId));
+    const grammar = await mapTopics(course.topics.grammar);
+    const vocab = await mapTopics(course.topics.vocabulary);
+    const dialogs = await mapTopics(course.topics.dialogue);
+
+    console.log("Grammar topics:", grammar);
 
     // Renders views/course.ejs (make sure this file exists)
     res.render("course", { course, dialogs, grammar, vocab });
@@ -306,7 +321,8 @@ app.post("/courses/:id/grammar/generate", async (req, res) => {
             const [title, description] = Object.entries(topic)[0];
             topicObjects.push({ title, description });
 
-            await putTopic(title, "grammar", "", description);
+            const dbTopic = await putTopic(title, "grammar", "", description);
+            await addTopicToCourse(courseId, dbTopic.topicId);
         }
 
         res.json({ topics: topicObjects });
