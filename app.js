@@ -305,10 +305,10 @@ app.post("/courses/:id/grammar/generate", async (req, res) => {
         }
 
         const previousTopics = await mapTopics(course.topics.grammar);
-        console.log("Previous topics:", previousTopics);
+        // console.log("Previous topics:", previousTopics);
         const previousTopicsTitles = previousTopics.map(t => t.title);
 
-        console.log("Previous topics:", previousTopicsTitles);
+        // console.log("Previous topics:", previousTopicsTitles);
 
         // Call Bedrock or other AI service to generate lesson content
         const output = await promptGenerateGrammarsTitle(
@@ -319,7 +319,7 @@ app.post("/courses/:id/grammar/generate", async (req, res) => {
             course.langLevelDescription
         );
 
-        console.log("Raw AI output:", output);
+        // console.log("Raw AI output:", output);
 
         const topics = JSON.parse(output);
 
@@ -348,7 +348,7 @@ app.post("/courses/:id/grammar/generate", async (req, res) => {
                 course.nativeLang
             );
 
-            console.log("Raw quiz output:", quizzesOutput);
+            // console.log("Raw quiz output:", quizzesOutput);
 
             const quizzes = JSON.parse(quizzesOutput);
 
@@ -382,9 +382,9 @@ app.post("/courses/:id/vocab/generate", async (req, res) => {
             course.langLevelDescription
         );
 
-        console.log(output);
+        // console.log(output);
 
-        console.log("Raw AI output:", output);
+        // console.log("Raw AI output:", output);
 
         const topics = JSON.parse(output);
 
@@ -511,7 +511,7 @@ app.get("/getDialogues/:id", async (req, res) => {
         }
 
         const response = {
-            dialogue: topic.items.map(item => {
+            dialogue: topic.items.slice(1).map(item => {
                 return { who: item.role, text: item.content[0].text };
             })
         };
