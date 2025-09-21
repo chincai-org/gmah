@@ -34,6 +34,7 @@ app.use(express.static(path.join(__dirname, "public"))); // serve static files
 function cookieAuth(req, res, next) {
 	const token = req.cookies?.token;
 	if (!token) {
+		console.log("Please log in");
 		return res.redirect("/login");
 	}
 	try {
@@ -41,6 +42,7 @@ function cookieAuth(req, res, next) {
 		req.user = decoded; // store user info in request
 		next();
 	} catch (err) {
+		console.log("Cookie invalid. Please log in!");
 		return res.redirect("/login");
 	}
 }
@@ -66,7 +68,7 @@ async function signup_verification(name, password) {
 
 // routes
 app.get("/", (req, res) => {
-	res.sendFile(path.join(__dirname, "public/index.html"));
+	res.sendFile(path.join(__dirname, "public/landing_page.html"));
 });
 
 app.post("/user", async (req, res) => {
@@ -157,7 +159,7 @@ app.post("/login-verifier", async (req, res) => {
 	if (verifyUserCredentials(user.id, password)) {
 		// Create JWT (valid 7 days)
 		const token = jwt.sign(
-			{ id: user.id, username: newUser.username },
+			{ id: user.id, username: user.username },
 			"super-secret", // 🔑 move this to process.env.JWT_SECRET in real app
 			{ expiresIn: "7d" }
 		);
@@ -277,6 +279,10 @@ app.post("/profile", async (req, res) => {
 
 		res.redirect("/profile");
 	}
+});
+
+app.get("/testcookie", cookieAuth, (req, res) => {
+	res.send("You have cookie and is valid");
 });
 
 app.listen(port, () => {
