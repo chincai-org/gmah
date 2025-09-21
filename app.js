@@ -488,8 +488,8 @@ app.post("/courses/:id/dialog/generate", async (req, res) => {
         );
 
         const chat = [
-            { role: "system", content: { text: systemMessage } },
-            { role: "assistant", content: { text: firstMessage } }
+            { role: "user", content: [{ text: systemMessage }] },
+            { role: "assistant", content: [{ text: firstMessage }] }
         ];
 
         await addItemsToTopic(dbTopic.topicId, chat);
@@ -512,7 +512,7 @@ app.get("/getDialogues/:id", async (req, res) => {
 
         const response = {
             dialogue: topic.items.map(item => {
-                return { who: item.role, text: item.content.text };
+                return { who: item.role, text: item.content[0].text };
             })
         };
 
@@ -540,7 +540,7 @@ app.post("/getResponse/:id", async (req, res) => {
 
         const chat = [
             ...topic.items,
-            { role: "user", content: { text: userMessage } }
+            { role: "user", content: [{ text: userMessage }] }
         ];
 
         console.log("Chat history for response:", chat);
@@ -550,8 +550,8 @@ app.post("/getResponse/:id", async (req, res) => {
         console.log("AI reply:", reply);
 
         // Save user message and AI reply to topic items
-        topic.items.push({ role: "user", content: { text: userMessage } });
-        topic.items.push({ role: "assistant", content: { text: reply } });
+        topic.items.push({ role: "user", content: [{ text: userMessage }] });
+        topic.items.push({ role: "assistant", content: [{ text: reply }] });
 
         await updateTopicItems(topicId, topic.items);
 
