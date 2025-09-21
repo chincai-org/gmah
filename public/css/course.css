@@ -1,244 +1,240 @@
 :root {
-	--bg: #0e1116;
-	--panel: #121720;
-	--card: #171c26;
-	--border: #263041;
-	--text: #e6edf3;
-	--muted: #9fb0c3;
-	--primary: #6ea8fe;
-	--primary-600: #5b95ec;
-	--shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    --bg: #0e1116;
+    --panel: #121720;
+    --card: #171c26;
+    --border: #263041;
+    --text: #e6edf3;
+    --muted: #9fb0c3;
+    --primary: #6ea8fe;
+    --primary-600: #5b95ec;
+    --shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
 }
 
 * {
-	box-sizing: border-box;
+    box-sizing: border-box;
 }
 html,
 body {
-	margin: 0;
-	padding: 0;
-	background: var(--bg);
-	color: var(--text);
-	font:
-		14px/1.5 system-ui,
-		-apple-system,
-		Segoe UI,
-		Roboto,
-		sans-serif;
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font:
+        14px/1.5 system-ui,
+        -apple-system,
+        Segoe UI,
+        Roboto,
+        sans-serif;
 }
 
 a {
-	color: inherit;
+    color: inherit;
 }
 
 .course-header {
-	border-bottom: 1px solid var(--border);
-	background: linear-gradient(
-		180deg,
-		rgba(255, 255, 255, 0.04),
-		transparent
-	);
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent);
 }
 .course-header__meta {
-	max-width: 1100px;
-	margin: 0 auto;
-	padding: 20px 16px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px 16px;
 }
 .back-link {
-	display: inline-block;
-	color: var(--muted);
-	text-decoration: none;
-	margin-bottom: 4px;
+    display: inline-block;
+    color: var(--muted);
+    text-decoration: none;
+    margin-bottom: 4px;
 }
 .back-link:hover {
-	color: var(--text);
+    color: var(--text);
 }
 .course-title {
-	margin: 4px 0 2px;
-	font-size: 22px;
+    margin: 4px 0 2px;
+    font-size: 22px;
 }
 .course-subtitle {
-	margin: 0;
-	color: var(--muted);
+    margin: 0;
+    color: var(--muted);
 }
 .dot {
-	margin: 0 8px;
-	color: var(--border);
+    margin: 0 8px;
+    color: var(--border);
 }
 
 .course-main {
-	max-width: 1100px;
-	margin: 0 auto;
-	padding: 16px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px;
 }
 
 .tabs {
-	display: flex;
-	gap: 8px;
-	border-bottom: 1px solid var(--border);
-	margin-bottom: 16px;
+    display: flex;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
 }
 .tab {
-	appearance: none;
-	border: 1px solid transparent;
-	background: transparent;
-	color: var(--muted);
-	padding: 10px 12px;
-	border-radius: 8px 8px 0 0;
-	cursor: pointer;
+    appearance: none;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--muted);
+    padding: 10px 12px;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
 }
 .tab:hover {
-	color: var(--text);
+    color: var(--text);
 }
 .tab.is-active {
-	color: var(--text);
-	background: var(--panel);
-	border-color: var(--border);
-	border-bottom-color: transparent;
+    color: var(--text);
+    background: var(--panel);
+    border-color: var(--border);
+    border-bottom-color: transparent;
 }
 
 .panel {
-	background: var(--panel);
-	border: 1px solid var(--border);
-	border-radius: 12px;
-	padding: 16px;
-	box-shadow: var(--shadow);
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: var(--shadow);
 }
 .panel + .panel {
-	margin-top: 16px;
+    margin-top: 16px;
 }
 .panel__header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
 }
 .panel[hidden] {
-	display: none;
+    display: none;
 }
 
 .grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-	gap: 12px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
 }
 
 .card {
-	background: var(--card);
-	border: 1px solid var(--border);
-	border-radius: 12px;
-	padding: 12px;
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 .card h3 {
-	margin: 0 0 2px;
-	font-size: 16px;
+    margin: 0 0 2px;
+    font-size: 16px;
 }
 .card__actions {
-	display: flex;
-	gap: 8px;
-	margin-top: 4px;
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
 }
 
 .btn {
-	appearance: none;
-	border: 1px solid var(--border);
-	background: transparent;
-	color: var(--text);
-	padding: 8px 10px;
-	border-radius: 8px;
-	cursor: pointer;
+    appearance: none;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
 }
 .btn:hover {
-	border-color: var(--primary);
-	color: var(--primary);
+    border-color: var(--primary);
+    color: var(--primary);
 }
 .btn-primary {
-	background: var(--primary);
-	border-color: var(--primary-600);
-	color: #0b1020;
+    background: var(--primary);
+    border-color: var(--primary-600);
+    color: #0b1020;
 }
 .btn-primary:hover {
-	background: var(--primary-600);
+    background: var(--primary-600);
 }
 
 .btn-ghost {
-	background: transparent;
-	color: var(--muted);
+    background: transparent;
+    color: var(--muted);
 }
 .btn-ghost:hover {
-	color: var(--text);
-	border-color: var(--text);
+    color: var(--text);
+    border-color: var(--text);
 }
 
 .chat {
-	display: grid;
-	gap: 12px;
+    display: grid;
+    gap: 12px;
 }
 .chat__messages {
-	background: var(--card);
-	border: 1px solid var(--border);
-	border-radius: 12px;
-	padding: 12px;
-	height: 300px;
-	overflow: auto;
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    height: 300px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 .chat__bubble {
-	max-width: 70%;
-	padding: 10px 12px;
-	border-radius: 12px;
+    max-width: 70%;
+    padding: 10px 12px;
+    border-radius: 12px;
 }
 .chat__bubble--bot {
-	background: #1a2332;
-	border: 1px solid var(--border);
+    background: #1a2332;
+    border: 1px solid var(--border);
 }
 .chat__bubble--me {
-	background: var(--primary);
-	color: #0b1020;
-	align-self: flex-end;
+    background: var(--primary);
+    color: #0b1020;
+    align-self: flex-end;
 }
 .chat__form {
-	display: flex;
-	gap: 8px;
+    display: flex;
+    gap: 8px;
 }
 .input {
-	flex: 1;
-	background: var(--card);
-	color: var(--text);
-	border: 1px solid var(--border);
-	border-radius: 8px;
-	padding: 8px 10px;
+    flex: 1;
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 10px;
 }
 .input:focus {
-	outline: none;
-	border-color: var(--primary);
-	box-shadow: 0 0 0 2px rgba(110, 168, 254, 0.25);
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(110, 168, 254, 0.25);
 }
 
 .dialog-list {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-	display: grid;
-	gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
 }
 .dialog-item {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	gap: 12px;
-	background: var(--card);
-	border: 1px solid var(--border);
-	border-radius: 12px;
-	padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
 }
 .muted {
-	color: var(--muted);
-	margin: 2px 0 0;
-	font-size: 13px;
+    color: var(--muted);
+    margin: 2px 0 0;
+    font-size: 13px;
 }

@@ -1,7 +1,7 @@
 // utils/bedrock.js
 import {
-	BedrockRuntimeClient,
-	InvokeModelCommand,
+    BedrockRuntimeClient,
+    InvokeModelCommand
 } from "@aws-sdk/client-bedrock-runtime";
 
 const region = process.env.BEDROCK_REGION || "us-east-1";
@@ -16,47 +16,47 @@ const client = new BedrockRuntimeClient({ region });
  * @returns {Promise<string>} - The model's reply text.
  */
 export async function promptBedrock(prompt) {
-	try {
-		const input = {
-			modelId,
-			contentType: "application/json",
-			accept: "application/json",
-			body: JSON.stringify({
-				// Nova expects "messages" array
-				messages: [
-					{
-						role: "user",
-						content: [{ text: prompt }],
-					},
-				],
-				inferenceConfig: {
-					maxTokens: 200,
-					temperature: 0.7,
-				},
-			}),
-		};
+    try {
+        const input = {
+            modelId,
+            contentType: "application/json",
+            accept: "application/json",
+            body: JSON.stringify({
+                // Nova expects "messages" array
+                messages: [
+                    {
+                        role: "user",
+                        content: [{ text: prompt }]
+                    }
+                ],
+                inferenceConfig: {
+                    maxTokens: 200,
+                    temperature: 0.7
+                }
+            })
+        };
 
-		const command = new InvokeModelCommand(input);
-		const response = await client.send(command);
+        const command = new InvokeModelCommand(input);
+        const response = await client.send(command);
 
-		const decoded = new TextDecoder("utf-8").decode(response.body);
-		const json = JSON.parse(decoded);
+        const decoded = new TextDecoder("utf-8").decode(response.body);
+        const json = JSON.parse(decoded);
 
-		// Nova returns `outputText`
-		return json.outputText || JSON.stringify(json);
-	} catch (err) {
-		console.error("Bedrock prompt error:", err);
-	}
+        // Nova returns `outputText`
+        return json.outputText || JSON.stringify(json);
+    } catch (err) {
+        console.error("Bedrock prompt error:", err);
+    }
 }
 
 export async function promptGenerateGrammarsTitle(
-	language,
-	previousTopics,
-	numOfTopic,
-	nativeLanguage,
-	proficiencyLevelDescription
+    language,
+    previousTopics,
+    numOfTopic,
+    nativeLanguage,
+    proficiencyLevelDescription
 ) {
-	const prompt = `
+    const prompt = `
 	Generate a list of grammar topics for ${language}. Avoid topics from this list: ${previousTopics}.
 
 	Format the response as:
@@ -70,18 +70,18 @@ export async function promptGenerateGrammarsTitle(
 	Write the response in the user's native language (${nativeLanguage}).
 	`;
 
-	return await promptBedrock(prompt);
+    return await promptBedrock(prompt);
 }
 
 export async function promptGenerateVocabsTitle(
-	language,
-	previousTopics,
-	numOfTopic,
-	context,
-	nativeLanguage,
-	profficiencyLevelDescription
+    language,
+    previousTopics,
+    numOfTopic,
+    context,
+    nativeLanguage,
+    profficiencyLevelDescription
 ) {
-	const prompt = `Generate a list of vocabulary topics for ${language}. Avoid topics from this list: ${previousTopics}. 
+    const prompt = `Generate a list of vocabulary topics for ${language}. Avoid topics from this list: ${previousTopics}. 
 
     Format the response as:
     [ { "topic for vocabulary": "number of words • proficiency level" } ]
@@ -93,17 +93,17 @@ export async function promptGenerateVocabsTitle(
 
     The user's proficiency level is described as "${profficiencyLevelDescription}", and their native language is ${nativeLanguage}. Write the response in their native language.`;
 
-	return await promptBedrock(prompt);
+    return await promptBedrock(prompt);
 }
 
 export async function promptGenerateDialogueTitle(
-	language,
-	previousTopics,
-	context,
-	nativeLanguage,
-	profficiencyLevelDescription
+    language,
+    previousTopics,
+    context,
+    nativeLanguage,
+    profficiencyLevelDescription
 ) {
-	const prompt = `Create a real-life scenario for a ${language} enthusiast who wants to learn this language because of "${context}". Avoid scenarios related to this list: ${previousTopics}. 
+    const prompt = `Create a real-life scenario for a ${language} enthusiast who wants to learn this language because of "${context}". Avoid scenarios related to this list: ${previousTopics}. 
 
     Format the response as: 
     { "scenario title": "short description" }
@@ -117,5 +117,5 @@ export async function promptGenerateDialogueTitle(
 
     Consider the user's native language (${nativeLanguage}) and proficiency level described as (${profficiencyLevelDescription}). Write the response in their native language.`;
 
-	return await promptBedrock(prompt);
+    return await promptBedrock(prompt);
 }
