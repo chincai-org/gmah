@@ -277,14 +277,39 @@ app.post("/courses/:id/grammar/generate", async (req, res) => {
             return res.status(404).json({ error: "Course not found" });
         }
 
-        const topic = {
-            title: "New Grammar Topic",
-            description: "Generated lesson des".slice(0, 240)
-        };
+        const previousTopics = await findTopicsByCourseId(courseId);
+        console.log("Previous topics:", previousTopics);
+        const previosTopicsTitles = previousTopics.map(t => t.title);
 
-        // Optionally persist topic here
+        console.log("Previous topics:", previosTopicsTitles);
 
-        res.json({ topic });
+        // Call Bedrock or other AI service to generate lesson content
+        const output = await promptGenerateGrammarsTitle(
+            course.learningLang,
+            previosTopicsTitles,
+            5,
+            course.nativeLang,
+            course.langLevelDescription
+        );
+
+        console.log("Raw AI output:", output);
+
+        const topics = JSON.parse(output);
+
+        if (!topics || !Array.isArray(topics) || topics.length === 0) {
+            return res.status(500).json({ error: "Failed to generate topics" });
+        }
+
+        const topicObjects = [];
+
+        for (const topic of topics) {
+            const [title, description] = Object.entries(topic)[0];
+            topicObjects.push({ title, description });
+
+            await putTopic(title, "grammar", "", description);
+        }
+
+        res.json({ topics: topicObjects });
     } catch (err) {
         console.error("Generate grammar error:", err);
         res.status(500).json({ error: "Failed to generate lesson" });
@@ -396,53 +421,7 @@ app.get("/testcookie", cookieAuth, (req, res) => {
 
 // AI API
 
-app.post("/generate-grammar-lesson", cookieAuth, async (req, res) => {
-    // Get course ID from request body
-    const { courseId } = req.body;
-    if (!courseId) {
-        return res
-            .status(400)
-            .json({ error: "Missing courseId in request body" });
-    }
-
-    // Fetch course details from database
-    const course = await getCourse(parseInt(courseId, 10));
-    if (!course) {
-        return res.status(404).json({ error: "Course not found" });
-    }
-
-    const previousTopics = await findTopicsByCourseId(courseId);
-    console.log("Previous topics:", previousTopics);
-    const previosTopicsTitles = previousTopics.map(t => t.title);
-
-    console.log("Previous topics:", previosTopicsTitles);
-
-    // Call Bedrock or other AI service to generate lesson content
-    const output = await promptGenerateGrammarsTitle(
-        course.learningLang,
-        previosTopicsTitles,
-        5,
-        course.nativeLang,
-        course.langLevelDescription
-    );
-
-    console.log("Raw AI output:", output);
-
-    const topics = JSON.parse(output);
-
-    if (!topics || !Array.isArray(topics) || topics.length === 0) {
-        return res.status(500).json({ error: "Failed to generate topics" });
-    }
-
-    const topicObjects = [];
-
-    for (const topic of topics) {
-        const [title, description] = Object.entries(topic)[0];
-        topicObjects.push({ title, description });
-    }
-
-    res.json({ topics: topicObjects });
-});
+app.post("/generate-grammar-lesson", cookieAuth, async (req, res) => {});
 
 app.post("/generate-vocab-lesson", cookieAuth, async (req, res) => {
     // Get course ID from request body
