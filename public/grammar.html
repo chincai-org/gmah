@@ -270,7 +270,7 @@
 
 </html>
 =======
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
@@ -363,7 +363,8 @@
 	<div class="lesson-card">
 		<h2>Topic: Present Simple Tense</h2>
 		<p>
-			The Present Simple tense is used for habits, routines, and general facts.
+			The Present Simple tense is used for habits,
+			routines, and general facts.
 		</p>
 		<p><strong>Examples:</strong></p>
 		<ul>
@@ -384,62 +385,125 @@
 			{
 				question: "1. Choose the correct answer:",
 				options: [
-					{text: "She plays the piano.", correct: true},
-					{text: "She play the piano.", correct: false},
-					{text: "She playing the piano.", correct: false},
-					{text: "She played the piano every day.", correct: false}
-				]
+					{
+						text: "She plays the piano.",
+						correct: true,
+					},
+					{
+						text: "She play the piano.",
+						correct: false,
+					},
+					{
+						text: "She playing the piano.",
+						correct: false,
+					},
+					{
+						text: "She played the piano every day.",
+						correct: false,
+					},
+				],
 			},
 			{
 				question: "2. Choose the correct answer:",
 				options: [
-					{text: "They plays football every weekend.", correct: false},
-					{text: "They play football every weekend.", correct: true},
-					{text: "They playing football every weekend.", correct: false},
-					{text: "They played football every weekend.", correct: false}
-				]
+					{
+						text: "They plays football every weekend.",
+						correct: false,
+					},
+					{
+						text: "They play football every weekend.",
+						correct: true,
+					},
+					{
+						text: "They playing football every weekend.",
+						correct: false,
+					},
+					{
+						text: "They played football every weekend.",
+						correct: false,
+					},
+				],
 			},
 			{
 				question: "3. Choose the correct answer:",
 				options: [
-					{text: "The sun rises in the east.", correct: true},
-					{text: "The sun rise in the east.", correct: false},
-					{text: "The sun rising in the east.", correct: false},
-					{text: "The sun rose in the east.", correct: false}
-				]
+					{
+						text: "The sun rises in the east.",
+						correct: true,
+					},
+					{
+						text: "The sun rise in the east.",
+						correct: false,
+					},
+					{
+						text: "The sun rising in the east.",
+						correct: false,
+					},
+					{
+						text: "The sun rose in the east.",
+						correct: false,
+					},
+				],
 			},
 			{
 				question: "4. Choose the correct answer:",
 				options: [
-					{text: "She is cooking dinner now.", correct: false},
-					{text: "He goes to the gym every morning.", correct: true},
-					{text: "They will go to the party tonight.", correct: false},
-					{text: "We visited the museum yesterday.", correct: false}
-				]
-			}
+					{
+						text: "She is cooking dinner now.",
+						correct: false,
+					},
+					{
+						text: "He goes to the gym every morning.",
+						correct: true,
+					},
+					{
+						text: "They will go to the party tonight.",
+						correct: false,
+					},
+					{
+						text: "We visited the museum yesterday.",
+						correct: false,
+					},
+				],
+			},
 		];
 
 		function renderQuiz() {
-			const container = document.getElementById("quiz-container");
+			const container =
+				document.getElementById(
+					"quiz-container"
+				);
 			container.innerHTML = "";
 
 			quizData.forEach((q, index) => {
-				const block = document.createElement("div");
+				const block =
+					document.createElement("div");
 				block.className = "question-block";
 
-				const questionEl = document.createElement("p");
+				const questionEl =
+					document.createElement("p");
 				questionEl.textContent = q.question;
 				block.appendChild(questionEl);
 
 				q.options.forEach(opt => {
-					const optionEl = document.createElement("div");
-					optionEl.className = "quiz-option";
+					const optionEl =
+						document.createElement(
+							"div"
+						);
+					optionEl.className =
+						"quiz-option";
 					optionEl.textContent = opt.text;
-					optionEl.onclick = () => checkAnswer(optionEl, opt.correct, index);
+					optionEl.onclick = () =>
+						checkAnswer(
+							optionEl,
+							opt.correct,
+							index
+						);
 					block.appendChild(optionEl);
 				});
 
-				const feedback = document.createElement("div");
+				const feedback =
+					document.createElement("div");
 				feedback.id = "feedback-" + index;
 				feedback.className = "feedback";
 				block.appendChild(feedback);
@@ -449,9 +513,16 @@
 		}
 
 		function checkAnswer(option, isCorrect, index) {
-			const feedback = document.getElementById("feedback-" + index);
-			const options = option.parentElement.querySelectorAll(".quiz-option");
-			options.forEach(el => el.classList.remove("correct", "wrong"));
+			const feedback = document.getElementById(
+				"feedback-" + index
+			);
+			const options =
+				option.parentElement.querySelectorAll(
+					".quiz-option"
+				);
+			options.forEach(el =>
+				el.classList.remove("correct", "wrong")
+			);
 
 			if (isCorrect) {
 				option.classList.add("correct");
@@ -459,7 +530,8 @@
 				feedback.style.color = "#2ecc71";
 			} else {
 				option.classList.add("wrong");
-				feedback.textContent = "❌ That’s not correct — please try again.";
+				feedback.textContent =
+					"❌ That’s not correct — please try again.";
 				feedback.style.color = "#e74c3c";
 			}
 		}
@@ -470,5 +542,7 @@
 
 </html>
 
-
 >>>>>>> 01e2967379d396d6838a17436977db11156c6f4f
+=======
+
+>>>>>>> 275b609768fd1b8f07b2ea6b0e0e9bd6e004ed10
