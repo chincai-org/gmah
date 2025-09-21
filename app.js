@@ -20,6 +20,7 @@ import {
     addTopicToCourse,
     getTopic
 } from "./util/database.js";
+
 import {
     promptBedrock,
     promptGenerateGrammarsTitle,
@@ -292,16 +293,16 @@ app.post("/courses/:id/grammar/generate", async (req, res) => {
             return res.status(404).json({ error: "Course not found" });
         }
 
-        const previousTopics = await findTopicsByCourseId(courseId);
+        const previousTopics = await mapTopics(course.topics.grammar);
         console.log("Previous topics:", previousTopics);
-        const previosTopicsTitles = previousTopics.map(t => t.title);
+        const previousTopicsTitles = previousTopics.map(t => t.title);
 
-        console.log("Previous topics:", previosTopicsTitles);
+        console.log("Previous topics:", previousTopicsTitles);
 
         // Call Bedrock or other AI service to generate lesson content
         const output = await promptGenerateGrammarsTitle(
             course.learningLang,
-            previosTopicsTitles,
+            previousTopicsTitles,
             5,
             course.nativeLang,
             course.langLevelDescription
@@ -340,16 +341,46 @@ app.post("/courses/:id/vocab/generate", async (req, res) => {
             return res.status(404).json({ error: "Course not found" });
         }
 
-        const topic = {
-            title: "New Vocab Topic",
-            description: "Generated vocab des".slice(0, 240)
-        };
+        const previousTopics = await mapTopics(course.topics.vocabulary);
+        const previousTopicsTitles = previousTopics.map(t => t.title);
 
-        // Optionally persist topic here
+        // Call Bedrock or other AI service to generate lesson content
+        const output = await promptGenerateVocabsTitle(
+            course.learningLang,
+            previousTopicsTitles,
+            5,
+            course.nativeLang,
+            course.langLevelDescription
+        );
 
-        res.json({ topic });
+        console.log(output);
+
+        console.log("Raw AI output:", output);
+
+        const topics = JSON.parse(output);
+
+        if (!topics || !Array.isArray(topics) || topics.length === 0) {
+            return res.status(500).json({ error: "Failed to generate topics" });
+        }
+
+        const topicObjects = [];
+
+        for (const topic of topics) {
+            const [title, description] = Object.entries(topic)[0];
+            topicObjects.push({ title, description });
+
+            const dbTopic = await putTopic(
+                title,
+                "vocabulary",
+                "",
+                description
+            );
+            await addTopicToCourse(courseId, dbTopic.topicId);
+        }
+
+        res.json({ topics: topicObjects });
     } catch (err) {
-        console.error("Generate grammar error:", err);
+        console.error("Generate vocabulary error:", err);
         res.status(500).json({ error: "Failed to generate lesson" });
     }
 });
