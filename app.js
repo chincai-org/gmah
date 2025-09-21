@@ -11,7 +11,7 @@ import {
 	getUser,
 	verifyUserCredentials,
 	getUserByUsername,
-	updateUser
+	updateUser,
 } from "./util/database.js";
 import { promptBedrock } from "./util/bedrock.js";
 
