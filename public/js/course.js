@@ -51,9 +51,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const genBtn = document.getElementById("generate-grammar");
+    const vocabBtn = document.getElementById("generate-vocab");
     const courseRoot = document.getElementById("course-root");
     const courseId = courseRoot?.dataset.courseId;
     const grammarGrid = document.querySelector("#grammar .grid");
+    const vocabGrid = document.querySelector("#vocab .grid");
 
     async function postJSON(url, data) {
         const res = await fetch(url, {
@@ -87,7 +89,24 @@ document.addEventListener("DOMContentLoaded", () => {
         grammarGrid.prepend(card);
     }
 
-    async function generateGrammarLesson() {
+    function appendVocabCard(topic) {
+        if (!vocabGrid || !topic) return;
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+            <h3>${topic.title ?? "New Lesson"}</h3>
+            <p>${topic.description ?? ""}</p>
+            <div class="card__actions">
+                <a href="../mcq.html">
+                    <button class="btn">Open</button>
+                </a>
+                <button class="btn btn-ghost">Delete</button>
+            </div>
+        `;
+        vocabGrid.prepend(card);
+    }
+
+    async function generateGrammar() {
         if (!courseId) {
             alert("Missing course id.");
             return;
@@ -110,7 +129,37 @@ document.addEventListener("DOMContentLoaded", () => {
             appendGrammarCard(topic);
         } catch (err) {
             console.error(err);
-            alert("Failed to generate lesson. " + (err?.message || ""));
+            alert("Failed to generate grammar lesson. " + (err?.message || ""));
+        } finally {
+            genBtn.disabled = false;
+            genBtn.textContent = prevText;
+        }
+    }
+
+    async function generateVocab() {
+        if (!courseId) {
+            alert("Missing course id.");
+            return;
+        }
+        const prevText = genBtn.textContent;
+        genBtn.disabled = true;
+        genBtn.textContent = "Generating...";
+
+        try {
+            // Call your API. Replace the URL if you have a different endpoint.
+            const data = await postJSON(
+                `/courses/${encodeURIComponent(courseId)}/vocab/generate`,
+                {
+                    // Include any context you want the API to use:
+                    // level: "...", learningLang: "...", context: "..."
+                }
+            );
+
+            const topic = data?.topic ?? data?.lesson ?? data;
+            appendVocabCard(topic);
+        } catch (err) {
+            console.error(err);
+            alert("Failed to generate vocab lesson. " + (err?.message || ""));
         } finally {
             genBtn.disabled = false;
             genBtn.textContent = prevText;
@@ -118,7 +167,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (genBtn) {
-        genBtn.addEventListener("click", generateGrammarLesson);
+        genBtn.addEventListener("click", generateGrammar);
+    }
+    if (vocabBtn) {
+        vocabBtn.addEventListener("click", generateVocab);
     }
 });
 

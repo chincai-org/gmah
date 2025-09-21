@@ -285,6 +285,28 @@ app.post("/courses/:id/grammar/generate", async (req, res) => {
     }
 });
 
+app.post("/courses/:id/vocab/generate", async (req, res) => {
+    try {
+        const courseId = parseInt(req.params.id, 10);
+        const course = await getCourse(courseId);
+        if (!course) {
+            return res.status(404).json({ error: "Course not found" });
+        }
+
+        const topic = {
+            title: "New Vocab Topic",
+            description: "Generated vocab des".slice(0, 240)
+        };
+
+        // Optionally persist topic here
+
+        res.json({ topic });
+    } catch (err) {
+        console.error("Generate grammar error:", err);
+        res.status(500).json({ error: "Failed to generate lesson" });
+    }
+});
+
 app.get("/ask", async (req, res) => {
     const q = req.query.q || "Hello";
     try {
