@@ -128,8 +128,27 @@ export async function promptGenerateDialogueStarter(
 	nativeLanguage,
 	proficiencyLevel
 ) {
-	const systemPrompt = `You are now a language teacher, you are not allowed to be a racist, you are kind and patient teacher willing to help out people to learn a language they wnat. You give them specific and clear feedback to improve the user. When given a scenario with its description and prompted to act a character to help the user, you will choose a character and a character for the user such that the user can improve their language they wish to learn for his purpose When given a scenario with its description and prompted to act a character to help the user, you will choose a character and a character for the user such that the user can improve their language they wish to learn for his purpose.`;
-	const prompt = `In a scenario of ${scenario} with description of ${scenarioDescription}, Choose a character you want to act base on the scenario above and choose a character the user should act, start a conversation with the user to train them knowing their native language is ${nativeLanguage} and they wanting to learn malay because ${context}. When the user reply your conversation, provide a feedback on the user reply from the perspective of ${language} native speaker base one how natural the user reply before continuing the conversation to reply the user. This conversation will go on until the user decide to stop talking. Remeber to speak with the language they want to learn which is ${language}, you want to help the person to be excellent in ${language} as their proficiency level can be describe as ${proficiencyLevel}.`;
+	const systemPrompt = `You are interacting with a user who is roleplaying in a ${language} scenario: ${scenario}, described as "${scenarioDescription}".
+	The goal is to help the user practice their ${language} skills.
+
+	Your role:
+
+	Fully immerse yourself as the character the user is speaking to, responding naturally and contextually in ${language}.
+
+	After each user reply, step out of character briefly to provide constructive feedback in ${nativeLanguage}, focusing on:
+
+	Naturalness of phrasing
+
+	Grammatical accuracy
+
+	Suggestions for more authentic word choice
+	Keep the feedback encouraging and tailored to the user’s ${proficiencyLevel}.
+
+	Additional context:
+
+	${context} (e.g. user’s interests, reasons for learning, goals).
+
+	Make sure the roleplay is engaging, improvisational, and adaptive to the user’s input.`;
 	try {
 		const input = {
 			modelId,
@@ -145,14 +164,6 @@ export async function promptGenerateDialogueStarter(
 							}
 						]
 					},
-					{
-						role: "user",
-						content: [
-							{
-								text: prompt
-							}
-						]
-					}
 				],
 				inferenceConfig: {
 					maxTokens: 200,
@@ -213,8 +224,75 @@ export async function promptGenerateVocabQuiz(
 	return await promptBedrock(prompt);
 }
 
-export async function promptGenerateDialogueFirstSentence() {
+export async function promptGenerateDialogueFirstSentence(
+	language,
+	scenario,
+	scenarioDescription,
+	context,
+	nativeLanguage,
+	proficiencyLevel
+) {
 	const prompt = `Now start the conversation with the user acting as the role you chosen for yourself and speaking to the user that is of role you chosen for them to act as. Remeber to provide concise feedback to the user after the user reply before continuing your conversation.`;
+	const systemPrompt = `You are interacting with a user who is roleplaying in a ${language} scenario: ${scenario}, described as "${scenarioDescription}".
+	The goal is to help the user practice their ${language} skills.
 
-	return await promptBedrock(prompt);
+	Your role:
+
+	Fully immerse yourself as the character the user is speaking to, responding naturally and contextually in ${language}.
+
+	After each user reply, step out of character briefly to provide constructive feedback in ${nativeLanguage}, focusing on:
+
+	Naturalness of phrasing
+
+	Grammatical accuracy
+
+	Suggestions for more authentic word choice
+	Keep the feedback encouraging and tailored to the user’s ${proficiencyLevel}.
+
+	Additional context:
+
+	${context} (e.g. user’s interests, reasons for learning, goals).
+
+	Make sure the roleplay is engaging, improvisational, and adaptive to the user’s input.`;
+	try {
+		const input = {
+			modelId,
+			contentType: "application/json",
+			accept: "application/json",
+			body: JSON.stringify({
+				messages: [
+					{
+						role: "system",
+						content: [
+							{
+								text: systemPrompt
+							}
+						]
+					},
+					{
+						role: "user",
+						content: [
+							{
+								text: prompt
+							}
+						]
+					},
+				],
+				inferenceConfig: {
+					maxTokens: 200,
+					temperature: 0.7
+				}
+			})
+		};
+
+		const command = new InvokeModelCommand(input);
+		const response = await client.send(command);
+
+		const decoded = new TextDecoder("utf-8").decode(response.body);
+		const json = JSON.parse(decoded);
+
+		return json.outputText || JSON.stringify(json);
+	} catch (err) {
+		console.error("Bedrock prompt error:", err);
+	}
 }
