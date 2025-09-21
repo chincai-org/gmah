@@ -1,65 +1,80 @@
-# 🌟 LinguaAI - AI-Powered Language Learning Platform
+# 🌟 **LinguaAI** - AI-Powered Language Learning Platform
 
 LinguaAI is an innovative platform designed to help users master grammar, vocabulary, and dialogues in various languages. With cutting-edge AI-powered content generation and an intuitive interface, LinguaAI makes language learning personalized, engaging, and effective.
 
 ---
 
-## 🌐 Live Demo
+## 🌐 **Live Demo**
 
-Check out the live version of LinguaAI hosted on AWS Elastic Beanstalk:  
-[http://gmah-env.eba-ppxf88e6.ap-southeast-5.elasticbeanstalk.com](http://gmah-env.eba-ppxf88e6.ap-southeast-5.elasticbeanstalk.com)
+🚀 Experience LinguaAI in action:  
+[**http://gmah-env.eba-ppxf88e6.ap-southeast-5.elasticbeanstalk.com**](http://gmah-env.eba-ppxf88e6.ap-southeast-5.elasticbeanstalk.com)
 
 ---
 
-## 🚀 Hosting Locally
+## 🚀 **Hosting Locally**
 
 Follow these steps to set up and run LinguaAI locally:
 
-### Prerequisites
-- [Node.js](https://nodejs.org/) (v14 or higher)
+### ⚙️ **Prerequisites**
+- [Node.js](https://nodejs.org/) (v14 or higher)  
 - [Docker](https://www.docker.com/) (for local DynamoDB)
 
-### Setup
-1. Install dependencies:
+### 🛠️ **Setup**
+1. **Install dependencies**:  
    ```bash
    npm install
    ```
 
-2. Start the development server:
+2. **Start the development server**:  
    ```bash
    npm run dev
    ```
 
-3. Start a local DynamoDB instance:
+3. **Start a local DynamoDB instance**:  
    ```bash
    docker run -p 8000:8000 amazon/dynamodb-local
    ```
 
-4. Set up the local DynamoDB table:
+4. **Set up the local DynamoDB table**:  
    ```bash
    node scripts/localTableManager.js
    ```
-   > This will create a table named `user`.
+   > This will create all necessary tables in your local DynamoDB instance.
 
 ---
 
-## 🌍 Deployment Instructions
+## 🌍 **Deployment Instructions**
 
-To deploy LinguaAI:
-1. Zip everything except `node_modules` and `.env`.
-2. Upload the zip file to [AWS Elastic Beanstalk](https://ap-southeast-5.console.aws.amazon.com/elasticbeanstalk/home?region=ap-southeast-5#/environment/dashboard?environmentId=e-tyhth82n3m).
-
----
-
-## 📝 Notes
-
-- If the generation takes too long or the generated content is not relevant to the topic, press `Ctrl + R` to reload the page in the **Grammar**, **Vocabulary**, or **Dialogue** tabs.
-- LinguaAI is built entirely around **AWS services**, leveraging the scalability and reliability of the AWS ecosystem.
-- The app uses **AWS Bedrock's Amazon Nova Lite** for its AI-powered content generation capabilities.
+To deploy LinguaAI:  
+1. **Zip everything** except `node_modules` and `.env`.  
+2. **Upload the zip file** to [AWS Elastic Beanstalk](https://ap-southeast-5.console.aws.amazon.com/elasticbeanstalk/home?region=ap-southeast-5#/environment/dashboard?environmentId=e-tyhth82n3m).
 
 ---
 
-## 💡 About GMAH
+## 📝 **Notes**
+
+- ⏳ If the generation takes too long or the generated content is not relevant to the topic, press `Ctrl + R` to reload the page in the **Grammar**, **Vocabulary**, or **Dialogue** tabs.
+- 🛡️ LinguaAI is built entirely around **AWS services**, leveraging the scalability and reliability of the AWS ecosystem.
+- 🤖 The app uses **AWS Bedrock's Amazon Nova Lite** for its AI-powered content generation capabilities.
+
+---
+
+## 🛠️ **Tech Stack**
+
+LinguaAI is built using the following technologies:
+
+| **Category**         | **Technology**                 |
+| -------------------- | ------------------------------ |
+| **Frontend**         | HTML, CSS, JavaScript          |
+| **Backend**          | Node.js, Express.js            |
+| **Database**         | AWS DynamoDB (local and cloud) |
+| **AI Services**      | AWS Bedrock's Amazon Nova Lite |
+| **Hosting**          | AWS Elastic Beanstalk          |
+| **Containerization** | Docker                         |
+
+---
+
+## 💡 **About GMAH**
 
 LinguaAI was developed as part of the [**GMAH Hackathon**](https://greataihackathon.com), showcasing the power of AI in revolutionizing language learning.
 
