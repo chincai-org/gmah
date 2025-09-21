@@ -24,9 +24,12 @@ import {
 import {
     promptBedrock,
     promptGenerateGrammarsTitle,
-    promptGenerateVocabsTitle
+    promptGenerateVocabsTitle,
+    promptGenerateGrammarLesson,
+    promptGenerateGrammarQuiz,
+    promptGenerateVocabLesson,
+    promptGenerateVocabQuiz
 } from "./util/bedrock.js";
-import { get } from "http";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -322,7 +325,12 @@ app.post("/courses/:id/grammar/generate", async (req, res) => {
             const [title, description] = Object.entries(topic)[0];
             topicObjects.push({ title, description });
 
-            const dbTopic = await putTopic(title, "grammar", "", description);
+            const dbTopic = await putTopic(
+                title,
+                "grammar",
+                await promptGenerateGrammarLesson(course.learningLang, title),
+                description
+            );
             await addTopicToCourse(courseId, dbTopic.topicId);
         }
 
@@ -372,7 +380,7 @@ app.post("/courses/:id/vocab/generate", async (req, res) => {
             const dbTopic = await putTopic(
                 title,
                 "vocabulary",
-                "",
+                await promptGenerateVocabLesson(course.learningLang, title),
                 description
             );
             await addTopicToCourse(courseId, dbTopic.topicId);
