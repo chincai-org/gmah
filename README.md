@@ -33,22 +33,24 @@ Follow these steps to set up and run LinguaAI locally:
    npm install
    ```
 
-2. **Start the development server**:  
-   ```bash
-   npm run dev
-   ```
-
-3. **Start a local DynamoDB instance**:  
+2. **Start a local DynamoDB instance**:  
    ```bash
    docker run -p 8000:8000 amazon/dynamodb-local
    ```
 
-4. **Set up the local DynamoDB table**:  
+3. **Set up the local DynamoDB table**:  
    ```bash
    node scripts/localTableManager.js
    ```
    > This will create all necessary tables in your local DynamoDB instance.
 
+4. **Configure environment variables**:
+   Create a `.env` file in the root directory based on the `.env.example` file and fill in your AWS credentials and Bedrock model ID.
+
+5. **Start the development server**:  
+   ```bash
+   npm run dev
+   ```
 ---
 
 ## 🌍 **Deployment Instructions**
